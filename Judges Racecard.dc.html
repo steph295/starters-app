@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<script src="./colour-changes.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/styles.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; font-family: Inter, -apple-system, sans-serif; background: rgb(248,250,252); }
+a { color: rgb(0,47,113); text-decoration: none; }
+a:hover { color: rgb(0,47,113); text-decoration: underline; }
+</style>
+</helmet>
+<div style="font-family: Inter, -apple-system, sans-serif; color: rgb(9,9,11);">
+
+<div style="margin-bottom: 20px;">
+  <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <button onClick="{{ fixtureClick }}" aria-haspopup="listbox" style="display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0;">
+      <h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.5px; line-height: 34px; color: var(--sv-ink, rgb(9,9,11));">{{ venueTitle }}</h1>
+      <x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="20" hint-size="20px,20px"></x-import>
+    </button>
+    <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
+      <sc-for list="{{ raceTabs }}" as="t" hint-placeholder-count="7">
+        <button onClick="{{ t.select }}" style="display: flex; align-items: center; gap: 4px; padding: 3px 9px; font-size: 12px; line-height: 18px; font-weight: {{ t.weight }}; font-family: inherit; background: {{ t.bg }}; border: 1px solid {{ t.border }}; border-radius: 4px; cursor: pointer; color: {{ t.color }}; font-variant-numeric: tabular-nums;">{{ t.label }}<sc-if value="{{ t.done }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="check" size="11" hint-size="11px,11px"></x-import></sc-if></button>
+      </sc-for>
+    </div>
+  </div>
+  <p style="margin: 10px 0 0; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--sv-accent, rgb(0,47,113));">
+    <span style="font-weight: 400; font-size: 13px; color: rgb(113,113,122);">Monday 12 October 2026 · {{ runnerCountLabel }}</span>
+    <span>{{ raceTitle }}</span>
+  </p>
+</div>
+
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+  <button onClick="{{ toggleOff }}" aria-pressed="{{ isOff }}" style="display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid {{ offBorder }}; background: {{ offBg }}; color: {{ offInk }}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; font-variant-numeric: tabular-nums; transition: background .12s cubic-bezier(.4,0,.2,1);"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="flag" size="16" hint-size="16px,16px"></x-import>{{ offLabel }}</button>
+  <div style="flex: 1;"></div>
+  <button onClick="{{ primaryAction }}" disabled="{{ primaryDisabled }}" style="display: flex; align-items: center; gap: 8px; min-height: 40px; background: {{ primaryBg }}; color: {{ primaryColor }}; border: 1px solid {{ primaryBorder }}; border-radius: 10px; padding: 0 16px; font-size: 14px; font-weight: 600; cursor: {{ primaryCursor }}; font-family: inherit; white-space: nowrap;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ primaryIcon }}" size="16" hint-size="16px,16px"></x-import>{{ primaryLabel }}</button>
+</div>
+
+<sc-if value="{{ modeHint }}" hint-placeholder-val="{{ false }}">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; margin-bottom: 16px; border-radius: 10px; background: rgb(233,244,250); border: 1px solid rgb(200,224,240); font-size: 13px; color: rgb(0,47,113);">
+    <span>{{ modeHint }}</span>
+    <button onClick="{{ clearMode }}" style="background: none; border: none; padding: 0; font: inherit; font-size: 13px; font-weight: 600; color: rgb(0,47,113); cursor: pointer;">Done</button>
+  </div>
+</sc-if>
+
+<div style="display: grid; grid-template-columns: {{ layoutCols }}; gap: 16px; align-items: start;">
+
+  <div style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; overflow: hidden;">
+    <div style="padding: 14px 16px; border-bottom: 1px solid rgb(228,228,231); display: flex; align-items: center; justify-content: space-between;">
+      <span style="font-size: 16px; font-weight: 500;">Placings</span>
+      <sc-if value="{{ hasPhoto }}" hint-placeholder-val="{{ false }}">
+        <span style="font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 26px; background: rgb(244,244,245); color: rgb(63,63,70);">Photo finish</span>
+      </sc-if>
+    </div>
+    <sc-if value="{{ statusShown }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 18px 16px 14px; text-align: center; border-bottom: 1px solid rgb(228,228,231);">
+        <span style="width: 40px; height: 40px; border-radius: 9999px; background: {{ statusIconBg }}; color: {{ statusIconInk }}; display: flex; align-items: center; justify-content: center;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ statusIcon }}" size="20" hint-size="20px,20px"></x-import></span>
+        <span style="font-size: 14px; font-weight: 600;">{{ statusTitle }}</span>
+        <span style="font-size: 13px; color: rgb(113,113,122);">{{ statusSub }}</span>
+      </div>
+    </sc-if>
+    <sc-for list="{{ placingRows }}" as="p" hint-placeholder-count="4">
+      <div style="display: grid; grid-template-columns: 52px minmax(0,1fr) 36px; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid rgb(228,228,231);">
+        <span style="font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums;">{{ p.pos }}</span>
+        <span style="min-width: 0;">
+          <span style="display: block; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums;">{{ p.no }}</span>
+          <span style="display: block; font-size: 13px; color: rgb(63,63,70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ p.name }}</span>
+        </span>
+        <span style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid rgb(228,228,231); background: {{ p.silk }};"></span>
+      </div>
+    </sc-for>
+    <sc-if value="{{ noPlacings }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 16px; font-size: 13px; color: rgb(113,113,122); text-align: center; line-height: 20px;">Tap runners in finishing order to record placings.</div>
+    </sc-if>
+  </div>
+
+  <div style="min-width: 0;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; margin-bottom: 12px; border-radius: 10px; background: {{ bannerBg }}; border: 1px solid {{ bannerBorder }}; color: {{ bannerInk }}; font-size: 14px; font-weight: 600;">
+      <x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ bannerIcon }}" size="16" hint-size="16px,16px"></x-import>{{ bannerText }}
+    </div>
+    <sc-if value="{{ hasCc }}" hint-placeholder-val="{{ false }}">
+    <div style="border: 1px solid rgb(228,228,231); border-radius: 14px; background: #fff; overflow: hidden; margin-bottom: 10px;">
+      <sc-for list="{{ ccRows }}" as="x" hint-placeholder-count="1">
+        <div style="padding: 10px 14px; border-bottom: 1px solid rgb(228,228,231); display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <span style="font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 26px; background: rgb(255,247,230); color: rgb(146,90,0); white-space: nowrap;">* Colours changed</span>
+            <span style="font-size: 14px; font-weight: 600;">No.{{ x.no }} {{ x.horse }}</span>
+            <span style="font-size: 14px; color: rgb(63,63,70); flex: 1; min-width: 180px;">Now: {{ x.afterDesc }}</span>
+            <button onClick="{{ x.toggle }}" aria-expanded="{{ x.open }}" style="min-height: 44px; padding: 0 12px; border: 1px solid rgb(228,228,231); border-radius: 10px; background: #fff; font: inherit; font-size: 14px; font-weight: 500; color: rgb(9,9,11); cursor: pointer;">{{ x.toggleLabel }}</button>
+          </div>
+          <sc-if value="{{ x.open }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 12px; border-radius: 10px; background: rgb(250,250,250);">
+              <span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; color: rgb(113,113,122);"><dc-import name="Silk" spec="{{ x.beforeSpec }}" size="56" label="{{ x.beforeDesc }}" hint-size="56px,56px"></dc-import>Declared</span>
+              <x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="arrow-right" size="16" hint-size="16px,16px"></x-import>
+              <span style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; color: rgb(146,90,0);"><dc-import name="Silk" spec="{{ x.afterSpec }}" size="56" label="{{ x.afterDesc }}" hint-size="56px,56px"></dc-import>Wearing</span>
+              <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 200px; font-size: 13px; line-height: 18px;">
+                <span><span style="color: rgb(113,113,122);">Declared:</span> {{ x.beforeDesc }}</span>
+                <span><span style="color: rgb(113,113,122);">Wearing:</span> <b style="font-weight: 600;">{{ x.afterDesc }}</b></span>
+                <span style="color: rgb(63,63,70);">“{{ x.note }}” · {{ x.owner }} · recorded by scales {{ x.at }}</span>
+              </span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px;">
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="10">
+        <button onClick="{{ c.tap }}" aria-label="{{ c.aria }}" style="position: relative; display: flex; flex-direction: column; text-align: left; padding: 0; min-height: 104px; background: {{ c.bg }}; border: {{ c.border }}; border-radius: 14px; cursor: {{ c.cursor }}; font-family: inherit; overflow: hidden; opacity: {{ c.opacity }};" style-hover="border-color: rgb(0,47,113);">
+          <span style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid {{ c.rule }}; width: 100%; box-sizing: border-box;">
+            <sc-if value="{{ c.unchanged }}" hint-placeholder-val="{{ true }}"><span style="width: 40px; height: 40px; border-radius: 6px; border: 1px solid rgb(228,228,231); background: {{ c.silk }}; flex-shrink: 0;"></span></sc-if>
+            <sc-if value="{{ c.changed }}" hint-placeholder-val="{{ false }}"><span style="position: relative; display: flex; flex-shrink: 0;"><dc-import name="Silk" spec="{{ c.newSpec }}" size="40" label="{{ c.newDesc }}" hint-size="40px,40px"></dc-import><span aria-label="Colours changed" style="position: absolute; top: -6px; right: -8px; width: 20px; height: 20px; border-radius: 9999px; background: rgb(255,247,230); color: rgb(146,90,0); border: 1px solid rgb(146,90,0); font-size: 15px; font-weight: 700; line-height: 22px; text-align: center;">*</span></span></sc-if>
+            <span style="font-size: 28px; font-weight: 700; line-height: 1; color: {{ c.noInk }}; font-variant-numeric: tabular-nums;">{{ c.no }}</span>
+            <span style="flex: 1;"></span>
+            <sc-if value="{{ c.badge }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 26px; background: {{ c.badgeBg }}; color: {{ c.badgeInk }}; white-space: nowrap;">{{ c.badge }}</span>
+            </sc-if>
+          </span>
+          <span style="padding: 10px 14px; font-size: 14px; color: {{ c.nameInk }};">{{ c.name }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+
+<div style="position: sticky; bottom: 0; z-index: 20; margin: 20px -4px 0; padding: 10px 12px; background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; box-shadow: 0 -4px 12px rgba(0,0,0,0.06); display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+  <button onClick="{{ openFull }}" style="display: flex; align-items: center; gap: 6px; font: inherit; font-size: 14px; font-weight: 500; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid rgb(228,228,231); background: #fff; color: rgb(9,9,11); cursor: pointer; white-space: nowrap;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="trophy" size="16" hint-size="16px,16px"></x-import>Full results</button>
+  <div style="flex: 1;"></div>
+  <div role="group" aria-label="Result options" style="display: flex; border: 1px solid rgb(228,228,231); border-radius: 10px; overflow: hidden; background: #fff;">
+    <sc-for list="{{ modeButtons }}" as="m" hint-placeholder-count="3">
+      <button onClick="{{ m.toggle }}" aria-pressed="{{ m.on }}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; font: inherit; font-size: 14px; font-weight: 600; padding: 0 16px; border: none; border-right: 1px solid rgb(228,228,231); background: {{ m.bg }}; color: {{ m.color }}; cursor: pointer; white-space: nowrap;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ m.icon }}" size="16" hint-size="16px,16px"></x-import>{{ m.label }}</button>
+    </sc-for>
+  </div>
+  <div style="flex: 1;"></div>
+  <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: rgb(9,9,11); cursor: pointer; min-height: 44px;">
+    <button onClick="{{ toggleRp }}" role="switch" aria-checked="{{ rp }}" style="width: 36px; height: 20px; border-radius: 9999px; border: none; padding: 2px; background: {{ rpTrack }}; cursor: pointer; display: flex; justify-content: {{ rpJustify }}; transition: background .18s;"><span style="width: 16px; height: 16px; border-radius: 9999px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></span></button>RP
+  </label>
+  <button onClick="{{ openOptions }}" style="display: flex; align-items: center; gap: 6px; font: inherit; font-size: 14px; font-weight: 500; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid rgb(228,228,231); background: #fff; color: rgb(9,9,11); cursor: pointer; white-space: nowrap;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="settings" size="16" hint-size="16px,16px"></x-import>Race options</button>
+  <button onClick="{{ askDelete }}" style="display: flex; align-items: center; gap: 6px; font: inherit; font-size: 14px; font-weight: 500; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid rgb(228,228,231); background: #fff; color: rgb(9,9,11); cursor: pointer; white-space: nowrap; color: rgb(231,0,11);" style-hover="background: rgb(254,242,242);"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="trash2" size="16" hint-size="16px,16px"></x-import>Delete</button>
+</div>
+
+<sc-if value="{{ fullOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeFull }}" style="position: fixed; inset: 0; background: rgba(0,0,0,0.1); z-index: 300;"></div>
+  <div style="position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100%; background: #fff; border-left: 1px solid rgb(228,228,231); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); z-index: 301; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid rgb(228,228,231);">
+      <div>
+        <div style="font-size: 16px; font-weight: 500;">Full results</div>
+        <div style="font-size: 12px; color: rgb(113,113,122); margin-top: 2px;">{{ raceTitle }}</div>
+      </div>
+      <button onClick="{{ closeFull }}" aria-label="Close" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgb(113,113,122);" style-hover="background: rgb(244,244,245);"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+    </div>
+    <div style="flex: 1; overflow-y: auto;">
+      <sc-for list="{{ fullRows }}" as="f" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 10px; padding: 12px 16px; border-bottom: 1px solid rgb(228,228,231);">
+          <span style="font-size: 14px; font-weight: 600;">{{ f.pos }}</span>
+          <span>
+            <span style="display: block; font-size: 14px;"><b style="font-variant-numeric: tabular-nums;">{{ f.no }}</b> {{ f.name }}</span>
+            <span style="display: block; font-size: 12px; color: rgb(113,113,122); margin-top: 2px; font-variant-numeric: tabular-nums;">{{ f.meta }}</span>
+          </span>
+        </div>
+      </sc-for>
+      <sc-for list="{{ dnfRows }}" as="f" hint-placeholder-count="1">
+        <div style="display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 10px; padding: 12px 16px; border-bottom: 1px solid rgb(228,228,231); color: rgb(113,113,122);">
+          <span style="font-size: 14px; font-weight: 600;">{{ f.pos }}</span>
+          <span style="font-size: 14px;"><b style="font-variant-numeric: tabular-nums;">{{ f.no }}</b> {{ f.name }}</span>
+        </div>
+      </sc-for>
+      <sc-if value="{{ noFull }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 24px 16px; font-size: 13px; color: rgb(113,113,122);">No placings recorded for this race yet.</div>
+      </sc-if>
+    </div>
+    <div style="display: flex; gap: 8px; justify-content: flex-end; padding: 12px 16px; border-top: 1px solid rgb(228,228,231); background: rgb(250,250,250);">
+      <button onClick="{{ closeFull }}" style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 10px; padding: 8px 14px; font-size: 14px; font-weight: 500; font-family: inherit; color: rgb(9,9,11); cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Close</button>
+      <button onClick="{{ manageDnf }}" style="background: rgb(0,47,113); border: 1px solid rgb(0,47,113); border-radius: 10px; padding: 8px 14px; font-size: 14px; font-weight: 500; font-family: inherit; color: #fff; cursor: pointer;">Manage DNF</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ optionsOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeOptions }}" style="position: fixed; inset: 0; background: rgba(0,0,0,0.1); z-index: 300;"></div>
+  <div role="dialog" aria-label="Race options" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 480px; max-width: calc(100vw - 32px); background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); z-index: 301; overflow: hidden;">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 8px;">
+      <div>
+        <div style="font-size: 16px; font-weight: 500;">Race options</div>
+        <div style="font-size: 14px; color: rgb(113,113,122); margin-top: 4px;">How the official time is recorded for {{ raceTime }}.</div>
+      </div>
+      <button onClick="{{ closeOptions }}" aria-label="Close" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgb(113,113,122); align-self: flex-start;" style-hover="background: rgb(244,244,245);"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+    </div>
+    <div style="padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 8px;">
+      <sc-for list="{{ timeOptions }}" as="o" hint-placeholder-count="3">
+        <button onClick="{{ o.pick }}" style="display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid {{ o.border }}; background: {{ o.bg }}; font: inherit; font-size: 14px; color: rgb(9,9,11); cursor: pointer;">
+          <span style="width: 16px; height: 16px; border-radius: 9999px; border: 1px solid {{ o.dot }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ o.dotFill }};"></span></span>
+          <x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ o.icon }}" size="16" hint-size="16px,16px"></x-import>{{ o.label }}
+        </button>
+      </sc-for>
+      <div style="height: 1px; background: rgb(228,228,231); margin: 4px 0;"></div>
+      <button disabled="{{ true }}" style="display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid rgb(228,228,231); background: rgb(245,245,245); font: inherit; font-size: 14px; color: rgb(161,161,170); cursor: not-allowed;">
+        <x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="circle-alert" size="16" hint-size="16px,16px"></x-import>False start<span style="margin-left: auto; font-size: 12px;">Before the off only</span>
+      </button>
+    </div>
+    <div style="display: flex; justify-content: flex-end; padding: 12px 16px; border-top: 1px solid rgb(228,228,231); background: rgb(250,250,250);">
+      <button onClick="{{ closeOptions }}" style="background: rgb(0,47,113); border: 1px solid rgb(0,47,113); border-radius: 10px; padding: 8px 14px; font-size: 14px; font-weight: 500; font-family: inherit; color: #fff; cursor: pointer;">Done</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ deleteOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ cancelDelete }}" style="position: fixed; inset: 0; background: rgba(0,0,0,0.1); z-index: 300;"></div>
+  <div role="alertdialog" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 420px; max-width: calc(100vw - 32px); background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); z-index: 301; overflow: hidden;">
+    <div style="padding: 16px;">
+      <div style="font-size: 16px; font-weight: 500;">Delete placings for {{ raceTime }}?</div>
+      <div style="font-size: 14px; color: rgb(113,113,122); margin-top: 6px; line-height: 20px;">{{ deleteBody }}</div>
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px; border-top: 1px solid rgb(228,228,231); background: rgb(250,250,250);">
+      <button onClick="{{ cancelDelete }}" style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 10px; padding: 8px 14px; font-size: 14px; font-weight: 500; font-family: inherit; color: rgb(9,9,11); cursor: pointer;">Cancel</button>
+      <button onClick="{{ confirmDelete }}" style="background: rgb(254,242,242); border: 1px solid rgb(254,202,202); border-radius: 10px; padding: 8px 14px; font-size: 14px; font-weight: 500; font-family: inherit; color: rgb(231,0,11); cursor: pointer;">Delete placings</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+  <div role="status" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 400; background: #fff; border: 1px solid rgb(228,228,231); border-radius: 18px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 12px 16px; font-size: 14px; color: rgb(9,9,11);">{{ toast }}</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;phone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() { const go = () => { if (window.BHAColourChanges) { this.setState({ cc: window.BHAColourChanges.load() }); this._ccUn = window.BHAColourChanges.subscribe(l => this.setState({ cc: l })); } else this._ccT = setTimeout(go, 50); }; go(); }
+  componentWillUnmount() { if (this._ccUn) this._ccUn(); clearTimeout(this._ccT); }
+  ccFor = (name) => (this.state.cc || []).filter(c => c.race === this.state.raceIdx && c.horse === name)[0];
+  RUNNERS = [
+    { id: 1, name: 'Ballynaheer', silk: 'radial-gradient(circle, #fff 1.5px, transparent 2px) 0 0/8px 8px, #111' },
+    { id: 2, name: 'Billy Boi Blue', silk: 'linear-gradient(160deg, transparent 40%, #e07a10 40% 60%, transparent 60%), #111' },
+    { id: 3, name: 'Ridin Solo', silk: 'linear-gradient(115deg, #fff 0 38%, #c02020 38% 52%, #111 52%)' },
+    { id: 4, name: 'Sonyourastar', silk: 'linear-gradient(#e07a10 0 60%, #111 60%)' },
+    { id: 5, name: 'Washington Parks', silk: 'radial-gradient(circle, #6ea0d8 2px, transparent 2.5px) 0 0/9px 9px, #fff' },
+    { id: 6, name: 'Balkardy', silk: 'linear-gradient(90deg, #1a44a8 0 50%, #fff 50%)' },
+    { id: 7, name: 'Saint Arion', silk: 'radial-gradient(circle at 40% 55%, #1a9a4a 0 22%, transparent 23%), #1a3a8a' },
+    { id: 8, name: 'Pawpaw', silk: 'conic-gradient(#1a44a8 0 25%, #fff 0 50%, #1a44a8 0 75%, #fff 0) 0 0/16px 16px' },
+    { id: 9, name: 'Moonlightinthepark', silk: 'repeating-linear-gradient(90deg, #1a7a4a 0 5px, #fff 5px 10px)' },
+    { id: 10, name: 'Valirann Gold', silk: 'repeating-linear-gradient(#e8c830 0 6px, #111 6px 10px)' },
+  ];
+  RACES = [
+    { t: '2:07', title: "Novices' hurdle (Class 4), 2m 4f" },
+    { t: '2:40', title: 'Handicap chase (Class 3), 2m 7f' },
+    { t: '3:15', title: 'Mares\u2019 handicap hurdle (Class 4), 2m' },
+    { t: '3:50', title: 'Novices\u2019 chase (Class 3), 2m 4f' },
+    { t: '4:25', title: 'Handicap hurdle (Class 5), 3m' },
+    { t: '5:00', title: 'Hunters\u2019 chase (Class 6), 2m 7f' },
+    { t: '5:35', title: 'Standard open NH flat (Class 5), 2m' },
+  ];
+  DIST = ['', '1\u00bc lengths', 'Head', '4\u00bd lengths', '2 lengths', 'Neck', '6 lengths', '3\u00be lengths', '11 lengths', 'Distance'];
+  TIME_OPTS = [
+    { key: 'none', label: 'No official time', icon: 'pause' },
+    { key: 'pause', label: 'Official hand start time', icon: 'clock' },
+    { key: 'calc', label: 'Official calculated time', icon: 'table' },
+  ];
+  state = {
+    raceIdx: 0, mode: 'place', fullOpen: false, optionsOpen: false, deleteOpen: false, toast: '',
+    races: {
+      0: { placings: [[2], [9], [3], [1]], out: { 5: true }, status: 'confirmed', photo: false, timeOpt: 'calc', rp: false, off: '2:07:42' },
+    },
+  };
+  race = () => this.state.races[this.state.raceIdx] || { placings: [], out: {}, status: 'open', photo: false, timeOpt: 'calc', rp: false, off: null };
+  patch = (p) => this.setState(s => ({ races: { ...s.races, [s.raceIdx]: { ...(s.races[s.raceIdx] || this.race()), ...p } } }));
+  flash = (m) => { clearTimeout(this._t); this.setState({ toast: m }); this._t = setTimeout(() => this.setState({ toast: '' }), 3500); };
+  ord = (n) => n + (['th','st','nd','rd'][(n % 100 - 20) % 10] || ['th','st','nd','rd'][n % 100] || 'th');
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._c); }
+
+  tapRunner = (id) => {
+    const r = this.race(), st = this.state;
+    if (r.status !== 'open') { this.flash('Placings are locked. Choose Amend placings to make changes.'); return; }
+    if (st.mode === 'out') {
+      const out = { ...r.out, [id]: !r.out[id] };
+      this.patch({ out, placings: r.placings.map(g => g.filter(x => x !== id)).filter(g => g.length) });
+      return;
+    }
+    if (r.out[id]) { this.flash('This runner is out of the race. Use Out of race to restore it.'); return; }
+    if (r.placings.some(g => g.includes(id))) {
+      this.patch({ placings: r.placings.map(g => g.filter(x => x !== id)).filter(g => g.length) });
+      return;
+    }
+    if (st.mode === 'dh' && r.placings.length) {
+      const pl = r.placings.slice(); pl[pl.length - 1] = [...pl[pl.length - 1], id];
+      this.patch({ placings: pl }); this.setState({ mode: 'place' });
+      return;
+    }
+    this.patch({ placings: [...r.placings, [id]] });
+  };
+  submit = () => {
+    const i = this.state.raceIdx;
+    this.patch({ status: 'submitted' });
+    this.flash('Result sent to the PFO.');
+    clearTimeout(this._c);
+    this._c = setTimeout(() => this.setState(s => ({ races: { ...s.races, [i]: { ...s.races[i], status: 'confirmed' } } })), 2500);
+  };
+
+  renderVals() {
+    const st = this.state, r = this.race(), phone = !!this.props.phone;
+    const byId = (id) => this.RUNNERS.find(x => x.id === id);
+    const posOf = {}; let n = 1; const rows = [];
+    r.placings.forEach(g => {
+      const dh = g.length > 1;
+      g.forEach(id => { posOf[id] = n; rows.push({ id, pos: this.ord(n) + (dh ? ' =' : ''), n }); });
+      n += g.length;
+    });
+    const placedCount = rows.length;
+    const outIds = Object.keys(r.out).filter(k => r.out[k]).map(Number);
+    const status = r.status;
+    const navy = 'rgb(0,47,113)';
+    const modeDefs = [
+      { key: 'out', label: 'Out of race', icon: 'flag' },
+      { key: 'dh', label: 'Dead heat', icon: 'copy' },
+      { key: 'photo', label: 'Photo finish', icon: 'image' },
+    ];
+    let elapsed = 6 * 60 + 2.35;
+    const fullRows = rows.map((p, i) => {
+      if (i) elapsed += [0.21, 0.02, 0.7, 0.4, 0.12, 1.1, 0.8, 2.2][i - 1] || 1;
+      const m = Math.floor(elapsed / 60), s = (elapsed - m * 60).toFixed(2).padStart(5, '0');
+      const ru = byId(p.id);
+      return {
+ pos: p.pos, no: ru.id, name: ru.name, meta: m + ':' + s + (i ? ' \u00b7 ' + this.DIST[i] : '') };
+    });
+    const bannerDefs = {
+      open: { text: placedCount ? placedCount + ' placed \u00b7 not yet submitted' : 'Awaiting placings', icon: 'clock', bg: 'rgb(244,244,245)', border: 'rgb(228,228,231)', ink: 'rgb(63,63,70)' },
+      submitted: { text: 'Submitted \u00b7 awaiting PFO confirmation', icon: 'refresh-cw', bg: 'rgb(233,244,250)', border: 'rgb(200,224,240)', ink: navy },
+      confirmed: { text: 'PFO results confirmed', icon: 'circle-check', bg: 'rgb(233,246,239)', border: 'rgb(190,226,206)', ink: 'rgb(0,120,63)' },
+    };
+    const b = bannerDefs[status];
+    const modeHint = st.mode === 'out' ? 'Tap runners that did not finish to mark them out of the race.'
+      : st.mode === 'dh' ? 'Tap the runner that dead-heated with ' + (rows.length ? byId(rows[rows.length - 1].id).name : 'the last placed horse') + '.' : '';
+    return {
+      notesOpen: !!this.state.notesOpen, openNotes: () => this.setState({ notesOpen: true }), closeNotes: () => this.setState({ notesOpen: false }),
+      notesStart: st.raceIdx,
+      notesRaces: this.RACES.map((R, i) => {
+        const rr = st.races[i] || { placings: [], out: {} }; let pos = 1; const place = {};
+        (rr.placings || []).forEach(g => { g.forEach(id => { place[id] = this.ord(pos); }); pos += g.length; });
+        return { time: R.t, title: R.title, cls: (R.title.match(/Class (\d)/) || [])[1] || '', runners: this.RUNNERS.map(x => {
+          const out = rr.out && rr.out[x.id];
+          return { no: x.id, horse: x.name, jockey: '\u2013', silk: x.silk, status: out ? 'Out of race' : rr.status === 'confirmed' ? 'Placed' : 'Declared',
+            statusBg: out ? 'rgb(254,242,242)' : undefined, statusInk: out ? 'rgb(216,0,39)' : undefined, result: out ? '\u2013' : (place[x.id] || '\u2013') };
+        }) };
+      }),
+      venueTitle: this.props.fixtureVenue || 'Worcester',
+      fixtureClick: (e) => { if (this.props.onFixtureClick) this.props.onFixtureClick(e); },
+      raceTabs: this.RACES.map((x, i) => {
+        const on = i === st.raceIdx, done = (st.races[i] || {}).status === 'confirmed';
+        return { label: x.t, done, select: () => this.setState({ raceIdx: i, mode: 'place' }),
+          bg: on ? navy : '#fff', color: on ? '#fff' : 'rgb(113,113,122)', border: on ? navy : 'rgb(228,228,231)', weight: on ? 700 : 500 };
+      }),
+      raceTime: this.RACES[st.raceIdx].t,
+      raceTitle: this.RACES[st.raceIdx].t + ' \u2013 ' + this.RACES[st.raceIdx].title,
+      runnerCountLabel: (this.RUNNERS.length - outIds.length) + ' runners' + (outIds.length ? ' \u00b7 ' + outIds.length + ' out' : ''),
+      layoutCols: phone ? '1fr' : 'minmax(260px, 320px) minmax(0, 1fr)',
+      modeButtons: modeDefs.map(m => {
+        const on = m.key === 'photo' ? r.photo : st.mode === m.key;
+        return { ...m, on, bg: on ? navy : '#fff', color: on ? '#fff' : 'rgb(9,9,11)', border: on ? navy : 'rgb(212,212,216)',
+          toggle: () => {
+            if (m.key === 'photo') { this.patch({ photo: !r.photo }); return; }
+            if (r.status !== 'open') { this.flash('Placings are locked. Choose Amend placings to make changes.'); return; }
+            if (m.key === 'dh' && !r.placings.length) { this.flash('Place the first horse before adding a dead heat.'); return; }
+            this.setState({ mode: on ? 'place' : m.key });
+          } };
+      }),
+      modeHint, clearMode: () => this.setState({ mode: 'place' }),
+      rp: !!r.rp, rpTrack: r.rp ? navy : 'rgb(228,228,231)', rpJustify: r.rp ? 'flex-end' : 'flex-start',
+      toggleRp: (e) => { e.preventDefault(); this.patch({ rp: !r.rp }); },
+      hasPhoto: r.photo,
+      statusShown: status !== 'open',
+      statusIcon: status === 'confirmed' ? 'check' : 'refresh-cw',
+      statusIconBg: status === 'confirmed' ? 'rgb(233,246,239)' : 'rgb(233,244,250)',
+      statusIconInk: status === 'confirmed' ? 'rgb(0,120,63)' : navy,
+      statusTitle: 'Placings submitted',
+      statusSub: status === 'confirmed' ? 'Confirmed by PFO' : 'Awaiting PFO confirmation',
+      placingRows: rows.map(p => { const ru = byId(p.id); return { pos: p.pos, no: ru.id, name: ru.name, silk: ru.silk }; }),
+      noPlacings: !rows.length,
+      bannerText: b.text, bannerIcon: b.icon, bannerBg: b.bg, bannerBorder: b.border, bannerInk: b.ink,
+      cards: this.RUNNERS.map(ru => {
+        const out = !!r.out[ru.id], pos = posOf[ru.id];
+        const placed = pos != null;
+        return {
+          no: ru.id, name: ru.name, silk: ru.silk, tap: () => this.tapRunner(ru.id), changed: !!this.ccFor(ru.name), unchanged: !this.ccFor(ru.name), newSpec: (this.ccFor(ru.name) || {}).afterSpec, newDesc: (this.ccFor(ru.name) || {}).afterDesc,
+          aria: ru.id + ' ' + ru.name + (placed ? ', placed ' + this.ord(pos) : out ? ', out of race' : ''),
+          bg: out ? 'rgb(244,244,245)' : placed ? 'rgb(233,246,239)' : '#fff',
+          border: placed ? '1px solid rgb(0,151,79)' : '1px solid rgb(228,228,231)',
+          rule: placed ? 'rgb(190,226,206)' : 'rgb(228,228,231)',
+          noInk: out ? 'rgb(161,161,170)' : 'rgb(9,9,11)', nameInk: out ? 'rgb(161,161,170)' : 'rgb(63,63,70)',
+          opacity: 1, cursor: status === 'open' ? 'pointer' : 'default',
+          badge: placed ? this.ord(pos) : out ? 'Out' : this.ccFor(ru.name) ? 'Colours changed' : '',
+          badgeBg: placed ? 'rgb(0,151,79)' : out ? 'rgb(228,228,231)' : 'rgb(255,247,230)', badgeInk: placed ? '#fff' : out ? 'rgb(82,82,91)' : 'rgb(146,90,0)',
+        };
+      }),
+      hasCc: (this.state.cc || []).some(c => c.race === this.state.raceIdx),
+      ccRows: (this.state.cc || []).filter(c => c.race === this.state.raceIdx).map(c => { const op = !!(this.state.ccOpen || {})[c.id]; return Object.assign({}, c, { open: op, toggleLabel: op ? 'Hide original' : 'Show original', toggle: () => this.setState(st => ({ ccOpen: Object.assign({}, st.ccOpen, { [c.id]: !op }) })) }); }),
+      isOff: !!r.off, bigFlex: phone ? '1 1 100%' : '0 0 auto',
+      offBg: r.off ? 'rgb(0,151,79)' : '#fff', offBorder: r.off ? 'rgb(0,151,79)' : 'rgb(228,228,231)', offInk: r.off ? '#fff' : 'rgb(9,9,11)',
+      offLabel: r.off ? 'Off ' + r.off : 'Race off',
+      offSub: r.off ? 'Off at ' + r.off : 'Tap as the race starts',
+      toggleOff: () => {
+        if (r.off) { if (r.status !== 'open') { this.flash('Result already sent. Amend to change the off time.'); return; } this.patch({ off: null }); this.flash('Race off cleared.'); return; }
+        const d = new Date(), t = (d.getHours() % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0') + ':' + String(d.getSeconds()).padStart(2, '0');
+        this.patch({ off: t }); this.flash('Race off at ' + t + '.');
+      },
+      primaryBorder: status === 'open' ? (placedCount ? navy : 'rgb(228,228,231)') : 'rgb(212,212,216)',
+      primaryLabel: status === 'open' ? 'Send result' : 'Amend result',
+      primaryIcon: status === 'open' ? 'send' : 'pencil',
+      primaryDisabled: status === 'open' && !placedCount,
+      primaryBg: status === 'open' ? (placedCount ? navy : 'rgb(228,228,231)') : '#fff',
+      primaryColor: status === 'open' ? (placedCount ? '#fff' : 'rgb(161,161,170)') : 'rgb(9,9,11)',
+      primaryCursor: status === 'open' && !placedCount ? 'default' : 'pointer',
+      primaryAction: () => { if (status === 'open') { if (placedCount) this.submit(); } else { clearTimeout(this._c); this.patch({ status: 'open' }); this.flash('Placings unlocked. Resubmit when ready.'); } },
+      fullOpen: st.fullOpen, openFull: () => this.setState({ fullOpen: true }), closeFull: () => this.setState({ fullOpen: false }),
+      fullRows, noFull: !fullRows.length && !outIds.length,
+      dnfRows: outIds.map(id => ({ pos: 'Out', no: id, name: byId(id).name })),
+      manageDnf: () => { this.setState({ fullOpen: false }); if (r.status === 'open') this.setState({ mode: 'out' }); else this.flash('Amend placings to manage DNF runners.'); },
+      optionsOpen: st.optionsOpen, openOptions: () => this.setState({ optionsOpen: true }), closeOptions: () => this.setState({ optionsOpen: false }),
+      timeOptions: this.TIME_OPTS.map(o => {
+        const on = r.timeOpt === o.key;
+        return { ...o, pick: () => this.patch({ timeOpt: o.key }), border: on ? navy : 'rgb(228,228,231)', bg: on ? 'rgb(233,244,250)' : '#fff', dot: on ? navy : 'rgb(212,212,216)', dotFill: on ? navy : 'transparent' };
+      }),
+      deleteOpen: st.deleteOpen, askDelete: () => this.setState({ deleteOpen: true }), cancelDelete: () => this.setState({ deleteOpen: false }),
+      deleteBody: status === 'open' ? 'This clears every placing and out-of-race mark for this race.' : 'These placings have been sent to the PFO. Deleting them withdraws the submission and clears the race.',
+      confirmDelete: () => { clearTimeout(this._c); this.patch({ placings: [], out: {}, status: 'open', photo: false }); this.setState({ deleteOpen: false, mode: 'place' }); this.flash('Placings deleted for ' + this.RACES[st.raceIdx].t + '.'); },
+      toast: st.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
