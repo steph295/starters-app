@@ -1,8 +1,0 @@
-/* BHA Raceday Apps — webfonts.
-   Inter, Geist, Geist Mono, Roboto Slab and Caveat are the file's real families and are
-   served from Google Fonts.
-   DIN Condensed Bold (--font-family-heading) and DIN Next LT Pro (--font-label) are
-   licensed foundry faces. No substitute is loaded for them: the tokens keep pointing at
-   the real family names and the generic fallback stack renders until the font files are
-   supplied. See readme.md → "Missing font files". */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&family=Roboto+Slab:wght@100..900&family=Caveat:wght@400..700&display=swap');
