@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/styles.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; font-family: Inter, -apple-system, sans-serif; background: rgb(248,250,252); }
+a { color: rgb(0,47,113); text-decoration: none; }
+a:hover { color: rgb(0,47,113); text-decoration: underline; }
+</style>
+</helmet>
+<div style="font-family: Inter, -apple-system, sans-serif; color: rgb(9,9,11); max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 24px;">
+
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+  <div>
+    <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 34px;">Stalls tests</h1>
+    <p style="margin: 4px 0 0; font-size: 13px; color: rgb(113,113,122);">Lingfield Park · Monday 6 July 2026</p>
+  </div>
+  <button onClick="{{ toggleNet }}" title="Tap to simulate signal" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 26px; border: 1px solid {{ netBorder }}; background: {{ netBg }}; color: {{ netInk }}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;"><span style="width: 8px; height: 8px; border-radius: 9999px; background: {{ netDot }};"></span>{{ netLabel }}</button>
+</div>
+
+<sc-if value="{{ hasPending }}" hint-placeholder-val="{{ false }}">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 14px; border-radius: 10px; background: rgb(255,247,230); border: 1px dashed rgb(201,162,74); color: rgb(107,67,0); font-size: 13px;">
+    <span style="display: flex; align-items: center; gap: 8px;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="cloud-off" size="16" hint-size="16px,16px"></x-import><span><b style="font-weight: 600;">{{ pendingTitle }}</b> {{ pendingSub }}</span></span>
+    <button onClick="{{ retry }}" style="flex-shrink: 0; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid rgb(201,162,74); background: #fff; color: rgb(107,67,0); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;">{{ retryLabel }}</button>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 14px; font-weight: 600;">Check a horse</span>
+      <div style="display: flex; align-items: center; gap: 10px; height: 52px; box-sizing: border-box; padding: 0 6px 0 14px; border: 1px solid rgb(230,230,230); border-radius: 10px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); color: rgb(113,113,122);">
+        <x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="search" size="18" hint-size="18px,18px"></x-import>
+        <input value="{{ q }}" onInput="{{ onQ }}" placeholder="Any horse, booked or not" aria-label="Search a horse" style="flex: 1; min-width: 0; border: none; outline: none; font: inherit; font-size: 16px; color: rgb(9,9,11); background: transparent;">
+        <sc-if value="{{ searching }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ clearQ }}" aria-label="Clear" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: none; background: none; border-radius: 8px; cursor: pointer; color: rgb(113,113,122);"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="18" hint-size="18px,18px"></x-import></button>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ searching }}" hint-placeholder-val="{{ false }}">
+      <div style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; overflow: hidden;">
+        <sc-for list="{{ found }}" as="h" hint-placeholder-count="2">
+          <button onClick="{{ h.open }}" style="display: flex; flex-direction: column; gap: 6px; width: 100%; text-align: left; padding: 14px 16px; border: none; border-bottom: 1px solid rgb(228,228,231); background: #fff; font: inherit; color: rgb(9,9,11); cursor: pointer;" style-hover="background: rgb(250,250,250);">
+            <span style="display: flex; align-items: center; gap: 10px; width: 100%;">
+              <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 16px; font-weight: 600;">{{ h.name }}</span><span style="display: block; font-size: 13px; color: rgb(113,113,122);">{{ h.meta }}</span></span>
+              <span style="font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 26px; background: {{ h.sBg }}; color: {{ h.sInk }}; border: 1px {{ h.sBorderStyle }} {{ h.sBorder }}; white-space: nowrap;">{{ h.status }}</span>
+            </span>
+            <span style="font-size: 13px; line-height: 18px; color: rgb(63,63,70); text-wrap: pretty;">{{ h.why }}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ noneFound }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 24px 16px; text-align: center; font-size: 14px; color: rgb(113,113,122);">No horse matches “{{ q }}”.</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ notSearching }}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 14px; font-weight: 600;">Booked today</span>
+          <span style="font-size: 12px; color: rgb(113,113,122);">{{ summary }}</span>
+        </div>
+        <div style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; overflow: hidden;">
+          <sc-for list="{{ booked }}" as="h" hint-placeholder-count="6">
+            <button onClick="{{ h.open }}" style="display: grid; grid-template-columns: 52px minmax(0,1fr); gap: 12px; width: 100%; text-align: left; padding: 14px 16px; border: none; border-bottom: 1px solid rgb(228,228,231); background: #fff; font: inherit; color: rgb(9,9,11); cursor: pointer;" style-hover="background: rgb(250,250,250);">
+              <span style="font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; padding-top: 1px;">{{ h.booked }}</span>
+              <span style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+                <span style="display: flex; align-items: flex-start; gap: 10px;">
+                  <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 16px; font-weight: 600;">{{ h.name }}</span><span style="display: block; font-size: 13px; color: rgb(113,113,122);">{{ h.trainer }}</span></span>
+                  <span style="font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 26px; background: {{ h.sBg }}; color: {{ h.sInk }}; border: 1px {{ h.sBorderStyle }} {{ h.sBorder }}; white-space: nowrap;">{{ h.status }}</span>
+                </span>
+                <span style="font-size: 13px; line-height: 18px; color: rgb(63,63,70); text-wrap: pretty;">{{ h.why }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+  <div style="display: flex; flex-direction: column; gap: 16px;">
+    <button onClick="{{ backToList }}" style="align-self: flex-start; display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px 0 6px; margin-left: -6px; border: none; background: none; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 500; color: rgb(0,47,113); cursor: pointer;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-left" size="18" hint-size="18px,18px"></x-import>Stalls tests</button>
+    <div>
+      <div style="font-size: 22px; font-weight: 600; letter-spacing: -0.3px; line-height: 28px;">{{ d.name }}</div>
+      <div style="font-size: 13px; color: rgb(113,113,122); margin-top: 2px;">{{ d.meta }}</div>
+    </div>
+
+    <div style="border: 1px {{ d.sBorderStyle }} {{ d.sBorder }}; background: {{ d.sBg }}; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+      <span style="font-size: 18px; font-weight: 600; color: {{ d.sInk }};">{{ d.status }}</span>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <sc-for list="{{ d.reasons }}" as="r" hint-placeholder-count="2">
+          <div style="display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 8px; font-size: 14px; line-height: 20px; color: rgb(9,9,11);"><span style="display: flex; padding-top: 2px; color: {{ d.sInk }};"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ r.icon }}" size="16" hint-size="16px,16px"></x-import></span><span style="text-wrap: pretty;">{{ r.text }}</span></div>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ d.hasRule20 }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 10px; background: rgb(233,244,250); border: 1px solid rgb(200,224,240);">
+        <span style="font-size: 14px; font-weight: 600; color: rgb(0,47,113);">Rule 20 now applies</span>
+        <span style="font-size: 14px; color: rgb(0,47,113); font-variant-numeric: tabular-nums;">until {{ d.rule20 }}</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ d.canRecord }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ openRecord }}" style="min-height: 52px; border-radius: 10px; border: 1px solid rgb(0,47,113); background: rgb(0,47,113); color: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;">Record result</button>
+    </sc-if>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 14px; font-weight: 600;">{{ d.notifyTitle }}</span>
+      <div style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; overflow: hidden;">
+        <sc-for list="{{ d.notify }}" as="n" hint-placeholder-count="4">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid rgb(228,228,231);">
+            <span style="flex: 1; min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 500;">{{ n.who }}</span><span style="display: block; font-size: 12px; color: rgb(113,113,122);">{{ n.detail }}</span></span>
+            <span style="font-size: 12px; font-weight: 500; color: {{ n.ink }}; white-space: nowrap;">{{ n.state }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+        <span style="font-size: 14px; font-weight: 600;">Checklist history</span>
+        <span style="font-size: 12px; color: rgb(113,113,122);">Newest first</span>
+      </div>
+      <div style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; overflow: hidden;">
+        <sc-for list="{{ d.hist }}" as="h" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 52px minmax(0,1fr); gap: 10px; padding: 12px 16px 12px 10px; border-bottom: 1px solid rgb(228,228,231); background: {{ h.bg }};">
+            <span style="font-size: 12px; font-weight: 700; color: {{ h.markInk }}; padding-top: 2px; text-align: center; word-break: break-word;">{{ h.mark }}</span>
+            <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+              <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; color: rgb(82,82,91); font-variant-numeric: tabular-nums;">{{ h.d }}<span>{{ h.c }}</span><sc-if value="{{ h.pending }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 26px; background: rgb(255,247,230); color: rgb(107,67,0); border: 1px dashed rgb(201,162,74);">Not sent yet</span></sc-if><sc-if value="{{ h.isNew }}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 26px; background: rgb(233,246,239); color: rgb(0,120,63);">Sent {{ h.sentAt }}</span></sc-if></span>
+              <span style="font-size: 14px; font-weight: 600; line-height: 20px; text-wrap: pretty;">{{ h.line }} <span style="font-weight: 400; color: rgb(82,82,91);">{{ h.by }}</span></span>
+              <span style="font-size: 12px; color: rgb(113,113,122);">{{ h.label }}Trainer {{ h.t }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isRecord }}" hint-placeholder-val="{{ false }}">
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <button onClick="{{ cancelRecord }}" style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px 0 6px; margin-left: -6px; border: none; background: none; border-radius: 10px; font: inherit; font-size: 14px; font-weight: 500; color: rgb(0,47,113); cursor: pointer;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-left" size="18" hint-size="18px,18px"></x-import>Cancel</button>
+    </div>
+    <div>
+      <div style="font-size: 12px; color: rgb(113,113,122);">Record result</div>
+      <div style="font-size: 22px; font-weight: 600; letter-spacing: -0.3px; line-height: 28px;">{{ d.name }}</div>
+      <div style="font-size: 13px; color: rgb(113,113,122); margin-top: 2px;">{{ d.triggerLine }}</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 14px; font-weight: 600;">Result</span>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <sc-for list="{{ resultOpts }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.pick }}" aria-pressed="{{ o.on }}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 72px; border-radius: 14px; border: 2px solid {{ o.border }}; background: {{ o.bg }}; color: {{ o.ink }}; font: inherit; cursor: pointer;">
+            <span style="font-size: 17px; font-weight: 600;">{{ o.label }}</span>
+            <span style="font-size: 12px; font-weight: 600; opacity: 0.85;">{{ o.code }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 14px; font-weight: 600;">Who ran it</span>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <sc-for list="{{ starterOpts }}" as="s" hint-placeholder-count="3">
+          <button onClick="{{ s.toggle }}" aria-pressed="{{ s.on }}" style="display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 14px; border-radius: 10px; border: 1px solid {{ s.border }}; background: {{ s.bg }}; color: rgb(9,9,11); font: inherit; font-size: 14px; cursor: pointer;"><span style="width: 18px; height: 18px; border-radius: 4px; border: 1px solid {{ s.boxBorder }}; background: {{ s.boxBg }}; color: #fff; display: flex; align-items: center; justify-content: center;"><sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="check" size="12" hint-size="12px,12px"></x-import></sc-if></span>{{ s.name }}<b style="font-weight: 600;">({{ s.init }})</b></button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <span style="font-size: 14px; font-weight: 600;">Behaviour codes</span>
+      <sc-if value="{{ hasCodes }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #fff; border: 1px solid rgb(228,228,231); border-radius: 14px; overflow: hidden;">
+          <sc-for list="{{ chosen }}" as="c" hint-placeholder-count="2">
+            <div style="display: grid; grid-template-columns: 104px minmax(0,1fr) 44px; gap: 10px; align-items: center; padding: 8px 8px 8px 12px; border-bottom: 1px solid rgb(228,228,231);">
+              <span style="font-size: 12.5px; font-weight: 600; color: {{ c.fg }}; background: {{ c.bg }}; border: 1px solid {{ c.border }}; border-radius: 3px; padding: 3px 6px; text-align: center; white-space: nowrap;">{{ c.code }}</span>
+              <span style="min-width: 0;"><span style="display: block; font-size: 14px; font-weight: 600;">{{ c.label }}</span><span style="display: block; font-size: 12px; color: rgb(82,82,91); line-height: 16px;">{{ c.def }}</span></span>
+              <button onClick="{{ c.drop }}" aria-label="Remove code" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: none; background: none; border-radius: 8px; cursor: pointer; color: rgb(113,113,122);"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <button onClick="{{ openPicker }}" style="min-height: 48px; border-radius: 10px; border: 1px dashed rgb(154,168,192); background: #fff; color: rgb(0,47,113); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;">+ Add code</button>
+    </div>
+
+    <label style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600;">Note <span style="font-weight: 400; color: rgb(113,113,122); font-size: 12px; margin-top: -6px;">Optional</span>
+      <textarea value="{{ note }}" onInput="{{ onNote }}" rows="3" placeholder="Anything the next starter should know" style="box-sizing: border-box; width: 100%; border: 1px solid rgb(230,230,230); border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 15px; font-weight: 400; resize: vertical; box-shadow: 0 1px 2px rgba(0,0,0,0.05); outline: none;"></textarea>
+    </label>
+
+    <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 10px; background: rgb(244,244,245);">
+      <span style="font-size: 12px; color: rgb(113,113,122);">Will be recorded as</span>
+      <span style="font-size: 14px; font-weight: 600; line-height: 20px; text-wrap: pretty;">{{ previewLine }}</span>
+      <span style="font-size: 12px; color: rgb(113,113,122);">Vets, EWOs, ambulance and stable office are told when it sends.</span>
+    </div>
+
+    <div style="position: sticky; bottom: 0; background: rgb(248,250,252); padding: 10px 0 4px; display: flex; flex-direction: column; gap: 6px; border-top: 1px solid rgb(228,228,231);">
+      <button onClick="{{ save }}" disabled="{{ saveDisabled }}" style="min-height: 52px; border-radius: 10px; border: 1px solid {{ saveBorder }}; background: {{ saveBg }}; color: {{ saveInk }}; font: inherit; font-size: 16px; font-weight: 600; cursor: {{ saveCursor }};">Save result</button>
+      <span style="font-size: 12px; color: rgb(113,113,122); text-align: center;">{{ saveHint }}</span>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closePicker }}" style="position: fixed; inset: 0; background: rgba(0,0,0,0.1); z-index: 500;"></div>
+  <div style="position: fixed; z-index: 501; left: 50%; transform: translateX(-50%); bottom: 0; top: 72px; width: 600px; max-width: 100%; background: #fff; border-radius: 14px 14px 0 0; box-shadow: 0 -8px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden;">
+    <div style="border-bottom: 1px solid rgb(228,228,231); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+      <div>
+        <div style="font-size: 11px; font-weight: 600; color: rgb(113,113,122);">Add code, stalls test</div>
+        <div style="font-size: 15px; font-weight: 600;">{{ d.name }}</div>
+      </div>
+      <button onClick="{{ closePicker }}" style="min-height: 44px; background: rgb(0,47,113); border: 1px solid rgb(0,47,113); color: #fff; border-radius: 10px; padding: 0 18px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;">{{ pickerDone }}</button>
+    </div>
+    <div style="padding: 12px 16px; border-bottom: 1px solid rgb(228,228,231);">
+      <input value="{{ pq }}" onInput="{{ onPq }}" placeholder="Search a code or what it means, try “blindfold”" style="width: 100%; box-sizing: border-box; border: 2px solid rgb(0,47,113); border-radius: 10px; padding: 12px 13px; font: inherit; font-size: 16px; outline: none;">
+      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px;">
+        <sc-for list="{{ quick }}" as="x" hint-placeholder-count="4">
+          <button onClick="{{ x.run }}" style="min-height: 36px; background: #f0f2f6; border: 1px solid #dde2ea; border-radius: 20px; padding: 0 12px; font: inherit; font-size: 12px; font-weight: 600; color: rgb(0,47,113); cursor: pointer;">{{ x.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="flex: 1; overflow-y: auto;">
+      <sc-if value="{{ pickerEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 30px 20px; text-align: center; color: rgb(113,113,122); font-size: 13px;">No code matches “{{ pq }}”.</div>
+      </sc-if>
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+        <div>
+          <div style="background: #f5f6f8; padding: 7px 16px; font-size: 11px; font-weight: 600; color: #667; border-bottom: 1px solid #e8e8e8; position: sticky; top: 0;">{{ g.title }}</div>
+          <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="4">
+            <button onClick="{{ i.toggle }}" style="display: grid; grid-template-columns: 104px minmax(0,1fr) auto; gap: 12px; align-items: start; width: 100%; text-align: left; background: {{ i.bg }}; border: none; border-bottom: 1px solid #eee; padding: 12px 16px; min-height: 56px; cursor: pointer; font: inherit;">
+              <span style="font-size: 12.5px; font-weight: 600; color: {{ i.fg }}; background: {{ i.cbg }}; border: 1px solid {{ i.border }}; border-radius: 3px; padding: 3px 6px; text-align: center; white-space: nowrap;">{{ i.code }}</span>
+              <span><span style="display: block; font-size: 14px; font-weight: 600; color: rgb(9,9,11);">{{ i.label }}</span><span style="display: block; font-size: 12px; color: #555; line-height: 1.45; margin-top: 2px;">{{ i.def }}</span></span>
+              <span style="font-size: 12px; font-weight: 600; color: {{ i.actInk }}; white-space: nowrap; padding-top: 4px;">{{ i.action }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+  <div role="status" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 700; background: #fff; border: 1px solid rgb(228,228,231); border-radius: 18px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); padding: 12px 16px; font-size: 14px; color: rgb(9,9,11); max-width: 92vw;">{{ toast }}</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;phone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  CATS = {
+    test: { title: 'Stalls test', bg: '#eef2f9', fg: 'rgb(0,47,113)', border: '#c8d4e8' },
+    loading: { title: 'Loading behaviour', bg: '#fff5e5', fg: '#8a5300', border: '#f0d5a8' },
+    position: { title: 'Position & order', bg: '#eef2f9', fg: 'rgb(0,47,113)', border: '#c8d4e8' },
+  };
+  CODES = [
+    { c: 'OK', cat: 'test', label: 'Loaded and stood', def: 'Loaded without fuss and stood quietly in the stall.', syn: 'fine good quiet stood calm' },
+    { c: 'B IN STALL', cat: 'test', label: 'Blindfold in stall', def: 'Loaded blindfolded; blindfold removed once in the stall.', syn: 'blindfold hood eyes covered' },
+    { c: 'INT', cat: 'test', label: 'Intermittent', def: 'Loaded at some attempts and refused at others.', syn: 'sometimes inconsistent refuse' },
+    { c: 'REP LOADS', cat: 'test', label: 'Repeated loads', def: 'Loaded, unloaded and reloaded several times during the test.', syn: 'repeat again several times' },
+    { c: 'BLO', cat: 'test', label: 'Broke level out', def: 'Jumped out level with the stall gates when released.', syn: 'jump out start break level gates' },
+    { c: 'GD PH', cat: 'test', label: 'Good phase', def: 'Good behaviour through the full test: load, stand and jump out.', syn: 'good phase all fine' },
+    { c: 'BA', cat: 'loading', label: 'Blindfold always', def: 'Always to be loaded wearing a blindfold.', syn: 'blindfold eyes covered hood' },
+    { c: 'VR', cat: 'loading', label: 'Very reluctant to load', def: 'Very reluctant to load. Allow extra time and extra handlers.', syn: 'reluctant slow refuse resist' },
+    { c: 'VVR', cat: 'loading', label: 'Very very reluctant to load', def: 'Extremely reluctant to load. Expect a prolonged loading, load last.', syn: 'reluctant refuse worst resist' },
+    { c: 'RINS', cat: 'loading', label: 'Reared in stall', def: 'Reared in the stall after loading.', syn: 'rear reared up stand' },
+    { c: 'RINS BAD', cat: 'loading', label: 'Reared badly in stall', def: 'Reared badly in the stall, risk to horse, rider and handlers.', syn: 'rear reared badly dangerous' },
+    { c: 'KINS', cat: 'loading', label: 'Kicks in stall', def: 'Kicks in the stall after loading.', syn: 'kick kicking hind legs' },
+    { c: 'TGU', cat: 'loading', label: 'Tried to go under front gate', def: 'Attempted to go under the front gate after loading.', syn: 'under gate duck dive' },
+    { c: 'L-2', cat: 'position', label: 'Last but two to load', def: 'Load third from last, whatever its draw.', syn: 'late order last position' },
+    { c: 'DRN', cat: 'position', label: 'Load in draw order', def: 'Load in normal draw order.', syn: 'draw order normal' },
+    { c: 'GO LATE', cat: 'position', label: 'Load late', def: 'Load after the main body of the field.', syn: 'late last order hold' },
+  ];
+  STARTERS = [['Richard Smith', 'R.S'], ['Jane Mott', 'J.M'], ['Paul Ellis', 'P.E']];
+  NOTIFY = [['Vets', 'Lingfield Park veterinary team'], ['EWOs', 'Equine welfare officers on duty'], ['Ambulance', 'Horse ambulance crew'], ['Stable office', 'Lingfield Park stable office']];
+  H = {
+    silver: { name: 'Silver Mint (IRE)', trainer: 'J. Osborne', age: '4yo gelding', booked: '11:50', base: 'need', trig: ['Withdrawn', 'Windsor', '2026-06-09', 'W, TGU BAD'],
+      today: { result: 'pass', line: 'CERT, B IN STALL, OK, RULE 20 NOW APPLIES, UNTIL (08/06/27)', by: 'R.S', at: '11:58', sentAt: '11:59', rule20: '08/06/2027' },
+      hist: [['09/06/2026', 'Windsor', 'W, TGU BAD', 'J. Osborne', 'M.H', 'W'], ['20/05/2026', 'Salisbury', 'TGU', 'J. Osborne', 'P.E', ''], ['02/04/2026', 'Kempton', 'OK', 'J. Osborne', 'R.S', '']] },
+    ashdown: { name: 'Ashdown Lad (GB)', trainer: 'A. Watson', age: '3yo colt', booked: '12:05', base: 'need', trig: ['Withdrawn', 'Bath', '2026-06-20', 'W, VVR, BVR'],
+      today: { result: 'fail', line: 'FAILED, REP LOADS, VVR', by: 'R.S, J.M', at: '12:14', sentAt: '12:15' },
+      hist: [['20/06/2026', 'Bath', 'W, VVR, BVR', 'A. Watson', 'S.K', 'W'], ['31/05/2026', 'Brighton', 'VR, BA', 'A. Watson', 'P.E', '']] },
+    night: { name: 'Night Porter (GB)', trainer: 'G. Moore', age: '4yo gelding', booked: '12:40', base: 'need', trig: ['Withdrawn', 'Wolverhampton', '2026-06-22', 'W, VVR, RINS BAD'],
+      hist: [['22/06/2026', 'Wolverhampton', 'W, VVR, RINS BAD', 'G. Moore', 'M.H', 'W'], ['03/06/2026', 'Kempton', 'VR, L-1', 'G. Moore', 'R.S', ''], ['11/05/2026', 'Lingfield', 'VR', 'G. Moore', 'J.M', ''], ['14/09/2025', 'Chelmsford City', 'OK', 'G. Moore', 'P.E', '']] },
+    candle: { name: 'Candle Smoke (GB)', trainer: 'E. Walker', age: '3yo filly', booked: '12:55', base: 'need', trig: ['Reported', 'Brighton', '2026-06-18', 'R, KINS BAD'],
+      hist: [['18/06/2026', 'Brighton', 'R, KINS BAD, TGU', 'E. Walker', 'P.E', 'R'], ['30/05/2026', 'Goodwood', 'KINS', 'E. Walker', 'S.K', '']] },
+    weston: { name: 'Weston Common (GB)', trainer: 'S. Dow', age: '5yo gelding', booked: '13:10', base: 'need', trig: ['Trainer warned three times', 'Lingfield', '2026-05-29', 'TW x3'],
+      hist: [['29/05/2026', 'Lingfield', 'TW, VR', 'S. Dow', 'R.S', 'TW'], ['12/04/2026', 'Windsor', 'TW, BA', 'S. Dow', 'M.H', 'TW'], ['02/03/2026', 'Southwell', 'TW, VR', 'S. Dow', 'P.E', 'TW']] },
+    harbour: { name: 'Harbour Wall (GB)', trainer: 'P. Hedger', age: '5yo gelding', booked: '13:25', base: 'notreq', rule20: '26/10/2026',
+      reasons: ['Last withdrawn 27/10/2025 at Wolverhampton (W, RINS BAD)', 'Passed a stalls test 08/11/2025 at Wolverhampton (CERT) (R.S)', 'No W, R or TW since, 2 clean runs', 'Booked by the trainer, but no test is needed today'],
+      hist: [['14/06/2026', 'Lingfield', 'OK', 'P. Hedger', 'J.M', ''], ['21/03/2026', 'Kempton', 'DRN', 'P. Hedger', 'P.E', ''], ['08/11/2025', 'Wolverhampton', 'CERT, B IN STALL, OK, RULE 20 NOW APPLIES, UNTIL (26/10/26)', 'P. Hedger', 'R.S', 'YY'], ['27/10/2025', 'Wolverhampton', 'W, DRN, L-2, RINS BAD', 'P. Hedger', 'M.H', 'W']] },
+    lunar: { name: 'Lunar Power (IRE)', trainer: 'R. Hannon', age: '3yo colt', base: 'need', trig: ['Withdrawn', 'Kempton', '2026-07-01', 'W, RINS'],
+      hist: [['01/07/2026', 'Kempton', 'W, RINS', 'R. Hannon', 'S.K', 'W'], ['12/06/2026', 'Sandown', 'VR', 'R. Hannon', 'J.M', '']] },
+    brecon: { name: 'Brecon Beacon (GB)', trainer: 'D. Ivory', age: '6yo gelding', base: 'notreq',
+      reasons: ['No W, R or TW on record', '12 runs since 2023, all loaded'],
+      hist: [['24/06/2026', 'Lingfield', 'OK', 'D. Ivory', 'R.S', ''], ['30/04/2026', 'Brighton', 'GO EARLY', 'D. Ivory', 'P.E', '']] },
+    mister: { name: 'Mister Daydream (IRE)', trainer: 'K. Burke', age: '4yo gelding', base: 'notreq',
+      reasons: ['Trainer warned twice (TW x2): 10/06/2026 and 28/04/2026', 'A test is only needed after a third warning', 'No W or R on record'],
+      hist: [['10/06/2026', 'Newcastle', 'TW, VR', 'K. Burke', 'M.H', 'TW'], ['28/04/2026', 'Wolverhampton', 'TW', 'K. Burke', 'S.K', 'TW'], ['02/03/2026', 'Southwell', 'OK', 'K. Burke', 'P.E', '']] },
+  };
+  BOOKED = ['silver', 'ashdown', 'night', 'candle', 'weston', 'harbour'];
+  MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  state = { screen: 'list', id: null, q: '', online: false, saved: {}, form: null, picker: false, pq: '', toast: '' };
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._s); }
+  flash = (m) => { clearTimeout(this._t); this.setState({ toast: m }); this._t = setTimeout(() => this.setState({ toast: '' }), 3500); };
+  now = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+  fmt = (iso) => { const [y, m, d] = iso.split('-'); return +d + ' ' + this.MON[+m - 1] + ' ' + y; };
+  until = (iso) => { const d = new Date(iso + 'T12:00:00'); d.setFullYear(d.getFullYear() + 1); d.setDate(d.getDate() - 1); const p = (n) => String(n).padStart(2, '0'); return { long: p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear(), short: p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(2) }; };
+  codeDef = (c) => this.CODES.find(x => x.c === c);
+  sendQueue = () => {
+    clearTimeout(this._s);
+    if (!Object.values(this.state.saved).some(r => !r.sentAt)) return;
+    this._s = setTimeout(() => {
+      if (!this.state.online) return;
+      const t = this.now(), saved = {};
+      let n = 0;
+      Object.entries(this.state.saved).forEach(([k, r]) => { if (!r.sentAt) n++; saved[k] = r.sentAt ? r : { ...r, sentAt: t }; });
+      this.setState({ saved });
+      this.flash(n + (n === 1 ? ' result sent' : ' results sent') + '. Vets, EWOs, ambulance and stable office told.');
+    }, 1400);
+  };
+  today = (k) => this.state.saved[k] || this.H[k].today;
+  statusOf = (k) => {
+    const h = this.H[k], t = this.today(k);
+    if (t) return { key: t.result, pending: !t.sentAt };
+    return { key: h.base, pending: false };
+  };
+  pill = (st) => {
+    const P = { need: ['Needs test', 'rgb(255,247,230)', 'rgb(146,90,0)', 'rgb(240,213,168)'], notreq: ['Not required', 'rgb(244,244,245)', 'rgb(82,82,91)', 'rgb(228,228,231)'],
+      pass: ['Passed', 'rgb(233,246,239)', 'rgb(0,120,63)', 'rgb(190,226,206)'], fail: ['Failed', 'rgb(254,242,242)', 'rgb(185,28,28)', 'rgb(245,200,200)'] }[st.key];
+    return { status: P[0] + (st.pending ? ' \u00b7 not sent yet' : ''), sBg: P[1], sInk: P[2], sBorder: st.pending ? 'rgb(201,162,74)' : P[3], sBorderStyle: st.pending ? 'dashed' : 'solid' };
+  };
+  why = (k) => {
+    const h = this.H[k], t = this.today(k), st = this.statusOf(k);
+    if (t) return t.line + ' (' + t.by + ')' + (t.sentAt ? '' : ' \u00b7 saved ' + t.at + ' on this phone');
+    if (st.key === 'notreq') return h.reasons[0] + (h.rule20 ? ' \u00b7 passed test since' : '');
+    return h.trig[0] + ', ' + h.trig[1] + ', ' + this.fmt(h.trig[2]) + ', ' + h.trig[3];
+  };
+  open = (k) => this.setState({ screen: 'detail', id: k });
+
+  renderVals() {
+    const s = this.state, navy = 'rgb(0,47,113)';
+    const row = (k) => { const h = this.H[k]; return { name: h.name, trainer: h.trainer, booked: h.booked || '', meta: h.trainer + ' \u00b7 ' + (h.booked ? 'Booked ' + h.booked : 'Not booked today'), why: this.why(k), open: () => this.open(k), ...this.pill(this.statusOf(k)) }; };
+    const q = s.q.trim().toLowerCase();
+    const found = q ? Object.keys(this.H).filter(k => this.H[k].name.toLowerCase().includes(q) || this.H[k].trainer.toLowerCase().includes(q)).map(row) : [];
+    const cnt = { need: 0, notreq: 0, pass: 0, fail: 0 };
+    this.BOOKED.forEach(k => cnt[this.statusOf(k).key]++);
+    const summary = [[cnt.need, 'need test'], [cnt.pass, 'passed'], [cnt.fail, 'failed'], [cnt.notreq, 'not required']].filter(x => x[0]).map(x => x[0] + ' ' + x[1]).join(' \u00b7 ');
+    const pending = Object.entries(s.saved).filter(([, r]) => !r.sentAt);
+
+    let d = {};
+    if (s.id) {
+      const k = s.id, h = this.H[k], t = this.today(k), st = this.statusOf(k), p = this.pill(st);
+      const reasons = [];
+      if (st.key === 'notreq') h.reasons.forEach(r => reasons.push({ icon: 'check', text: r }));
+      else if (st.key === 'need') { reasons.push({ icon: 'triangle-alert', text: h.trig[0] + ', ' + h.trig[1] + ', ' + this.fmt(h.trig[2]) + ', ' + h.trig[3] }); reasons.push({ icon: 'info', text: 'No stalls test passed since. Cannot run until it passes.' }); if (!h.booked) reasons.push({ icon: 'info', text: 'Not booked for a test at this fixture.' }); }
+      else {
+        reasons.push({ icon: st.key === 'pass' ? 'circle-check' : 'circle-alert', text: t.line + ' (' + t.by + ') at ' + t.at });
+        reasons.push({ icon: 'info', text: 'After ' + h.trig[0].toLowerCase() + ', ' + h.trig[1] + ', ' + this.fmt(h.trig[2]) + ', ' + h.trig[3] });
+        if (st.key === 'fail') reasons.push({ icon: 'info', text: 'Cannot run until a further test is passed.' });
+        reasons.push({ icon: st.pending ? 'cloud-off' : 'check', text: st.pending ? 'Saved on this phone at ' + t.at + '. Not sent yet, sends when signal returns.' : 'Sent ' + t.sentAt + '. In the history now and on its checklist next time it runs.' });
+      }
+      const histNew = t ? [{ d: '06/07/2026', c: 'Lingfield Park', line: t.line, by: '(' + t.by + ')', t: h.trainer, mark: t.result === 'pass' ? 'YY' : 'FAILED', pending: !t.sentAt, isNew: !!t.sentAt && !!s.saved[k], sentAt: t.sentAt, label: 'Stalls test \u00b7 ' }] : [];
+      const hist = histNew.concat(h.hist.map(([dd, c, line, tr, by, mark]) => ({ d: dd, c, line, by: '(' + by + ')', t: tr, mark, pending: false, isNew: false, label: mark === 'W' ? 'Withdrawn \u00b7 ' : mark === 'YY' ? 'Stalls test passed \u00b7 ' : mark === 'R' ? 'Reported \u00b7 ' : mark === 'TW' ? 'Trainer warned \u00b7 ' : '' })))
+        .map(x => ({ ...x,
+          bg: x.mark === 'W' || x.mark === 'R' || x.mark === 'FAILED' ? 'rgb(254,245,245)' : x.mark === 'YY' ? 'rgb(240,249,244)' : '#fff',
+          markInk: x.mark === 'YY' ? 'rgb(0,120,63)' : x.mark === 'TW' ? 'rgb(146,90,0)' : 'rgb(185,28,28)' }));
+      const rule20 = t && t.result === 'pass' ? (t.rule20 || '') : h.rule20 || '';
+      const sent = t && t.sentAt;
+      d = { name: h.name, meta: h.age + ' \u00b7 ' + h.trainer + (h.booked ? ' \u00b7 booked ' + h.booked + ' with the course' : ' \u00b7 not booked today'),
+        ...p, reasons, hist, hasRule20: !!rule20, rule20, canRecord: st.key === 'need',
+        triggerLine: h.trig ? h.trig[0] + ', ' + h.trig[1] + ', ' + this.fmt(h.trig[2]) + ', ' + h.trig[3] : '',
+        notifyTitle: t ? 'Who was told' : 'Who gets told when you send a result',
+        notify: this.NOTIFY.map(([who, detail]) => ({ who, detail, state: sent ? 'Told ' + t.sentAt : t ? 'Waiting to send' : 'On send', ink: sent ? 'rgb(0,120,63)' : t ? 'rgb(146,90,0)' : 'rgb(113,113,122)' })) };
+    }
+
+    const f = s.form || { result: '', by: ['R.S'], codes: [], note: '' };
+    const h = s.id && this.H[s.id];
+    const u = h && h.trig ? this.until(h.trig[2]) : null;
+    const lineFor = (ff) => ff.result === 'pass' ? ['CERT'].concat(ff.codes, ['RULE 20 NOW APPLIES', 'UNTIL (' + u.short + ')']).join(', ') : ff.result === 'fail' ? ['FAILED'].concat(ff.codes).join(', ') : '';
+    const setF = (patch) => this.setState(x => ({ form: { ...(x.form || f), ...patch } }));
+    const canSave = !!f.result && f.by.length > 0;
+    const pqs = s.pq.trim().toLowerCase();
+    const match = (c) => !pqs || (c.c + ' ' + c.label + ' ' + c.def + ' ' + c.syn).toLowerCase().includes(pqs);
+    const groups = ['test', 'loading', 'position'].map(cat => ({ title: this.CATS[cat].title, items: this.CODES.filter(c => c.cat === cat && match(c)).map(c => {
+      const on = f.codes.includes(c.c);
+      return { code: c.c, label: c.label, def: c.def, cbg: this.CATS[cat].bg, fg: this.CATS[cat].fg, border: this.CATS[cat].border,
+        bg: on ? '#f2f5fb' : '#fff', action: on ? 'Added' : 'Add', actInk: on ? 'rgb(0,120,63)' : navy,
+        toggle: () => setF({ codes: on ? f.codes.filter(x => x !== c.c) : f.codes.concat(c.c) }) };
+    }) })).filter(g => g.items.length);
+
+    return {
+      netLabel: s.online ? 'Online' : 'No signal', netBg: s.online ? 'rgb(233,246,239)' : 'rgb(255,247,230)', netInk: s.online ? 'rgb(0,120,63)' : 'rgb(107,67,0)', netBorder: s.online ? 'rgb(190,226,206)' : 'rgb(240,213,168)', netDot: s.online ? 'rgb(0,151,79)' : 'rgb(230,150,0)',
+      toggleNet: () => { const on = !s.online; this.setState({ online: on }, () => on && this.sendQueue()); if (!on) this.flash('No signal. Results save on this phone and send when you\u2019re back online.'); },
+      hasPending: pending.length > 0,
+      pendingTitle: pending.length + (pending.length === 1 ? ' result not sent yet.' : ' results not sent yet.'),
+      pendingSub: s.online ? 'Sending\u2026' : 'Saved on this phone. Sends when signal returns.',
+      retryLabel: s.online ? 'Sending' : 'Retry now',
+      retry: () => { if (s.online) return; this.flash('Still no signal. Will keep trying.'); },
+      isList: s.screen === 'list', isDetail: s.screen === 'detail', isRecord: s.screen === 'record',
+      q: s.q, onQ: (e) => this.setState({ q: e.target.value }), clearQ: () => this.setState({ q: '' }),
+      searching: !!q, notSearching: !q, found, noneFound: !!q && !found.length,
+      booked: this.BOOKED.map(row), summary,
+      d, backToList: () => this.setState({ screen: 'list' }),
+      openRecord: () => this.setState({ screen: 'record', form: { result: '', by: ['R.S'], codes: [], note: '' } }),
+      cancelRecord: () => this.setState({ screen: 'detail', form: null }),
+      resultOpts: [['pass', 'Passed', 'CERT', 'rgb(0,120,63)', 'rgb(233,246,239)'], ['fail', 'Failed', 'FAILED', 'rgb(185,28,28)', 'rgb(254,242,242)']].map(([k, label, code, ink, bg]) => {
+        const on = f.result === k;
+        return { label, code, on, pick: () => setF({ result: k }), border: on ? ink : 'rgb(228,228,231)', bg: on ? bg : '#fff', ink: on ? ink : 'rgb(9,9,11)' };
+      }),
+      starterOpts: this.STARTERS.map(([name, init]) => {
+        const on = f.by.includes(init);
+        return { name, init, on, toggle: () => setF({ by: on ? f.by.filter(x => x !== init) : f.by.concat(init) }),
+          border: on ? navy : 'rgb(228,228,231)', bg: on ? 'rgb(233,244,250)' : '#fff', boxBorder: on ? navy : 'rgb(212,212,216)', boxBg: on ? navy : '#fff' };
+      }),
+      chosen: f.codes.map(c => { const def = this.codeDef(c), cat = this.CATS[def.cat]; return { code: c, label: def.label, def: def.def, bg: cat.bg, fg: cat.fg, border: cat.border, drop: () => setF({ codes: f.codes.filter(x => x !== c) }) }; }),
+      hasCodes: f.codes.length > 0,
+      openPicker: () => this.setState({ picker: true, pq: '' }), closePicker: () => this.setState({ picker: false }),
+      pickerOpen: s.picker, pq: s.pq, onPq: (e) => this.setState({ pq: e.target.value }),
+      pickerDone: f.codes.length ? 'Done \u00b7 ' + f.codes.length : 'Done',
+      quick: ['blindfold', 'repeat', 'rear', 'good'].map(t => ({ label: t, run: () => this.setState({ pq: t }) })),
+      groups, pickerEmpty: !groups.length,
+      note: f.note, onNote: (e) => setF({ note: e.target.value }),
+      previewLine: f.result ? lineFor(f) + ' (' + (f.by.join(', ') || '–') + ')' : 'Choose passed or failed',
+      saveDisabled: !canSave, saveBg: canSave ? navy : 'rgb(244,244,245)', saveInk: canSave ? '#fff' : 'rgb(161,161,170)', saveBorder: canSave ? navy : 'rgb(228,228,231)', saveCursor: canSave ? 'pointer' : 'default',
+      saveHint: !f.result ? 'Choose a result to save' : !f.by.length ? 'Add who ran the test' : s.online ? 'Sends now and tells vets, EWOs, ambulance and stable office' : 'No signal, saves on this phone and sends when you\u2019re back online',
+      save: () => {
+        if (!canSave) return;
+        const rec = { result: f.result, line: lineFor(f), by: f.by.join(', '), at: this.now(), sentAt: '', note: f.note, rule20: f.result === 'pass' ? u.long : '' };
+        this.setState(x => ({ saved: { ...x.saved, [s.id]: rec }, screen: 'detail', form: null, picker: false }), () => this.state.online && this.sendQueue());
+        this.flash(s.online ? 'Saved. Sending\u2026' : 'Saved on this phone. Not sent yet.');
+      },
+      toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

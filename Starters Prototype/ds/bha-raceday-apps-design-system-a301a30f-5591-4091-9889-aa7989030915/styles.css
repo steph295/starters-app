@@ -1,0 +1,10 @@
+@import './tokens/fonts.css';
+@import './tokens/fig-tokens.css';
+@import './tokens/fig-typography.css';
+@import './tokens/aliases.css';
+@import './components/core/core.css';
+@import './components/forms/forms.css';
+@import './components/feedback/feedback.css';
+@import './components/navigation/navigation.css';
+@import './components/data/data.css';
+@import './components/messaging/messaging.css';

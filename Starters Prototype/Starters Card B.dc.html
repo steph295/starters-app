@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/styles.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; font-family: Inter, -apple-system, sans-serif; background: rgb(248,250,252); }
+[data-hide~="colours"] [data-col="colours"]{display:none !important}
+[data-hide~="no"] [data-col="no"]{display:none !important}
+[data-hide~="gear"] [data-col="gear"]{display:none !important}
+[data-hide~="wif"] [data-col="wif"]{display:none !important}
+[data-hide~="prev"] [data-col="prev"]{display:none !important}
+[data-hide~="today"] [data-col="today"]{display:none !important}
+[data-hide~="priv"] [data-col="priv"]{display:none !important}
+[data-hide~="cmts"] [data-col="cmts"]{display:none !important}
+[data-hide~="notes"] [data-col="notes"]{display:none !important}
+#bha-print-portal { display: none; }
+@media print {
+  @page { size: A4 portrait; margin: 12mm; }
+  html.bha-printing, html.bha-printing body { height: auto !important; overflow: visible !important; background: #fff !important; }
+  html.bha-printing body > *:not(#bha-print-portal) { display: none !important; }
+  html.bha-printing #bha-print-portal { display: block !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</helmet>
+<div style="font-family:Inter,-apple-system,sans-serif;color:rgb(9,9,11);font-size:14px;line-height:20px">
+
+<!-- Header -->
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px 16px">
+<button type="button" onClick="{{ fixtureClick }}" aria-haspopup="listbox" style="display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;color:inherit">
+<h1 style="margin:0;font-size:{{ h1Size }};line-height:34px;font-weight:700;letter-spacing:-0.5px">{{ venue }}</h1>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="20" hint-size="20px,20px"></x-import>
+</button>
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ raceTabs }}" as="t" hint-placeholder-count="7">
+<button type="button" onClick="{{ t.select }}" aria-pressed="{{ t.pressed }}" style="min-height:36px;padding:0 12px;font:inherit;font-size:14px;font-weight:{{ t.weight }};background:{{ t.bg }};border:1px solid {{ t.border }};border-radius:10px;cursor:pointer;color:{{ t.color }};font-variant-numeric:tabular-nums">{{ t.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="margin-top:8px;font-size:14px;line-height:20px;color:rgb(82,82,91)">{{ dateLine }}</div>
+<div style="font-size:16px;line-height:24px;font-weight:600;color:rgb(0,47,113);text-wrap:pretty">{{ raceTitle }}</div>
+
+<!-- Toolbar -->
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:16px 0">
+<div role="radiogroup" aria-label="Stalls" style="display:inline-flex;gap:4px;padding:4px;background:rgb(235,235,236);border-radius:12px">
+<sc-for list="{{ oeOpts }}" as="o" hint-placeholder-count="3">
+<button type="button" role="radio" onClick="{{ o.pick }}" aria-checked="{{ o.pressed }}" style="min-height:36px;padding:0 16px;border:none;border-radius:8px;background:{{ o.tBg }};box-shadow:{{ o.tShadow }};color:{{ o.tInk }};font:inherit;font-size:14px;font-weight:600;cursor:pointer">{{ o.label }}</button>
+</sc-for>
+</div>
+<div style="position:relative">
+<button type="button" onClick="{{ toggleCols }}" aria-expanded="{{ colsOpenAttr }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="columns" size="16" hint-size="16px,16px"></x-import>Columns</button>
+<sc-if value="{{ colsOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ toggleCols }}" style="position:fixed;inset:0;z-index:80;background:{{ colsScrim }}"></div>
+<div role="dialog" aria-label="Show columns" style="{{ colsPos }}z-index:81;width:{{ colsW }};box-sizing:border-box;background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);padding:8px">
+<div style="padding:8px 10px 4px;font-size:16px;line-height:24px;font-weight:600">Show columns</div>
+<div style="padding:0 10px 8px;font-size:13px;line-height:18px;color:rgb(113,113,122)">Saved on this device. Draw and jockey always show.</div>
+<sc-for list="{{ colToggles }}" as="c" hint-placeholder-count="7">
+<label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:0 10px;border-radius:10px;cursor:pointer;font-size:14px">
+<span style="display:flex;flex-direction:column"><span>{{ c.label }}</span><sc-if value="{{ c.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ c.hint }}</span></sc-if></span>
+<input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" style="width:22px;height:22px;accent-color:rgb(0,47,113);cursor:pointer;flex-shrink:0">
+</label>
+</sc-for>
+<div style="display:flex;justify-content:flex-end;padding:8px 10px 4px;border-top:1px solid rgb(244,244,245);margin-top:4px"><button type="button" onClick="{{ resetCols }}" style="min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Reset to default</button></div>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ canCustomise }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ customise }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="sliders-horizontal" size="16" hint-size="16px,16px"></x-import>Customise card</button></sc-if>
+<button type="button" onClick="{{ openPrint }}" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="printer" size="16" hint-size="16px,16px"></x-import>Print</button>
+<div style="flex:1"></div>
+<span style="font-size:14px;line-height:20px;color:rgb(82,82,91)">{{ countLine }}</span>
+</div>
+
+<!-- Runners: table (desktop, tablet) -->
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<div data-hide="{{ hideAttr }}" style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;overflow:hidden">
+<div style="display:grid;grid-template-columns:{{ gridCols }};column-gap:12px;align-items:end;padding:10px 16px;border-bottom:1px solid rgb(228,228,231);font-size:12px;line-height:16px;font-weight:600;color:rgb(113,113,122)">
+<span data-col="colours"></span><span style="text-align:center">Draw</span><span data-col="no" style="text-align:center">No.</span><span>Jockey / horse</span><span data-col="gear">B / TS</span><span data-col="priv">Privileges</span><span data-col="wif">Withdraw if</span><span data-col="prev">Previous at the start</span><span data-col="today">Today</span><span data-col="cmts">Horse comments</span><span data-col="notes">Notes</span>
+</div>
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="12">
+<div style="display:grid;grid-template-columns:{{ gridCols }};column-gap:12px;align-items:center;min-height:64px;padding:8px 16px;border-bottom:1px solid rgb(228,228,231);background:{{ r.bg }}">
+<span data-col="colours" style="display:inline-flex;justify-content:center"><dc-import name="Silk" spec="{{ r.spec }}" size="40" label="{{ r.colours }}" hint-size="40px,40px"></dc-import></span>
+<span aria-label="Draw {{ r.draw }}" style="font-size:26px;line-height:28px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums">{{ r.draw }}</span>
+<span data-col="no" style="display:flex;justify-content:center;border-left:2px solid rgb(228,228,231);align-self:stretch;align-items:center"><span aria-label="Saddlecloth {{ r.no }}" style="display:inline-flex;flex-direction:column;align-items:center;min-width:38px;padding:2px 0;border-radius:8px;background:rgb(244,244,245);line-height:1"><span style="font-size:9px;font-weight:600;color:rgb(113,113,122);margin-top:2px">NO.</span><span style="font-size:15px;line-height:18px;font-weight:600;color:rgb(63,63,70);font-variant-numeric:tabular-nums">{{ r.no }}</span></span></span>
+<span style="min-width:0;display:flex;flex-direction:column"><span style="font-size:16px;line-height:22px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><button type="button" data-detail="{{ r.jKey }}" style="background:none;border:none;padding:0;font:inherit;color:rgb(0,47,113);text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-align:left">{{ r.jockey }}</button><span style="font-weight:500;color:rgb(82,82,91)">{{ r.claim }}</span></span><span style="font-size:12px;line-height:16px;color:rgb(82,82,91);overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><button type="button" data-detail="{{ r.hKey }}" style="background:none;border:none;padding:0;font:inherit;color:inherit;text-decoration:underline;text-decoration-color:rgb(161,161,170);text-underline-offset:2px;cursor:pointer;text-align:left">{{ r.horse }}</button></span></span>
+<span data-col="gear" style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ r.gear }}" as="g" hint-placeholder-count="1"><span title="{{ g.title }}" style="font-size:12px;line-height:18px;font-weight:700;padding:0 7px;border-radius:6px;border:1.5px solid rgb(9,9,11)">{{ g.code }}</span></sc-for></span>
+<span data-col="priv" style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ r.priv }}" as="g" hint-placeholder-count="0"><span title="{{ g.title }}" style="font-size:11px;line-height:18px;font-weight:700;padding:0 7px;border-radius:26px;background:{{ g.bg }};color:{{ g.ink }}">{{ g.text }}</span></sc-for></span>
+<span data-col="wif" style="font-size:13px;line-height:18px;font-weight:600;color:rgb(185,28,28);text-wrap:pretty">{{ r.wif }}</span>
+<span data-col="prev" style="display:flex;gap:4px;flex-wrap:wrap"><sc-for list="{{ r.prev }}" as="b" hint-placeholder-count="1"><span title="{{ b.title }}" style="font-size:12px;line-height:18px;font-weight:600;padding:0 8px;border-radius:26px;background:rgb(255,247,230);color:rgb(146,90,0);border:1px solid rgb(240,213,168)">{{ b.label }}</span></sc-for></span>
+<span data-col="today" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center"><sc-for list="{{ r.today }}" as="b" hint-placeholder-count="0"><span title="{{ b.title }}" style="font-size:12px;line-height:18px;font-weight:600;padding:0 8px;border-radius:26px;background:rgb(233,244,250);color:rgb(0,47,113);border:1px solid rgb(191,219,254)">{{ b.label }}</span></sc-for><button type="button" onClick="{{ r.openNote }}" title="Add behaviour at the start today" aria-label="Add behaviour" style="display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0 8px;border:1px dashed rgb(147,167,199);border-radius:26px;background:#fff;font:inherit;font-size:12px;font-weight:600;color:rgb(0,47,113);cursor:pointer;white-space:nowrap">+ Add</button></span>
+<span data-col="cmts" style="min-width:0;display:flex;flex-direction:column;gap:6px"><sc-for list="{{ r.cmts }}" as="c" hint-placeholder-count="0"><span style="display:block;font-size:12px;line-height:16px"><span style="display:flex;align-items:center;gap:6px;color:rgb(113,113,122)"><span style="font-size:10px;font-weight:700;padding:0 5px;border-radius:4px;background:{{ c.bg }};color:{{ c.ink }}">{{ c.cat }}</span>{{ c.when }}</span><span style="display:block;color:rgb(9,9,11);text-wrap:pretty">{{ c.text }}</span></span></sc-for><sc-if value="{{ r.noCmts }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:rgb(161,161,170)">None</span></sc-if></span>
+<span data-col="notes" style="min-width:0"><button type="button" onClick="{{ r.openNote }}" style="width:100%;min-height:44px;display:flex;align-items:center;gap:8px;padding:6px 10px;text-align:left;border:1px {{ r.noteBorderStyle }} {{ r.noteBorder }};border-radius:10px;background:#fff;font:inherit;font-size:13px;line-height:18px;color:{{ r.noteInk }};cursor:pointer"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">{{ r.noteLabel }}</span></button></span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Runners: cards (phone) -->
+<sc-if value="{{ phone }}" hint-placeholder-val="{{ false }}">
+<div data-hide="{{ hideAttr }}" style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+<div style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:10px">
+<span data-col="colours" style="display:inline-flex;flex-shrink:0"><dc-import name="Silk" spec="{{ r.spec }}" size="40" label="{{ r.colours }}" hint-size="40px,40px"></dc-import></span>
+<span style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;line-height:1;min-width:34px"><span style="font-size:10px;font-weight:600;color:rgb(113,113,122)">DRAW</span><span style="font-size:26px;line-height:28px;font-weight:700;font-variant-numeric:tabular-nums">{{ r.draw }}</span></span>
+<span data-col="no" style="flex-shrink:0;align-self:stretch;border-left:2px solid rgb(228,228,231);padding-left:10px;display:flex;align-items:center"><span style="display:inline-flex;flex-direction:column;align-items:center;min-width:34px;padding:2px 0;border-radius:8px;background:rgb(244,244,245);line-height:1"><span style="font-size:9px;font-weight:600;color:rgb(113,113,122);margin-top:2px">NO.</span><span style="font-size:15px;line-height:18px;font-weight:600;color:rgb(63,63,70);font-variant-numeric:tabular-nums">{{ r.no }}</span></span></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-size:16px;line-height:22px;font-weight:700"><button type="button" data-detail="{{ r.jKey }}" style="background:none;border:none;padding:0;font:inherit;color:rgb(0,47,113);text-decoration:underline;text-underline-offset:2px;cursor:pointer;text-align:left">{{ r.jockey }}</button><span style="font-weight:500;color:rgb(82,82,91)">{{ r.claim }}</span></span><span style="font-size:12px;line-height:16px;color:rgb(82,82,91)"><button type="button" data-detail="{{ r.hKey }}" style="background:none;border:none;padding:0;font:inherit;color:inherit;text-decoration:underline;text-decoration-color:rgb(161,161,170);text-underline-offset:2px;cursor:pointer;text-align:left">{{ r.horse }}</button></span></span>
+<span data-col="gear" style="display:flex;gap:4px;flex-shrink:0"><sc-for list="{{ r.gear }}" as="g" hint-placeholder-count="1"><span title="{{ g.title }}" style="font-size:12px;line-height:18px;font-weight:700;padding:0 6px;border-radius:6px;border:1.5px solid rgb(9,9,11)">{{ g.code }}</span></sc-for></span>
+<span data-col="priv" style="display:flex;gap:4px;flex-shrink:0"><sc-for list="{{ r.priv }}" as="g" hint-placeholder-count="0"><span title="{{ g.title }}" style="font-size:11px;line-height:18px;font-weight:700;padding:0 7px;border-radius:26px;background:{{ g.bg }};color:{{ g.ink }}">{{ g.text }}</span></sc-for></span>
+</div>
+<sc-if value="{{ r.hasWif }}" hint-placeholder-val="{{ false }}"><div data-col="wif" style="font-size:13px;line-height:18px;font-weight:600;color:rgb(185,28,28)">Withdraw if: {{ r.wif }}</div></sc-if>
+<sc-if value="{{ r.hasPrev }}" hint-placeholder-val="{{ false }}"><div data-col="prev" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center"><span style="font-size:12px;color:rgb(113,113,122);margin-right:2px">Previous</span><sc-for list="{{ r.prev }}" as="b" hint-placeholder-count="1"><span style="font-size:12px;line-height:18px;font-weight:600;padding:0 8px;border-radius:26px;background:rgb(255,247,230);color:rgb(146,90,0);border:1px solid rgb(240,213,168)">{{ b.label }}</span></sc-for></div></sc-if>
+<sc-if value="{{ r.hasToday }}" hint-placeholder-val="{{ false }}"><div data-col="today" style="display:flex;gap:4px;flex-wrap:wrap;align-items:center"><span style="font-size:12px;color:rgb(113,113,122);margin-right:2px">Today</span><sc-for list="{{ r.today }}" as="b" hint-placeholder-count="0"><span title="{{ b.title }}" style="font-size:12px;line-height:18px;font-weight:600;padding:0 8px;border-radius:26px;background:rgb(233,244,250);color:rgb(0,47,113);border:1px solid rgb(191,219,254)">{{ b.label }}</span></sc-for></div></sc-if>
+<sc-if value="{{ r.hasCmts }}" hint-placeholder-val="{{ false }}"><div data-col="cmts" style="display:flex;flex-direction:column;gap:6px;padding:8px 10px;border-radius:10px;background:rgb(250,250,250)"><span style="font-size:12px;color:rgb(113,113,122)">Horse comments</span><sc-for list="{{ r.cmts }}" as="c" hint-placeholder-count="0"><span style="font-size:13px;line-height:18px"><span style="font-size:10px;font-weight:700;padding:0 5px;border-radius:4px;background:{{ c.bg }};color:{{ c.ink }};margin-right:6px">{{ c.cat }}</span>{{ c.text }} <span style="color:rgb(113,113,122)">{{ c.when }}</span></span></sc-for></div></sc-if>
+<div data-col="notes"><button type="button" onClick="{{ r.openNote }}" style="width:100%;min-height:44px;display:flex;align-items:center;gap:8px;padding:8px 12px;text-align:left;border:1px {{ r.noteBorderStyle }} {{ r.noteBorder }};border-radius:10px;background:#fff;font:inherit;font-size:14px;line-height:20px;color:{{ r.noteInk }};cursor:pointer">{{ r.noteLabel }}</button></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Note sheet: horse stays visible while writing -->
+<sc-if value="{{ noteOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeNote }}" style="position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:400"></div>
+<div role="dialog" aria-modal="true" aria-label="Notes for {{ nr.horse }}" style="position:fixed;z-index:410;background:#fff;display:flex;flex-direction:column;{{ notePos }}">
+<div style="display:flex;align-items:flex-start;gap:12px;padding:16px;border-bottom:1px solid rgb(228,228,231);background:rgb(250,250,250)">
+<span style="flex-shrink:0;display:inline-flex"><dc-import name="Silk" spec="{{ nr.spec }}" size="48" label="{{ nr.colours }}" hint-size="48px,48px"></dc-import></span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+<span style="font-size:12px;line-height:16px;font-weight:600;color:rgb(113,113,122)">Draw {{ nr.draw }} · No.{{ nr.no }}</span>
+<span style="font-size:18px;line-height:24px;font-weight:700"><button type="button" data-detail="{{ nr.hKey }}" style="background:none;border:none;padding:0;font:inherit;color:inherit;text-decoration:underline;text-decoration-color:rgb(161,161,170);text-underline-offset:2px;cursor:pointer;text-align:left">{{ nr.horse }}</button></span>
+<span style="font-size:14px;line-height:20px;color:rgb(63,63,70)">{{ nr.jockey }} · {{ nr.trainer }}</span>
+</div>
+<button type="button" onClick="{{ closeNote }}" aria-label="Close" style="flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;cursor:pointer;color:rgb(63,63,70)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
+<sc-if value="{{ nr.hasPrev }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;line-height:20px;font-weight:600">Previous at the start</span>
+<sc-for list="{{ nr.prev }}" as="b" hint-placeholder-count="1"><div style="font-size:13px;line-height:18px"><span style="font-weight:600;color:rgb(146,90,0)">{{ b.label }}</span> <span style="color:rgb(63,63,70)">{{ b.meaning }}</span> <span style="color:rgb(113,113,122)">· {{ b.when }}</span></div></sc-for>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;line-height:20px;font-weight:600">What happened today</span>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ quick }}" as="q" hint-placeholder-count="6"><button type="button" onClick="{{ q.toggle }}" aria-pressed="{{ q.pressed }}" style="min-height:40px;padding:0 14px;border:1px solid {{ q.border }};border-radius:26px;background:{{ q.bg }};color:{{ q.ink }};font:inherit;font-size:13px;font-weight:700;cursor:pointer;text-align:left;line-height:16px" title="{{ q.meaning }}">{{ q.label }}<span style="display:block;font-size:11px;font-weight:400;color:rgb(113,113,122);max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.meaning }}</span></button></sc-for>
+</div>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;line-height:20px;font-weight:600">Note</span>
+<textarea value="{{ nr.note }}" onInput="{{ setNote }}" rows="5" placeholder="What happened at the start" style="width:100%;box-sizing:border-box;min-height:120px;border:1px solid rgb(212,212,216);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;line-height:20px;resize:vertical"></textarea></label>
+</div>
+<div style="display:flex;gap:10px;padding:12px 16px 16px;border-top:1px solid rgb(228,228,231)">
+<button type="button" onClick="{{ prevRunner }}" style="min-height:44px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Previous runner</button>
+<div style="flex:1"></div>
+<button type="button" onClick="{{ closeNote }}" style="min-height:44px;padding:0 20px;border:none;border-radius:10px;background:rgb(0,47,113);color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Done</button>
+<button type="button" onClick="{{ nextRunner }}" style="min-height:44px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Next runner</button>
+</div>
+</div>
+</sc-if>
+
+<!-- Print sheet (the same markup is shown in the preview) -->
+<div id="starters-b-print" style="display:none">
+<sc-for list="{{ pages }}" as="pg" hint-placeholder-count="1">
+<div style="font-family:Inter,-apple-system,sans-serif;color:#000;background:#fff;{{ pg.pageStyle }}">
+<div style="display:flex;align-items:baseline;gap:10px;padding-bottom:6px;border-bottom:2px solid #000"><span style="font-size:12px;font-weight:700;letter-spacing:0.3px">{{ pg.venue }}</span><span style="font-size:12px">{{ pg.date }}</span><span style="flex:1"></span><span style="font-size:11px;font-weight:700">{{ pg.stalls }}</span></div>
+<div style="display:flex;align-items:baseline;gap:12px;padding:8px 0 6px"><span style="font-size:28px;line-height:30px;font-weight:700">{{ pg.time }}</span><span style="font-size:12px;line-height:16px;font-weight:600">{{ pg.title }}</span></div>
+<div style="display:grid;grid-template-columns:{{ pg.cols }};column-gap:8px;padding:4px 0;border-bottom:1.5px solid #000;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px"><sc-for list="{{ pg.heads }}" as="h" hint-placeholder-count="6"><span style="text-align:{{ h.align }}">{{ h.label }}</span></sc-for></div>
+<sc-for list="{{ pg.rows }}" as="d" hint-placeholder-count="10">
+<div style="display:grid;grid-template-columns:{{ pg.cols }};column-gap:8px;align-items:center;min-height:{{ pg.rowH }};border-bottom:1px solid #999;break-inside:avoid">
+<sc-for list="{{ d.cells }}" as="c" hint-placeholder-count="6">
+<sc-if value="{{ c.isSilk }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;justify-content:center"><dc-import name="Silk" spec="{{ c.spec }}" size="30" label="{{ c.text }}" hint-size="30px,30px"></dc-import></span></sc-if>
+<sc-if value="{{ c.isText }}" hint-placeholder-val="{{ true }}"><span style="font-size:{{ c.size }};line-height:1.25;font-weight:{{ c.weight }};text-align:{{ c.align }};{{ c.extra }}">{{ c.text }}<sc-if value="{{ c.hasSub }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:9.5px;font-weight:400">{{ c.sub }}</span></sc-if></span></sc-if>
+<sc-if value="{{ c.isBlank }}" hint-placeholder-val="{{ false }}"><span style="align-self:stretch;border-left:1px solid #ccc"></span></sc-if>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+
+<!-- Print preview -->
+<sc-if value="{{ printOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;z-index:600;background:rgb(244,244,245);display:flex;flex-direction:{{ ppDir }}">
+<div role="dialog" aria-modal="true" aria-label="Print preview" style="flex:{{ ppSide }};background:#fff;border-right:1px solid rgb(228,228,231);border-bottom:1px solid rgb(228,228,231);display:flex;flex-direction:column;overflow-y:auto">
+<div style="display:flex;align-items:flex-start;gap:12px;padding:20px 20px 8px"><div style="flex:1"><div style="font-size:16px;line-height:24px;font-weight:600">Print preview</div><div style="font-size:14px;line-height:20px;color:rgb(113,113,122)">This is exactly what will print. Check it now, you print once before racing.</div></div><button type="button" onClick="{{ closePrint }}" aria-label="Close" style="flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button></div>
+<div style="padding:12px 20px 0;display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;line-height:20px;font-weight:600">Stalls</span>
+<div role="radiogroup" aria-label="Stalls" style="display:flex;gap:4px;padding:4px;background:rgb(235,235,236);border-radius:12px"><sc-for list="{{ ppStalls }}" as="o" hint-placeholder-count="3"><button type="button" role="radio" onClick="{{ o.pick }}" aria-checked="{{ o.pressed }}" style="flex:1;min-height:40px;border:none;border-radius:8px;background:{{ o.tBg }};box-shadow:{{ o.tShadow }};color:{{ o.tInk }};font:inherit;font-size:14px;font-weight:600;cursor:pointer">{{ o.label }}</button></sc-for></div></div>
+<div style="padding:16px 20px 0;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px"><span style="font-size:14px;line-height:20px;font-weight:600">On the sheet</span><button type="button" onClick="{{ ppResetCols }}" style="background:none;border:none;padding:0;font:inherit;font-size:13px;font-weight:600;color:rgb(0,47,113);cursor:pointer">Reset</button></div>
+<span style="font-size:13px;line-height:18px;color:rgb(113,113,122)">Draw and jockey always print. Saved for next time. Every sheet covers all races.</span>
+<sc-for list="{{ ppCols }}" as="c" hint-placeholder-count="7">
+<label style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:0 12px;border:1px solid rgb(228,228,231);border-radius:10px;cursor:pointer;font-size:14px">
+<span>{{ c.label }}</span>
+<input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" style="width:22px;height:22px;accent-color:rgb(0,47,113);cursor:pointer;flex-shrink:0">
+</label>
+</sc-for>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;gap:10px;padding:16px 20px 20px;border-top:1px solid rgb(228,228,231);margin-top:16px">
+<button type="button" onClick="{{ closePrint }}" style="min-height:44px;padding:0 18px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Back to card</button>
+<button type="button" onClick="{{ doPrint }}" style="flex:1;min-height:44px;border:none;border-radius:10px;background:rgb(0,47,113);color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="printer" size="16" hint-size="16px,16px"></x-import>{{ ppPrintLabel }}</button>
+</div>
+</div>
+<div style="flex:1;min-width:0;min-height:0;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 20px;border-bottom:1px solid rgb(228,228,231);background:rgb(250,250,250)">
+<span style="font-size:14px;line-height:20px;font-weight:600">{{ ppPageLabel }}</span>
+<div style="display:flex;gap:8px">
+<button type="button" onClick="{{ ppPrev }}" aria-label="Previous sheet" style="min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer;opacity:{{ ppPrevOp }}">Previous</button>
+<button type="button" onClick="{{ ppNext }}" aria-label="Next sheet" style="min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer;opacity:{{ ppNextOp }}">Next</button>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow:auto;padding:24px;display:flex;justify-content:center;align-items:flex-start">
+<div style="width:760px;zoom:{{ ppZoom }};flex-shrink:0;aspect-ratio:210/297;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.12),0 8px 24px rgba(0,0,0,0.08);padding:{{ ppPad }};box-sizing:border-box;overflow:hidden">
+<sc-for list="{{ previewPage }}" as="pg" hint-placeholder-count="1">
+<div style="font-family:Inter,-apple-system,sans-serif;color:#000;background:#fff">
+<div style="display:flex;align-items:baseline;gap:10px;padding-bottom:6px;border-bottom:2px solid #000"><span style="font-size:12px;font-weight:700;letter-spacing:0.3px">{{ pg.venue }}</span><span style="font-size:12px">{{ pg.date }}</span><span style="flex:1"></span><span style="font-size:11px;font-weight:700">{{ pg.stalls }}</span></div>
+<div style="display:flex;align-items:baseline;gap:12px;padding:8px 0 6px"><span style="font-size:28px;line-height:30px;font-weight:700">{{ pg.time }}</span><span style="font-size:12px;line-height:16px;font-weight:600">{{ pg.title }}</span></div>
+<div style="display:grid;grid-template-columns:{{ pg.cols }};column-gap:8px;padding:4px 0;border-bottom:1.5px solid #000;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px"><sc-for list="{{ pg.heads }}" as="h" hint-placeholder-count="6"><span style="text-align:{{ h.align }}">{{ h.label }}</span></sc-for></div>
+<sc-for list="{{ pg.rows }}" as="d" hint-placeholder-count="10">
+<div style="display:grid;grid-template-columns:{{ pg.cols }};column-gap:8px;align-items:center;min-height:{{ pg.rowH }};border-bottom:1px solid #999">
+<sc-for list="{{ d.cells }}" as="c" hint-placeholder-count="6">
+<sc-if value="{{ c.isSilk }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;justify-content:center"><dc-import name="Silk" spec="{{ c.spec }}" size="30" label="{{ c.text }}" hint-size="30px,30px"></dc-import></span></sc-if>
+<sc-if value="{{ c.isText }}" hint-placeholder-val="{{ true }}"><span style="font-size:{{ c.size }};line-height:1.25;font-weight:{{ c.weight }};text-align:{{ c.align }};{{ c.extra }}">{{ c.text }}<sc-if value="{{ c.hasSub }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-size:9.5px;font-weight:400">{{ c.sub }}</span></sc-if></span></sc-if>
+<sc-if value="{{ c.isBlank }}" hint-placeholder-val="{{ false }}"><span style="align-self:stretch;border-left:1px solid #ccc"></span></sc-if>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;phone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;fixtureVenue&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;onFixtureClick&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;},&quot;oddEven&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;noteFor&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;number&quot;},&quot;colsOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;printOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;},&quot;seedNotes&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;hiddenCols&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;gearSettings&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;onCustomise&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  RACES = ['1:50', '2:25', '3:00', '3:35', '4:10', '4:45', '5:20'];
+  // A full field: 20 runners, sorted by draw on the card. Saddlecloth numbers are deliberately close to draw numbers in places (draw 20 next to No.19).
+  RUNNERS = [
+    { no: 1, priv: ['EP'], cmts: [['Loading','14/06/26 Sandown','Reluctant to load, walked in at the third attempt.']], draw: 14, horse: 'Mister Daydream (IRE)', jockey: 'Kieran Shoemark', trainer: 'Richard Hannon', spec: { body:'navy', pattern:'star', second:'gold', cap:'navy' }, colours: 'Navy, gold star', gear: ['TS'], wif: 'Withdrawn if tongue strap', prev: [['GD PH', '14 Jun, Sandown']] },
+    { no: 2, priv: [], cmts: [], draw: 5, horse: 'Lunar Power (IRE)', jockey: 'Rossa Ryan', trainer: 'Andrew Balding', spec: { body:'red', pattern:'hoops', second:'white', cap:'red' }, colours: 'Red, white hoops', gear: [], prev: [] },
+    { no: 3, priv: ['RH','WITS'], cmts: [['Behaviour','14/03/26 Kempton','Blindfold needed. Rears if held too long behind the stalls.'],['Welfare','02/01/26 Lingfield','Cut hind leg in the stall, vet checked, fit to run.']], draw: 1, horse: 'Candle Smoke (GB)', jockey: 'Hollie Doyle', trainer: 'Ralph Beckett', spec: { body:'emerald green', pattern:'sash', second:'white', cap:'emerald green' }, colours: 'Emerald green, white sash', gear: ['B'], wif: 'Front plate lost', prev: [['B & OK', '14 Mar, Kempton'], ['FS', '02 Jan, Lingfield']] },
+    { no: 4, priv: [], cmts: [], draw: 19, horse: 'Quartz River (FR)', jockey: 'Tom Marquand', trainer: 'George Boughey', spec: { body:'yellow', pattern:'chevrons', second:'black', cap:'yellow' }, colours: 'Yellow, black chevrons', gear: [], prev: [] },
+    { no: 5, priv: ['FW'], cmts: [], draw: 2, horse: 'Brecon Beacon (GB)', jockey: 'David Probert', trainer: 'Eve Johnson Houghton', spec: { body:'royal blue', cap:'orange' }, colours: 'Royal blue, orange cap', gear: ['B', 'TS'], prev: [['JUST OK', '19 Jun, Bath']] },
+    { no: 6, priv: ['WITS'], cmts: [['Loading','30/05/26 Lingfield','Kicked out in the stalls. Load last.']], draw: 7, horse: 'Silver Mint (IRE)', jockey: 'Saffie Osborne', trainer: 'Jamie Osborne', spec: { body:'white', pattern:'cross belts', second:'maroon', cap:'white' }, colours: 'White, maroon cross belts', gear: ['TS'], wif: 'Withdrawn if tongue strap', prev: [['KINS', '30 May, Lingfield']] },
+    { no: 7, priv: [], cmts: [], draw: 4, horse: 'Night Porter (GB)', jockey: 'Jason Watson', trainer: 'Gary Moore', spec: { body:'black', pattern:'diamond', second:'pink', cap:'black' }, colours: 'Black, pink diamond', gear: [], prev: [] },
+    { no: 8, priv: ['EP','HP'], cmts: [['Behaviour','12/06/26 Lingfield','Goes in late, settle with a lead horse.']], draw: 6, horse: 'Ashdown Lad (GB)', jockey: 'Cieren Fallon', trainer: 'Archie Watson', spec: { body:'brown', pattern:'stripes', second:'beige', cap:'brown' }, colours: 'Chocolate, cream stripes', gear: [], prev: [['L-1', '12 Jun, Lingfield'], ['GO LATE', '12 Jun, Lingfield']] },
+    { no: 9, priv: ['Ear out'], cmts: [], draw: 8, horse: 'Weston Common (GB)', jockey: 'Rob Hornby', trainer: 'Charlie Hills', spec: { body:'grey', pattern:'braces', second:'red', cap:'grey' }, colours: 'Grey, red braces', gear: ['B'], prev: [] },
+    { no: 10, priv: [], cmts: [], draw: 12, horse: 'Harbour Lights (IRE)', jockey: 'Oisin Murphy', trainer: 'Andrew Balding', spec: { body:'light blue', pattern:'spots', second:'white', cap:'light blue' }, colours: 'Light blue, white spots', gear: [], prev: [] },
+    { no: 11, priv: ['LL'], cmts: [['Equipment','05/05/26 Windsor','Tongue strap fitted at the start after declaration note.']], draw: 3, horse: 'Copper Kettle (GB)', jockey: 'Benoit de la Sayette', trainer: 'John & Thady Gosden', spec: { body:'orange', pattern:'halved', second:'black', cap:'orange' }, colours: 'Orange and black halved', gear: ['TS'], prev: [['CH', '05 May, Windsor']], claim: ' (3)' },
+    { no: 12, priv: [], cmts: [], draw: 16, horse: 'Field Marshal (FR)', jockey: 'Mickael Barzalona', trainer: 'Charlie Appleby', spec: { body:'royal blue', cap:'royal blue' }, colours: 'Royal blue', gear: [], prev: [], foreign: true },
+    { no: 13, priv: [], cmts: [], draw: 9, horse: 'Fennel Brook (USA)', jockey: 'William Buick', trainer: 'Charlie Appleby', spec: { body:'royal blue', pattern:'disc', second:'white', cap:'white' }, colours: 'Royal blue, white disc, white cap', gear: ['B'], wif: 'Blinkers come off before loading', prev: [] },
+    { no: 14, priv: ['RH'], cmts: [['Behaviour','21/04/26 Newbury','Reared as the gates opened, unseated, remounted.']], draw: 11, horse: 'Glass Harbour (GB)', jockey: 'Silvestre de Sousa', trainer: 'Clive Cox', spec: { body:'maroon', pattern:'hoops', second:'gold', cap:'maroon' }, colours: 'Maroon, gold hoops', gear: [], prev: [['R', '21 Apr, Newbury']] },
+    { no: 15, priv: [], cmts: [], draw: 18, horse: 'Ivy League (IRE)', jockey: 'Ryan Moore', trainer: 'Aidan O’Brien', spec: { body:'dark blue', pattern:'stripes', second:'white', cap:'white' }, colours: 'Dark blue, white stripes', gear: ['TS'], prev: [], foreign: true },
+    { no: 16, priv: [], cmts: [], draw: 10, horse: 'Morning Ledger (GB)', jockey: 'Niamh Brennan', trainer: 'Ed Walker', spec: { body:'purple', pattern:'quartered', second:'yellow', cap:'purple' }, colours: 'Purple and yellow quartered', gear: [], prev: [], claim: ' (5)' },
+    { no: 17, priv: [], cmts: [], draw: 13, horse: 'Pebble Dash (GB)', jockey: 'Callum Shepherd', trainer: 'Simon & Ed Crisford', spec: { body:'white', pattern:'sash', second:'black', cap:'black' }, colours: 'White, black sash', gear: ['B', 'TS'], wif: 'Plate lost', prev: [] },
+    { no: 18, priv: ['EP'], cmts: [], draw: 17, horse: 'Rosa Gallica (IRE)', jockey: 'Jim Crowley', trainer: 'Owen Burrows', spec: { body:'pink', pattern:'cross belts', second:'black', cap:'pink' }, colours: 'Pink, black cross belts', gear: [], prev: [['1ST', '08 May, Ascot']] },
+    { no: 19, priv: ['MC'], cmts: [], draw: 20, horse: 'Thornbury (GB)', jockey: 'Luke Morris', trainer: 'Sir Mark Prescott', spec: { body:'black', pattern:'hoops', second:'white', cap:'white' }, colours: 'Black, white hoops', gear: [], prev: [] },
+    { no: 20, priv: [], cmts: [], draw: 15, horse: 'Velvet Hour (IRE)', jockey: 'Andrea Atzeni', trainer: 'Roger Varian', spec: { body:'light green', pattern:'braces', second:'dark green', cap:'dark green' }, colours: 'Light green, dark green braces', gear: ['TS'], prev: [] },
+  ];
+  GEAR = { B: 'Blinkers', TS: 'Tongue strap' };
+  PRIV = { RH: ['Red hood', '#e7000b'], EP: ['Early to post', '#e7000b'], MC: ['Mounting in the chute', '#e7000b'], HP: ['Hood in the parade ring', '#e7000b'], 'Ear out': ['Earplugs taken out', '#e7000b'], 'Ear in': ['Earplugs staying in', '#e7000b'], WITS: ['Withdrawn if tongue strap', '#e7000b'], W: ['Withdrawn if plate lost', '#e7000b'], FW: ['Withdrawn if front plate lost', '#e7000b'], LL: ['Late load (no code yet)', '#2563eb'], SR: ['Stable rep at the start (no code yet)', '#2563eb'], Rug: ['Rug, unconfirmed', '#2563eb'] };
+  CMT = { Behaviour: { bg: 'rgb(255,247,230)', ink: 'rgb(146,90,0)' }, Loading: { bg: 'rgb(254,242,242)', ink: 'rgb(185,28,28)' }, Welfare: { bg: 'rgb(240,250,244)', ink: 'rgb(0,120,63)' }, Equipment: { bg: 'rgb(233,244,250)', ink: 'rgb(0,47,113)' } };
+  // Privileges follow the Customise card settings shared with the other roles (show, abbreviation, display, colour)
+  privPills = (codes) => {
+    const gs = this.props.gearSettings || {};
+    const dark = (hex) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return true; const n = parseInt(m[1], 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 160; };
+    return codes.map(c => { const d = this.PRIV[c] || [c, '#2563eb']; const st = gs[d[0].toLowerCase()];
+      const colour = st ? st.colour : d[1]; const text = st ? (st.display === 'full' ? st.label : st.abbrev) : c;
+      return { code: c, title: d[0], text, bg: colour, ink: dark(colour) ? '#fff' : 'rgb(0,47,113)', show: !st || st.show !== false }; }).filter(x => x.show);
+  };
+  QUICK = ['1ST', 'GD PH', 'B & OK', 'BA', 'CH', 'FS', 'KINS', 'L-1', 'GO LATE', 'JUST OK', 'R', 'W'];
+  STCODES = {"R": "Reported to stewards (unruly at the start, inside or outside the stalls)", "W": "Withdrawn (refused to enter, unruly and taken out, or broke out of the stall)", "CERT": "Certificate (passed a stalls test)", "FAILED CERT": "Failed stalls test", "TW": "Trainer warned (potential problem or late request; TW x3 = stall test required)", "1ST": "1st horse to load", "1ST LEADS": "Loaded in the 1st wave", "1ST RUN": "Horse’s 1st run", "B & OK": "Blindfold, and behaved OK with it on", "B & TWIST OK": "Blindfold, and had a twist around", "B GD PH OK": "Blindfold, good push and was OK", "B IN ST": "Blindfold was required in stall to settle the horse", "B NO GOOD": "Blindfold was tried but it was off, no use", "B NO T": "Blindfold no touch (handlers guide in without touching quarters)", "BA": "Blindfold always", "BEST BA": "Recommended to load BA", "BEST BLO": "Recommended to load BLO", "BEST NO T": "Recommended to load no touch", "BKD OUT": "Backed out of stall whilst loading", "BLO": "Blindfold left on in stall until blinds off", "BROKE OUT": "Broke out of stalls", "BVR": "Blindfolded and very reluctant", "BVVR": "Blindfolded and very very reluctant", "CH": "Chase in rather than handlers try push in", "DIFF SHUT": "Difficult to shut back gate on horse", "DIFF OUT": "Difficult out (may kick, bite, rear when checking girths)", "DRN": "Drawn", "DRN EVENS": "Drawn even number", "DRN LAST": "Drawn last (highest even number)", "DRN LATE": "Drawn late (a high even number)", "DRN ODDS": "Drawn odd number", "E": "Load early (before the roll is called)", "END ODDS": "Loaded at the end of the odd numbers", "EVENS": "Loaded with the even numbers", "FLAG START": "Race started by flag", "FLIP START": "Race started by flip", "FS": "Panics in stall", "FS BAD": "Panics in stall bad (most likely taken out and withdrawn)", "FSB": "Future similar behaviour (R or W or both in 12 months)", "GD PH": "Good push", "GO 1ST": "Recommended to go 1st", "GO 1ST LEADS": "Recommended to go 1st leads", "GO EARLY": "Recommended to go early", "GO INT": "Recommended to go in turn", "GO LATE": "Recommended to go late", "HELPS": "Helps (jockey or stable representative helps with the load)", "IN FAST": "Horse loads fast into stall", "IN STALL": "In stall", "INJURED IN": "Horse injured in stall", "INT": "In turn", "1ST LDS ST": "1st leads stay 1st leads", "JOCK": "Jockey", "JUST OK": "Just OK (behaviour just OK)", "K OUT": "Kicks out of stall (make handlers aware)", "KEEP NR": "Keep near (kept near the back of gate for an easier load)", "KINS": "Kicks in stall", "KINS BAD": "Kicks in stall bad (most likely withdrawn)", "L-1": "Last but 1 to load", "L-2": "Last but 2 to load", "L-3": "Last but 3 to load", "LAD": "Lad at start"};
+  COLS = [['colours', 'Colours', 'On by default, every day'], ['no', 'Saddlecloth No.', ''], ['gear', 'Blinkers / tongue strap', ''], ['priv', 'Privileges', ''], ['wif', 'Withdraw if', ''], ['prev', 'Previous at the start', ''], ['today', 'Today', ''], ['cmts', 'Horse comments', ''], ['notes', 'Notes', '']];
+  PCOL_DEFAULT = { colours: 1, no: 1, gear: 1, priv: 0, wif: 1, prev: 0, load: 1 };
+  PCOLS = [['colours', 'Colours'], ['no', 'Saddlecloth No.'], ['gear', 'Blinkers / tongue strap'], ['priv', 'Privileges'], ['wif', 'Withdraw if'], ['prev', 'Previous at the start'], ['load', 'Space for load notes']];
+  CSTORE = 'bha_starters_b_cols_v1';
+  NSTORE = 'bha_starters_b_notes_v1';
+  load(k, d) { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v || d; } catch (e) { return d; } }
+  save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  state = { raceIdx: 2, oe: 'all', hid: this.load('bha_starters_b_cols_v1', {}), notes: this.load('bha_starters_b_notes_v1', {}), noteFor: null, colsOpen: false, printOpen: false, page: 0, pcols: this.load('bha_starters_print_cols_v1', null) || this.PCOL_DEFAULT };
+  componentDidMount() {
+    const p = this.props, patch = {};
+    if (p.oddEven) patch.oe = p.oddEven;
+    if (p.seedNotes) patch.notes = { ...this.state.notes, ...p.seedNotes };
+    if (p.noteFor != null) patch.noteFor = +p.noteFor;
+    if (p.colsOpen) patch.colsOpen = true;
+    if (p.printOpen) patch.printOpen = true;
+    if (p.hiddenCols) patch.hid = { ...p.hiddenCols };
+    if (Object.keys(patch).length) this.setState(patch);
+  }
+  setHid = (hid) => { this.save(this.CSTORE, hid); this.setState({ hid }); };
+  setNoteFor = (no, patch) => this.setState(s => { const cur = s.notes[no] || { text: '', today: [] }; const n = { ...s.notes, [no]: { ...cur, ...patch } }; this.save(this.NSTORE, n); return { notes: n }; });
+  printNow = () => {
+    const src = document.getElementById('starters-b-print');
+    if (!src) { window.print(); return; }
+    let portal = document.getElementById('bha-print-portal');
+    if (!portal) { portal = document.createElement('div'); portal.id = 'bha-print-portal'; document.body.appendChild(portal); }
+    portal.innerHTML = src.innerHTML;
+    const html = document.documentElement; html.classList.add('bha-printing');
+    const done = () => { html.classList.remove('bha-printing'); portal.innerHTML = ''; window.removeEventListener('afterprint', done); };
+    window.addEventListener('afterprint', done);
+    window.print();
+  };
+  renderVals() {
+    const s = this.state, navy = 'rgb(0,47,113)', phone = !!this.props.phone, hid = s.hid || {};
+    const seg = (on) => ({ border: on ? navy : 'rgb(228,228,231)', bg: on ? navy : '#fff', ink: on ? '#fff' : 'rgb(9,9,11)', pressed: on ? 'true' : 'false' });
+    const inOE = (r, oe) => oe === 'all' || (oe === 'odd' ? r.draw % 2 === 1 : r.draw % 2 === 0);
+    const list = this.RUNNERS.filter(r => inOE(r, s.oe)).slice().sort((a, b) => a.draw - b.draw);
+    const noteOf = (r) => s.notes[r.no] || { text: '', today: [] };
+    const mk = (r, i) => { const n = noteOf(r), has = !!(n.text || '').trim();
+      const sl = (x) => String(x).toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z]+/g, '');
+      return { hKey: 'st_h_' + sl(r.horse), jKey: 'st_j_' + sl(r.jockey), no: r.no, draw: r.draw, horse: r.horse, jockey: r.jockey, claim: r.claim || '', trainer: r.trainer, spec: r.spec, colours: r.colours,
+        gear: r.gear.map(g => ({ code: g, title: this.GEAR[g] })),
+        priv: this.privPills(r.priv || []), cmts: (r.cmts || []).map(([cat, when, text]) => ({ cat, when, text, ...(this.CMT[cat] || this.CMT.Behaviour) })), hasCmts: !!(r.cmts || []).length, noCmts: !(r.cmts || []).length, wif: r.wif || '', hasWif: !!r.wif,
+        prev: r.prev.map(([label, when]) => ({ label, when, meaning: this.STCODES[label] || '', title: (this.STCODES[label] ? this.STCODES[label] + ' \u00b7 ' : '') + when })), hasPrev: !!r.prev.length,
+        today: (n.today || []).map(c => ({ label: c, title: this.STCODES[c] || c })), hasToday: !!(n.today || []).length,
+        note: n.text || '', noteLabel: has ? n.text : 'Add note', noteInk: has ? 'rgb(9,9,11)' : 'rgb(0,47,113)', noteBorder: has ? 'rgb(228,228,231)' : 'rgb(147,167,199)', noteBorderStyle: has ? 'solid' : 'dashed',
+        bg: s.noteFor === r.no ? 'rgb(239,246,255)' : (i % 2 ? 'rgb(250,250,250)' : '#fff'),
+        openNote: () => this.setState({ noteFor: r.no }) }; };
+    const rows = list.map(mk);
+    const colDefs = [['colours', '44px'], ['draw', '44px'], ['no', '52px'], ['jockey', 'minmax(170px,1.6fr)'], ['gear', '72px'], ['priv', 'minmax(80px,0.6fr)'], ['wif', 'minmax(120px,1fr)'], ['prev', 'minmax(130px,1.1fr)'], ['today', 'minmax(110px,0.9fr)'], ['cmts', 'minmax(170px,1.4fr)'], ['notes', 'minmax(150px,1.3fr)']];
+    const gridCols = colDefs.filter(c => !hid[c[0]]).map(c => c[1]).join(' ');
+    // note sheet
+    const nRaw = this.RUNNERS.find(r => r.no === s.noteFor) || this.RUNNERS[0];
+    const nr = mk(nRaw, 0), nIdx = list.findIndex(r => r.no === nRaw.no);
+    const nToday = noteOf(nRaw).today || [];
+    // print
+    const races = this.RACES.map((t, i) => i);
+    const pc = s.pcols || this.PCOL_DEFAULT;
+    const stallsLabel = s.oe === 'odd' ? 'ODD STALLS' : s.oe === 'even' ? 'EVEN STALLS' : 'ALL STALLS';
+    const P = [['colours', '34px', '', 'center'], ['draw', '30px', 'Draw', 'center'], ['no', '30px', 'No.', 'center'], ['jockey', 'minmax(0,1.5fr)', 'Jockey / horse', 'left'], ['gear', '34px', 'B/TS', 'left'], ['priv', 'minmax(0,0.8fr)', 'Privileges', 'left'], ['wif', 'minmax(0,1fr)', 'Withdraw if', 'left'], ['prev', 'minmax(0,1fr)', 'Previous', 'left'], ['load', 'minmax(0,2.2fr)', 'Load notes', 'left']].filter(c => c[0] === 'draw' || c[0] === 'jockey' || pc[c[0]]);
+    const pRows = list.map(r => ({ cells: P.map(([k]) => {
+      const T = (text, o) => ({ isText: true, isSilk: false, isBlank: false, text, sub: '', hasSub: false, size: '11px', weight: 600, align: 'left', extra: '', ...(o || {}) });
+      if (k === 'colours') return { isSilk: true, isText: false, isBlank: false, spec: r.spec, text: r.colours };
+      if (k === 'draw') return T(String(r.draw), { size: '20px', weight: 700, align: 'center' });
+      if (k === 'no') return T(String(r.no), { size: '11px', weight: 600, align: 'center', extra: 'border-left:1px solid #999;' });
+      if (k === 'jockey') return T(r.jockey + (r.claim || ''), { size: '12.5px', weight: 700, sub: r.horse, hasSub: true });
+      if (k === 'gear') return T(r.gear.join(' '), { size: '11px', weight: 700 });
+      if (k === 'wif') return T(r.wif || '', { size: '9.5px', weight: 700 });
+      if (k === 'priv') return T((r.priv || []).join(' '), { size: '10px', weight: 700 });
+      if (k === 'prev') return T(r.prev.map(p => p[0]).join(', '), { size: '9.5px', weight: 500 });
+      return { isBlank: true, isText: false, isSilk: false };
+    }) }));
+    const pages = races.map((ri, k) => ({ venue: (this.props.fixtureVenue || 'Lingfield Park').toUpperCase(), date: 'Monday 6 July 2026', stalls: stallsLabel, time: this.RACES[ri], title: 'Race ' + (ri + 1) + ' · Class 4 handicap · 7f · ' + list.length + ' of ' + this.RUNNERS.length + ' runners',
+      cols: P.map(c => c[1]).join(' '), heads: P.map(c => ({ label: c[2], align: c[3] })), rows: pRows, rowH: list.length > 12 ? '40px' : '58px', pageStyle: k < races.length - 1 ? 'break-after:page;page-break-after:always;' : '' }));
+    const pi = Math.min(s.page || 0, pages.length - 1);
+    const shownCols = this.COLS.filter(c => !hid[c[0]] && ['colours', 'no', 'gear', 'wif', 'prev'].indexOf(c[0]) >= 0).map(c => c[1].toLowerCase());
+    return {
+      canCustomise: !!this.props.onCustomise, customise: () => { if (this.props.onCustomise) this.props.onCustomise(); },
+      phone, wide: !phone, h1Size: phone ? '26px' : '30px',
+      venue: this.props.fixtureVenue || 'Lingfield Park', fixtureClick: (e) => { if (this.props.onFixtureClick) this.props.onFixtureClick(e); },
+      dateLine: 'Monday 6 July 2026 · Good to Firm · Stalls far side', raceTitle: this.RACES[s.raceIdx] + ' · Class 4 handicap, 7f · ' + this.RUNNERS.length + ' runners',
+      raceTabs: this.RACES.map((t, i) => { const on = i === s.raceIdx; return { label: t, pressed: on ? 'true' : 'false', select: () => this.setState({ raceIdx: i }), bg: on ? navy : '#fff', border: on ? navy : 'rgb(228,228,231)', color: on ? '#fff' : 'rgb(63,63,70)', weight: on ? 700 : 500 }; }),
+      oeOpts: [['all', 'All'], ['odd', 'Odds'], ['even', 'Evens']].map(([k, l]) => { const on = s.oe === k; return { label: l, pick: () => this.setState({ oe: k }), ...seg(on), tBg: on ? '#fff' : 'transparent', tShadow: on ? '0 1px 2px rgba(0,0,0,0.08)' : 'none', tInk: on ? 'rgb(0,47,113)' : 'rgb(63,63,70)' }; }),
+      countLine: s.oe === 'all' ? list.length + ' runners, in draw order' : list.length + ' of ' + this.RUNNERS.length + ' runners, ' + (s.oe === 'odd' ? 'odd' : 'even') + ' stalls',
+      colsOpen: s.colsOpen, colsOpenAttr: s.colsOpen ? 'true' : 'false', toggleCols: () => this.setState({ colsOpen: !s.colsOpen }),
+      colToggles: this.COLS.map(([k, l, h]) => ({ label: l, hint: h, hasHint: !!h, on: !hid[k], toggle: () => this.setHid({ ...hid, [k]: !hid[k] }) })),
+      resetCols: () => this.setHid({}), hideAttr: Object.keys(hid).filter(k => hid[k]).join(' '),
+      gridCols, rows,
+      noteOpen: s.noteFor != null, nr: { ...nr, hasPrev: !!nRaw.prev.length },
+      notePos: phone ? 'left:0;right:0;bottom:0;max-height:90vh;border-radius:14px 14px 0 0' : 'top:0;right:0;bottom:0;width:min(460px,100%);border-left:1px solid rgb(228,228,231);box-shadow:0 10px 15px -3px rgba(0,0,0,0.1)',
+      closeNote: () => this.setState({ noteFor: null }),
+      setNote: (e) => this.setNoteFor(nRaw.no, { text: e.target.value }),
+      quick: this.QUICK.map(q => { const on = nToday.indexOf(q) >= 0; return { label: q, meaning: this.STCODES[q] || '', pressed: on ? 'true' : 'false', border: on ? navy : 'rgb(212,212,216)', bg: on ? 'rgb(233,244,250)' : '#fff', ink: on ? navy : 'rgb(9,9,11)',
+        toggle: () => this.setNoteFor(nRaw.no, { today: on ? nToday.filter(x => x !== q) : nToday.concat(q) }) }; }),
+      prevRunner: () => { if (nIdx > 0) this.setState({ noteFor: list[nIdx - 1].no }); }, nextRunner: () => { if (nIdx >= 0 && nIdx < list.length - 1) this.setState({ noteFor: list[nIdx + 1].no }); },
+      printOpen: s.printOpen, openPrint: () => this.setState({ printOpen: true, page: 0, colsOpen: false }), closePrint: () => this.setState({ printOpen: false }),
+      doPrint: () => { this.setState({ printOpen: false }); setTimeout(this.printNow, 120); },
+      pages, previewPage: [{ ...pages[pi], pageStyle: '' }],
+      ppStalls: [['all', 'All'], ['odd', 'Odds'], ['even', 'Evens']].map(([k, l]) => { const on = s.oe === k; return { label: l, pick: () => this.setState({ oe: k }), ...seg(on), tBg: on ? '#fff' : 'transparent', tShadow: on ? '0 1px 2px rgba(0,0,0,0.08)' : 'none', tInk: on ? 'rgb(0,47,113)' : 'rgb(63,63,70)' }; }),
+      ppCols: this.PCOLS.map(([k, l]) => ({ label: l, on: !!pc[k], toggle: () => { const n = { ...pc, [k]: pc[k] ? 0 : 1 }; this.save('bha_starters_print_cols_v1', n); this.setState({ pcols: n }); } })),
+      ppResetCols: () => { this.save('bha_starters_print_cols_v1', this.PCOL_DEFAULT); this.setState({ pcols: this.PCOL_DEFAULT }); },
+      ppPrintLabel: 'Print ' + pages.length + (pages.length === 1 ? ' sheet' : ' sheets'),
+      ppPageLabel: 'Sheet ' + (pi + 1) + ' of ' + pages.length + ' · ' + pages[pi].time,
+      ppPrev: () => this.setState({ page: Math.max(0, pi - 1) }), ppNext: () => this.setState({ page: Math.min(pages.length - 1, pi + 1) }),
+      ppPrevOp: pi === 0 ? 0.4 : 1, ppNextOp: pi >= pages.length - 1 ? 0.4 : 1,
+      ppDir: phone ? 'column' : 'row', ppSide: phone ? '0 0 auto' : '0 0 360px', ppZoom: phone ? 0.46 : 1, ppPad: '36px 40px',
+      colsPos: phone ? 'position:fixed;left:0;right:0;bottom:0;border-radius:14px 14px 0 0 !important;' : 'position:absolute;top:calc(100% + 8px);left:0;', colsW: phone ? '100%' : '280px', colsScrim: phone ? 'rgba(0,0,0,0.25)' : 'transparent'
+    };
+  }
+}
+</script>
+</body>
+</html>

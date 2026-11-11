@@ -1,0 +1,86 @@
+/* BHA Raceday Apps — messaging & questionnaire styles.
+   These are the file's own additions on top of the shadcn base: Bubble, Message,
+   MessageScroller, Attachment, Marker, Questionnaire, Chat.
+   Values from --component-{bubble,message,message-scroller,attachment,marker,questionnaire}-* */
+
+/* ─── Bubble ─────────────────────────────────────────────────────────── */
+.bha-bubble-group{display:flex;flex-direction:column;gap:calc(var(--component-bubble-group-gap)*1px)}
+.bha-bubble{display:flex;flex-direction:column;gap:calc(var(--component-bubble-gap)*1px);max-width:min(560px,80%)}
+.bha-bubble--end{align-self:flex-end;align-items:flex-end}
+.bha-bubble--start{align-self:flex-start;align-items:flex-start}
+.bha-bubble__content{position:relative;padding:calc(var(--component-bubble-content-py)*1px) calc(var(--component-bubble-content-px)*1px);border-radius:calc(var(--component-bubble-content-radius)*1px);border:calc(var(--component-bubble-content-border-width)*1px) solid transparent;font-family:var(--font-sans);font-size:var(--fs-sm);line-height:var(--lh-sm);word-break:break-word}
+.bha-bubble-default .bha-bubble__content{background:var(--component-bubble-variant-default-bg);color:var(--component-bubble-variant-default-text)}
+.bha-bubble-muted .bha-bubble__content{background:var(--component-bubble-variant-muted-bg);color:var(--component-bubble-variant-muted-text)}
+.bha-bubble-secondary .bha-bubble__content{background:var(--component-bubble-variant-secondary-bg);color:var(--foreground)}
+.bha-bubble-tinted .bha-bubble__content{background:var(--component-bubble-variant-tinted-bg);color:var(--component-bubble-variant-tinted-text)}
+.bha-bubble-outline .bha-bubble__content{background:var(--component-bubble-variant-outline-bg);color:var(--component-bubble-variant-outline-text);border-color:var(--component-bubble-variant-outline-border)}
+.bha-bubble-destructive .bha-bubble__content{background:var(--component-bubble-variant-destructive-bg);color:var(--component-bubble-variant-destructive-text)}
+.bha-bubble-ghost .bha-bubble__content{background:transparent;color:var(--component-bubble-variant-ghost-text);padding:0;border-radius:0}
+.bha-bubble__reactions{display:inline-flex;align-items:center;gap:calc(var(--component-bubble-reactions-gap)*1px);padding:calc(var(--component-bubble-reactions-py)*1px) calc(var(--component-bubble-reactions-px)*1px);background:var(--component-bubble-reactions-bg);border-radius:calc(var(--component-bubble-reactions-radius)*1px);box-shadow:0 0 0 calc(var(--component-bubble-reactions-ring-width)*1px) var(--component-bubble-reactions-ring);font-size:var(--fs-xs);color:var(--foreground)}
+
+/* ─── Message ────────────────────────────────────────────────────────── */
+.bha-message{display:flex;gap:calc(var(--component-message-gap)*1px);align-items:flex-start}
+.bha-message--end{flex-direction:row-reverse}
+.bha-message__content{display:flex;flex-direction:column;gap:calc(var(--component-message-content-gap)*1px);min-width:0;flex:1}
+.bha-message__header{padding-inline:calc(var(--component-message-header-px)*1px);font-family:var(--font-sans);font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--component-message-header-text);display:flex;gap:var(--sp-2);align-items:baseline}
+.bha-message__author{font-weight:var(--font-weight-medium);color:var(--foreground)}
+
+/* ─── MessageScroller ────────────────────────────────────────────────── */
+.bha-scroller{display:flex;flex-direction:column;gap:calc(var(--component-message-scroller-content-gap)*1px);overflow-y:auto;padding:var(--sp-4);flex:1}
+.bha-scroller__empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--component-message-scroller-empty-gap)*1px);flex:1;text-align:center;font-family:var(--font-sans)}
+.bha-scroller__empty-badge{width:calc(var(--spacing-10)*1px);height:calc(var(--spacing-10)*1px);display:flex;align-items:center;justify-content:center;background:var(--component-message-scroller-empty-badge-bg);border-radius:calc(var(--component-message-scroller-empty-badge-radius)*1px);color:var(--component-message-scroller-empty-text)}
+.bha-scroller__empty-title{font-size:var(--fs-sm);font-weight:var(--font-weight-medium);color:var(--component-message-scroller-empty-title)}
+.bha-scroller__empty-text{font-size:var(--fs-sm);color:var(--component-message-scroller-empty-text)}
+
+/* ─── Marker ─────────────────────────────────────────────────────────── */
+.bha-marker{display:flex;align-items:center;gap:calc(var(--component-marker-separator-gap)*1px);min-height:calc(var(--component-marker-min-height)*1px);font-family:var(--font-sans)}
+.bha-marker__rule{flex:1;height:calc(var(--component-marker-separator-thickness)*1px);background:var(--component-marker-line)}
+.bha-marker__content{display:inline-flex;align-items:center;gap:calc(var(--component-marker-gap)*1px);font-size:var(--fs-sm);line-height:100%;color:var(--component-marker-text);white-space:nowrap}
+.bha-marker--border{border-bottom:calc(var(--component-marker-border-width)*1px) solid var(--component-marker-line);padding-bottom:calc(var(--component-marker-border-pb)*1px)}
+.bha-marker--default .bha-marker__rule{display:none}
+.bha-marker a:hover,.bha-marker button:hover{color:var(--component-marker-text-hover)}
+
+/* ─── Attachment ─────────────────────────────────────────────────────── */
+.bha-attachment-group{display:flex;gap:calc(var(--component-attachment-group-gap)*1px);padding-block:calc(var(--component-attachment-group-py)*1px);padding-inline:calc(var(--component-attachment-group-scroll-px)*1px);overflow-x:auto}
+.bha-attachment{display:flex;align-items:center;gap:calc(var(--component-attachment-gap-default)*1px);padding:calc(var(--component-attachment-content-py-default)*1px) calc(var(--component-attachment-content-px-default)*1px);background:var(--component-attachment-root-bg);border:calc(var(--component-attachment-border-width)*1px) solid var(--component-attachment-root-border);border-radius:calc(var(--component-attachment-radius)*1px);min-width:calc(var(--component-attachment-min-width-horizontal)*1px);font-family:var(--font-sans)}
+.bha-attachment--sm{gap:calc(var(--component-attachment-gap-sm)*1px);padding:calc(var(--component-attachment-content-py-sm)*1px) calc(var(--component-attachment-content-px-sm)*1px)}
+.bha-attachment--xs{gap:calc(var(--component-attachment-gap-xs)*1px);padding:calc(var(--component-attachment-content-py-xs)*1px) calc(var(--component-attachment-content-px-xs)*1px);border-radius:calc(var(--component-attachment-radius-xs)*1px)}
+.bha-attachment--vertical{flex-direction:column;align-items:stretch;min-width:calc(var(--component-attachment-width-vertical-content)*1px);padding-inline:calc(var(--component-attachment-content-px-vertical)*1px)}
+.bha-attachment--error{border-color:var(--component-attachment-root-border-error)}
+.bha-attachment__media{width:calc(var(--component-attachment-media-size)*1px);height:calc(var(--component-attachment-media-size)*1px);border-radius:calc(var(--component-attachment-media-radius)*1px);background:var(--component-attachment-media-bg);color:var(--component-attachment-media-text);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.bha-attachment__media img{width:100%;height:100%;object-fit:cover}
+.bha-attachment--error .bha-attachment__media{background:var(--component-attachment-media-bg-error);color:var(--component-attachment-media-text-error)}
+.bha-attachment--sm .bha-attachment__media{width:calc(var(--component-attachment-media-size-sm)*1px);height:calc(var(--component-attachment-media-size-sm)*1px)}
+.bha-attachment--xs .bha-attachment__media{width:calc(var(--component-attachment-media-size-xs)*1px);height:calc(var(--component-attachment-media-size-xs)*1px);border-radius:calc(var(--component-attachment-media-radius-xs)*1px)}
+.bha-attachment__body{min-width:0;flex:1}
+.bha-attachment__title{font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:var(--font-weight-medium);color:var(--component-attachment-title-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bha-attachment__desc{margin-top:calc(var(--component-attachment-description-mt)*1px);font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--component-attachment-description-text)}
+.bha-attachment--error .bha-attachment__desc{color:var(--component-attachment-description-text-error)}
+.bha-attachment__actions{display:flex;gap:calc(var(--component-attachment-actions-gap)*1px);flex-shrink:0}
+
+/* ─── Questionnaire ──────────────────────────────────────────────────── */
+.bha-quest{display:flex;flex-direction:column;gap:calc(var(--component-questionnaire-root-gap)*1px);font-family:var(--font-sans)}
+.bha-quest__progress{font-size:var(--component-questionnaire-progress-size);line-height:var(--lh-xs);font-weight:var(--font-weight-medium);color:var(--component-questionnaire-progress-text)}
+.bha-quest__item{display:flex;flex-direction:column;gap:calc(var(--component-questionnaire-item-gap)*1px)}
+.bha-quest__header{display:flex;flex-direction:column;gap:calc(var(--component-questionnaire-content-gap)*1px)}
+.bha-quest__title{font-size:var(--component-questionnaire-title-size);line-height:100%;font-weight:700;color:var(--foreground)}
+.bha-quest__desc{font-size:var(--component-questionnaire-description-size);line-height:var(--lh-sm);color:var(--muted-foreground)}
+.bha-quest__choices{display:flex;flex-direction:column;gap:calc(var(--component-questionnaire-choices-gap)*1px)}
+.bha-quest__choice{display:flex;align-items:center;gap:calc(var(--component-questionnaire-choice-gap)*1px);padding:calc(var(--component-questionnaire-choice-py)*1px) calc(var(--component-questionnaire-choice-px)*1px);background:var(--component-questionnaire-choice-bg);border:calc(var(--component-questionnaire-choice-border-width)*1px) solid var(--component-questionnaire-choice-border);border-radius:calc(var(--component-questionnaire-choice-radius)*1px);font-size:var(--component-questionnaire-label-size);font-weight:var(--component-questionnaire-label-weight);color:var(--component-questionnaire-choice-text);cursor:pointer;text-align:left;width:100%;transition:background var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard)}
+.bha-quest__choice:hover{background:var(--component-questionnaire-choice-hover-bg)}
+.bha-quest__choice[data-checked="true"]{background:var(--component-questionnaire-choice-checked-bg);border-color:var(--component-questionnaire-choice-checked-border)}
+.bha-quest__choice[data-invalid="true"]{border-color:var(--component-questionnaire-choice-invalid-border)}
+.bha-quest__choice:focus-visible{outline:0;box-shadow:0 0 0 calc(var(--component-questionnaire-focus-ring-width)*1px) var(--component-questionnaire-choice-focus-ring)}
+.bha-quest__indicator{width:calc(var(--component-questionnaire-indicator-size)*1px);height:calc(var(--component-questionnaire-indicator-size)*1px);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--component-questionnaire-indicator-bg);border:calc(var(--component-questionnaire-indicator-border-width)*1px) solid var(--component-questionnaire-indicator-border);border-radius:calc(var(--component-questionnaire-indicator-radius)*1px);color:var(--component-questionnaire-check-color)}
+.bha-quest__indicator--radio{border-radius:var(--r-full)}
+.bha-quest__choice[data-checked="true"] .bha-quest__indicator{background:var(--component-questionnaire-checked-bg);border-color:var(--component-questionnaire-checked-border)}
+.bha-quest__dot{width:calc(var(--component-questionnaire-dot-size)*1px);height:calc(var(--component-questionnaire-dot-size)*1px);border-radius:var(--r-full);background:currentColor}
+.bha-quest__shortcut{margin-left:auto;width:calc(var(--component-questionnaire-shortcut-size)*1px);height:calc(var(--component-questionnaire-shortcut-size)*1px);display:inline-flex;align-items:center;justify-content:center;background:var(--component-questionnaire-shortcut-bg);border:1px solid var(--component-questionnaire-shortcut-border);border-radius:calc(var(--component-questionnaire-shortcut-radius)*1px);font-family:var(--font-mono);font-size:calc(var(--component-questionnaire-shortcut-text-size)*1px);color:var(--component-questionnaire-shortcut-text)}
+.bha-quest__error{font-size:var(--fs-sm);color:var(--component-questionnaire-error-text)}
+.bha-quest__actions{display:flex;align-items:center;gap:calc(var(--component-questionnaire-actions-gap)*1px);min-height:calc(var(--component-questionnaire-actions-min-height)*1px)}
+.bha-quest__spacer{flex:1}
+
+/* ─── Chat shell ─────────────────────────────────────────────────────── */
+.bha-chat{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;height:100%}
+.bha-chat__header{display:flex;align-items:center;gap:var(--sp-2-5);padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--border)}
+.bha-chat__composer{display:flex;align-items:flex-end;gap:var(--sp-2);padding:var(--sp-3);border-top:1px solid var(--border);background:var(--background)}

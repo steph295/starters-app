@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/styles.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; font-family: Inter, -apple-system, sans-serif; background: rgb(248,250,252); }
+a { color: rgb(0,47,113); text-decoration: none; }
+a:hover { color: rgb(0,47,113); text-decoration: underline; }
+[data-hide~="lastrun"] [data-col="lastrun"]{display:none}
+[data-hide~="pos"] [data-col="pos"]{display:none !important}
+[data-hide~="trainer"] [data-col="trainer"]{display:none}
+[data-hide~="exam"] [data-col="exam"]{display:none}
+[data-hide~="test"] [data-col="test"]{display:none}
+[data-hide~="pre"] [data-col="pre"]{display:none}
+[data-hide~="notes"] [data-col="notes"]{display:none}
+@media print { .vet-noprint { display: none !important; } }
+</style>
+</helmet>
+<div style="font-family:Inter,-apple-system,sans-serif;color:rgb(9,9,11)">
+
+<!-- Header -->
+<div style="margin-bottom:14px">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px 16px">
+<button onClick="{{ fixtureClick }}" aria-haspopup="listbox" style="display:flex;align-items:center;gap:10px;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;color:inherit">
+<h1 style="margin:0;font-size:{{ h1Size }};font-weight:700;letter-spacing:-0.5px;line-height:34px;color:var(--sv-ink, rgb(9,9,11))">{{ venueTitle }}</h1>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="20" hint-size="20px,20px"></x-import>
+</button>
+<div class="vet-noprint" style="position:relative">
+<button type="button" onClick="{{ toggleFx }}" aria-expanded="{{ fxOpenAttr }}" style="display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:13px;font-weight:500;color:rgb(9,9,11);cursor:pointer">Fixture actions<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="13" hint-size="13px,13px"></x-import></button>
+<sc-if value="{{ fxOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ toggleFx }}" style="position:fixed;inset:0;z-index:80"></div>
+<div role="menu" style="position:absolute;top:calc(100% + 6px);left:0;z-index:81;width:240px;background:#fff;border:1px solid rgb(228,228,231);border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -2px rgba(0,0,0,0.1);padding:4px">
+<sc-for list="{{ fxItems }}" as="a" hint-placeholder-count="5"><button type="button" role="menuitem" onClick="{{ a.run }}" style="width:100%;display:block;text-align:left;background:none;border:none;border-radius:8px;cursor:pointer;font:inherit;font-size:14px;line-height:20px;color:rgb(9,9,11);padding:8px 10px">{{ a.label }}</button></sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ isRunners }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+<sc-for list="{{ raceTabs }}" as="t" hint-placeholder-count="7">
+<button onClick="{{ t.select }}" style="padding:5px 10px;font-size:13px;line-height:18px;font-weight:{{ t.weight }};font-family:inherit;background:{{ t.bg }};border:1px solid {{ t.border }};border-radius:6px;cursor:pointer;color:{{ t.color }};font-variant-numeric:tabular-nums;min-height:32px">{{ t.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ showViewSwitch }}" hint-placeholder-val="{{ false }}"><div role="tablist" aria-label="View" style="display:inline-flex;gap:4px;padding:3px;margin-top:10px;background:rgb(235,235,236);border-radius:10px"><sc-for list="{{ viewTabs }}" as="t" hint-placeholder-count="3"><button type="button" role="tab" aria-selected="{{ t.selected }}" onClick="{{ t.select }}" style="min-height:30px;padding:0 12px;border:none;border-radius:8px;background:{{ t.bg }};box-shadow:{{ t.shadow }};font:inherit;font-size:13px;font-weight:600;color:{{ t.ink }};cursor:pointer">{{ t.label }}</button></sc-for></div></sc-if>
+<div style="margin-top:8px;font-size:13px;line-height:18px;color:rgb(113,113,122)">{{ dateLine }}</div>
+<sc-if value="{{ isRunners }}" hint-placeholder-val="{{ true }}"><div style="margin-top:2px;font-size:14px;line-height:20px;font-weight:600;color:rgb(0,47,113);text-wrap:pretty"><span style="font-weight:700">{{ race.dist }}</span> {{ race.title }}</div></sc-if>
+</div>
+
+<sc-if value="{{ isRunners }}" hint-placeholder-val="{{ true }}">
+<!-- Toolbar -->
+<div class="vet-noprint" style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 12px">
+  <div style="position: relative;">
+    <button type="button" onClick="{{ toggleCols }}" aria-expanded="{{ colsOpenAttr }}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid rgb(228,228,231); border-radius: 10px; background: #fff; font: inherit; font-size: 14px; font-weight: 500; color: rgb(9,9,11); cursor: pointer;">Columns <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    <sc-if value="{{ colsOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ toggleCols }}" style="position: fixed; inset: 0; z-index: 80;"></div>
+      <div style="position: absolute; top: calc(100% + 6px); left: 0; z-index: 81; width: 236px; background: #fff; border: 1px solid rgb(228,228,231); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); padding: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 10px 8px;"><span style="font-size: 12px; font-weight: 600; color: rgb(113,113,122);">Show</span><button type="button" onClick="{{ resetCols }}" style="background: none; border: none; padding: 0; font: inherit; font-size: 12.5px; font-weight: 600; color: rgb(0,47,113); cursor: pointer;">Reset</button></div>
+        <sc-for list="{{ colToggles }}" as="c" hint-placeholder-count="6">
+          <label style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; color: rgb(9,9,11);"><input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" style="width: 16px; height: 16px; accent-color: rgb(0,47,113); cursor: pointer;">{{ c.label }}</label>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+  <sc-if value="{{ canCustomise }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ customise }}" style="display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="sliders-horizontal" size="16" hint-size="16px,16px"></x-import>Customise card</button></sc-if>
+  <button type="button" onClick="{{ print }}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid rgb(228,228,231); border-radius: 10px; background: #fff; font: inherit; font-size: 14px; font-weight: 500; color: rgb(9,9,11); cursor: pointer;"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="printer" size="14" hint-size="14px,14px"></x-import>Print</button>
+  <div style="flex:1"></div>
+  <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:rgb(0,120,63);padding:3px 10px;border-radius:26px;background:rgb(233,246,239)"><span style="width:7px;height:7px;border-radius:9999px;background:rgb(0,151,79)"></span>{{ progress }}</span>
+</div>
+
+<!-- Runner list -->
+<div data-hide="{{ hideAttr }}" style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;overflow:hidden">
+
+<!-- Desktop header row -->
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:{{ gridCols }};column-gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid rgb(228,228,231);font-size:12px;line-height:16px;font-weight:500;color:rgb(113,113,122)">
+<span>No. / horse / trainer</span><span data-col="lastrun">Last run</span><span data-col="exam">Last exam</span><span data-col="test" style="text-align:center">Test</span><span data-col="pre" style="text-align:center">Post-race exam</span><span data-col="notes">Notes</span><span data-col="pos">Position</span>
+</div>
+</sc-if>
+
+<sc-for list="{{ runners }}" as="r" hint-placeholder-count="8">
+<!-- Desktop row -->
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<div id="run-row-vet-{{ r.no }}" style="display:grid;grid-template-columns:{{ gridCols }};column-gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid rgb(228,228,231);background-color:{{ r.bg }};background-image:{{ r.hatch }};outline:{{ r.outline }};outline-offset:-2px" style-hover="background:var(--custom-muted-subtle, rgb(250,250,250))">
+<div style="display:flex;gap:10px;align-items:flex-start;min-width:0">
+<span style="flex-shrink:0;width:22px;font-size:16px;line-height:20px;font-weight:700;color:rgb(0,47,113);font-variant-numeric:tabular-nums">{{ r.no }}</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+<button type="button" onClick="{{ r.open }}" style="background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:14px;line-height:20px;font-weight:700;color:{{ r.horseInk }};text-decoration:{{ r.horseDeco }};text-underline-offset:2px;text-align:left">{{ r.horse }}</button>
+
+<sc-if value="{{ r.hasFlag }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;line-height:16px;font-weight:700;padding:0 6px;border-radius:26px;background:rgb(255,247,230);color:rgb(146,90,0);border:1px solid rgb(240,213,168)">{{ r.flag }}</span></sc-if><sc-if value="{{ r.isNr }}" hint-placeholder-val="{{ false }}"><span title="{{ r.nrTitle }}" style="display:inline-flex;align-items:center;font-size:11px;font-weight:700;line-height:16px;padding:1px 7px;border-radius:4px;background:rgb(82,82,91);color:#fff;white-space:nowrap">{{ r.nrLabel }}</span></sc-if>
+</div>
+<span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ r.desc }}</span>
+<span style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;font-size:13px;line-height:18px;margin-top:2px"><button type="button" data-detail="{{ r.tKey }}" title="Open {{ r.trainer }}" style="background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:13px;line-height:18px;font-weight:600;color:rgb(0,47,113);text-decoration:underline;text-underline-offset:2px;text-align:left">{{ r.trainer }}</button></span>
+<sc-if value="{{ r.hasPills }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><sc-for list="{{ r.pills }}" as="g" hint-placeholder-count="2"><span title="{{ g.title }}" style="display:inline-flex;align-items:center;font-size:12px;line-height:16px;font-weight:600;padding:1px 7px;border-radius:9999px;border:1px solid {{ g.border }};background:{{ g.bg }};color:{{ g.ink }};white-space:nowrap">{{ g.text }}</span></sc-for></div></sc-if>
+</div>
+</div>
+<div data-col="lastrun" style="display:flex;flex-direction:column;gap:1px;min-width:0">
+<span style="font-size:14px;line-height:20px;font-weight:700;color:{{ r.daysInk }};font-variant-numeric:tabular-nums">{{ r.daysLabel }}</span>
+<span style="font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgb(63,63,70)">{{ r.lastRunLine }}</span><span style="font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgb(113,113,122)">{{ r.lastRunLine2 }}</span>
+</div>
+<div data-col="exam" style="display:flex;flex-direction:column;gap:1px;min-width:0">
+<span style="font-size:13px;line-height:18px;font-weight:600;color:{{ r.examInk }};font-variant-numeric:tabular-nums">{{ r.examLabel }}</span>
+<span style="font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgb(63,63,70)">{{ r.examSub }}</span><span style="font-size:12px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgb(113,113,122)">{{ r.examSub2 }}</span>
+</div>
+<label data-col="test" title="Test requested" style="display:flex;justify-content:center;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" checked="{{ r.test }}" onChange="{{ r.toggleTest }}" disabled="{{ r.isNr }}" aria-label="Test {{ r.horse }}" style="width:22px;height:22px;accent-color:rgb(0,47,113);cursor:pointer"></label>
+<label data-col="pre" title="Post-race exam" style="display:flex;justify-content:center;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" checked="{{ r.pre }}" onChange="{{ r.togglePre }}" disabled="{{ r.isNr }}" aria-label="Post-race exam {{ r.horse }}" style="width:22px;height:22px;accent-color:rgb(0,47,113);cursor:pointer"></label>
+<textarea data-col="notes" value="{{ r.note }}" onInput="{{ r.setNote }}" rows="2" aria-label="Notes" placeholder="Note" style="width: 100%; min-width: 120px; box-sizing: border-box; min-height: 48px; border: 1px solid rgb(228,228,231); border-radius: 8px; padding: 6px 8px; font: inherit; font-size: 13px; line-height: 18px; resize: vertical; background: #fff;"></textarea>
+<div data-col="pos" title="{{ r.posTitle }}" style="font-size:15px;line-height:20px;font-weight:700;color:{{ r.posInk }};font-variant-numeric:tabular-nums">{{ r.pos }}</div>
+</div>
+</sc-if>
+
+<!-- Phone card -->
+<sc-if value="{{ phone }}" hint-placeholder-val="{{ false }}">
+<div id="run-row-vet-m{{ r.no }}" style="padding:12px 14px;border-bottom:1px solid rgb(228,228,231);background-color:{{ r.bg }};background-image:{{ r.hatch }};outline:{{ r.outline }};outline-offset:-2px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<span style="flex-shrink:0;width:26px;font-size:20px;line-height:24px;font-weight:700;color:rgb(0,47,113);font-variant-numeric:tabular-nums">{{ r.no }}</span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+<button type="button" onClick="{{ r.open }}" style="background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:16px;line-height:22px;font-weight:700;color:{{ r.horseInk }};text-decoration:{{ r.horseDeco }};text-underline-offset:2px;text-align:left">{{ r.horse }}</button>
+
+<sc-if value="{{ r.hasFlag }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;line-height:16px;font-weight:700;padding:0 6px;border-radius:26px;background:rgb(255,247,230);color:rgb(146,90,0);border:1px solid rgb(240,213,168)">{{ r.flag }}</span></sc-if><sc-if value="{{ r.isNr }}" hint-placeholder-val="{{ false }}"><span title="{{ r.nrTitle }}" style="display:inline-flex;align-items:center;font-size:11px;font-weight:700;line-height:16px;padding:1px 7px;border-radius:4px;background:rgb(82,82,91);color:#fff;white-space:nowrap">{{ r.nrLabel }}</span></sc-if>
+</div>
+<span style="font-size:13px;line-height:18px"><button type="button" data-detail="{{ r.tKey }}" style="background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:13px;line-height:18px;font-weight:600;color:rgb(0,47,113);text-decoration:underline;text-underline-offset:2px;text-align:left">{{ r.trainer }}</button></span>
+<sc-if value="{{ r.hasPills }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px"><sc-for list="{{ r.pills }}" as="g" hint-placeholder-count="2"><span title="{{ g.title }}" style="display:inline-flex;align-items:center;font-size:12px;line-height:16px;font-weight:600;padding:1px 7px;border-radius:9999px;border:1px solid {{ g.border }};background:{{ g.bg }};color:{{ g.ink }};white-space:nowrap">{{ g.text }}</span></sc-for></div></sc-if>
+</div>
+<button type="button" onClick="{{ r.open }}" aria-label="Open {{ r.horse }}" style="flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;border-radius:8px;background:transparent;color:rgb(113,113,122);cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-right" size="18" hint-size="18px,18px"></x-import></button>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px 14px;padding-left:36px;font-size:13px;line-height:18px">
+<span data-col="lastrun" style="display:flex;align-items:baseline;gap:5px"><span style="font-size:11px;font-weight:600;color:rgb(113,113,122);text-transform:uppercase;letter-spacing:0.2px">Last run</span><span style="font-weight:700;color:{{ r.daysInk }};font-variant-numeric:tabular-nums">{{ r.daysLabel }}</span></span>
+<span data-col="exam" style="display:flex;align-items:baseline;gap:5px"><span style="font-size:11px;font-weight:600;color:rgb(113,113,122);text-transform:uppercase;letter-spacing:0.2px">Last exam</span><span style="font-weight:600;color:{{ r.examInk }};font-variant-numeric:tabular-nums">{{ r.examLabel }}</span></span>
+<span data-col="pos" style="display:flex;align-items:baseline;gap:5px"><span style="font-size:11px;font-weight:600;color:rgb(113,113,122);text-transform:uppercase;letter-spacing:0.2px">Position</span><span title="{{ r.posTitle }}" style="font-weight:700;color:{{ r.posInk }}">{{ r.pos }}</span></span>
+</div>
+<div style="display:flex;align-items:center;gap:8px;padding-left:36px">
+<label data-col="test" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid {{ r.testBorder }};border-radius:10px;background:{{ r.testBg }};font-size:14px;font-weight:600;color:{{ r.testInk }};cursor:pointer;user-select:none"><input type="checkbox" checked="{{ r.test }}" onChange="{{ r.toggleTest }}" disabled="{{ r.isNr }}" aria-label="Test {{ r.horse }}" style="width:20px;height:20px;accent-color:rgb(0,47,113);cursor:pointer;margin:0">Test</label>
+<label data-col="pre" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid {{ r.preBorder }};border-radius:10px;background:{{ r.preBg }};font-size:14px;font-weight:600;color:{{ r.preInk }};cursor:pointer;user-select:none"><input type="checkbox" checked="{{ r.pre }}" onChange="{{ r.togglePre }}" disabled="{{ r.isNr }}" aria-label="Post-race exam {{ r.horse }}" style="width:20px;height:20px;accent-color:rgb(0,47,113);cursor:pointer;margin:0">Post-race exam</label>
+</div>
+<div data-col="notes" style="padding-left:36px">
+<textarea value="{{ r.note }}" onInput="{{ r.setNote }}" rows="1" aria-label="Notes" placeholder="Add a note" style="width: 100%; box-sizing: border-box; min-height: 40px; border: 1px solid rgb(228,228,231); border-radius: 10px; padding: 9px 12px; font: inherit; font-size: 14px; line-height: 20px; resize: vertical; background: #fff;"></textarea>
+</div>
+</div>
+</sc-if>
+</sc-for>
+<sc-if value="{{ noRunners }}" hint-placeholder-val="{{ false }}">
+<div style="padding:24px 16px;font-size:14px;color:rgb(113,113,122)">No declarations loaded for this race.</div>
+</sc-if>
+</div>
+</sc-if>
+<!-- Report: the whole fixture, horses grouped by race -->
+<sc-if value="{{ isReport }}" hint-placeholder-val="{{ false }}">
+<div class="vet-noprint" style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 12px">
+<div role="radiogroup" aria-label="Report view" style="display:inline-flex;gap:4px;padding:3px;background:rgb(235,235,236);border-radius:10px"><sc-for list="{{ rpModes }}" as="t" hint-placeholder-count="2"><button type="button" role="radio" aria-checked="{{ t.selected }}" onClick="{{ t.select }}" style="min-height:34px;padding:0 14px;border:none;border-radius:8px;background:{{ t.bg }};box-shadow:{{ t.shadow }};font:inherit;font-size:13px;font-weight:600;color:{{ t.ink }};cursor:pointer">{{ t.label }}</button></sc-for></div>
+<sc-if value="{{ rpIsFull }}" hint-placeholder-val="{{ false }}">
+<button type="button" role="switch" aria-checked="{{ ahtuSw.attr }}" onClick="{{ toggleAhtu }}" style="display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><span style="position:relative;display:inline-block;width:32px;height:18px;border-radius:9px;background:{{ ahtuSw.track }}"><span style="position:absolute;top:2px;left:{{ ahtuSw.thumb }};width:14px;height:14px;border-radius:7px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.15)"></span></span>Hide all horse trot ups</button>
+<button type="button" role="switch" aria-checked="{{ oldSw.attr }}" onClick="{{ toggleOld }}" style="display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><span style="position:relative;display:inline-block;width:32px;height:18px;border-radius:9px;background:{{ oldSw.track }}"><span style="position:absolute;top:2px;left:{{ oldSw.thumb }};width:14px;height:14px;border-radius:7px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.15)"></span></span>Hide over 3 years</button>
+</sc-if>
+<button type="button" onClick="{{ printReport }}" style="display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="printer" size="16" hint-size="16px,16px"></x-import>Print</button>
+<div style="flex:1"></div>
+<sc-if value="{{ rpIsSummary }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:rgb(82,82,91)">{{ rpSummary }}</span></sc-if>
+</div>
+<div id="vets-report">
+<sc-if value="{{ rpIsSummary }}" hint-placeholder-val="{{ true }}">
+<div class="bha-datatable">
+<table class="bha-table" style="table-layout:fixed;width:100%">
+<thead><tr><th style="font-size:12px;font-weight:500;color:rgb(113,113,122);width:56px;min-width:0">No.</th><th style="font-size:12px;font-weight:500;color:rgb(113,113,122)">Horse / trainer</th><th style="font-size:12px;font-weight:500;color:rgb(113,113,122);width:120px">Last run</th><th style="font-size:12px;font-weight:500;color:rgb(113,113,122);width:40%">Activity today</th></tr></thead>
+<sc-for list="{{ rpRaces }}" as="R" hint-placeholder-count="3">
+<tbody>
+<tr style="background:var(--custom-muted-subtle, rgb(250,250,250))"><td colspan="4" style="padding-top:8px;padding-bottom:8px"><span style="font-size:14px;line-height:20px;font-weight:600;color:rgb(0,47,113)"><span style="font-weight:400;color:rgb(113,113,122)">Race {{ R.n }} · </span>{{ R.t }} · {{ R.title }}</span><span style="margin-left:8px;font-size:13px;color:rgb(113,113,122)">{{ R.dist }} · {{ R.count }}</span></td></tr>
+<sc-for list="{{ R.rows }}" as="r" hint-placeholder-count="2">
+<tr style="background-image:{{ r.hatch }};vertical-align:top">
+<td style="min-width:0;font-size:16px;line-height:20px;font-weight:700;color:rgb(0,47,113);font-variant-numeric:tabular-nums">{{ r.no }}</td>
+<td style="min-width:0">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px"><button type="button" onClick="{{ r.open }}" disabled="{{ r.noOpen }}" style="background:none;border:none;padding:0;cursor:{{ r.cursor }};font:inherit;font-size:14px;line-height:20px;font-weight:700;color:{{ r.horseInk }};text-decoration:{{ r.horseDeco }};text-underline-offset:2px;text-align:left">{{ r.horse }}</button><sc-for list="{{ r.items }}" as="g" hint-placeholder-count="0"><span title="{{ g.title }}" style="font-size:11px;line-height:16px;font-weight:700;padding:0 6px;border-radius:26px;background:{{ g.bg }};color:{{ g.ink }}">{{ g.text }}</span></sc-for></div>
+<div style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ r.desc }} · {{ r.jockey }}</div>
+<button type="button" data-detail="{{ r.tKey }}" style="margin-top:2px;background:none;border:none;padding:0;cursor:pointer;font:inherit;font-size:13px;line-height:18px;font-weight:600;color:rgb(0,47,113);text-decoration:underline;text-underline-offset:2px;text-align:left">{{ r.trainer }}</button>
+</td>
+<td><span style="font-size:14px;line-height:20px;font-weight:700;color:{{ r.daysInk }};font-variant-numeric:tabular-nums">{{ r.days }} days</span></td>
+<td><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ r.acts }}" as="a" hint-placeholder-count="1"><span class="{{ a.cls }}" title="{{ a.title }}" style="color:{{ a.ink }};background:{{ a.bg }}">{{ a.label }}</span></sc-for><sc-if value="{{ r.none }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:rgb(161,161,170)">None</span></sc-if></div></td>
+</tr>
+</sc-for>
+</tbody>
+</sc-for>
+</table>
+<sc-if value="{{ rpEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:32px 16px;text-align:center;font-size:14px;color:rgb(113,113,122)">No horses with activity yet. Switch to Full report to see every runner.</div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ rpIsFull }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;padding:16px 18px;font-size:13px;line-height:18px">
+<div style="font-size:20px;line-height:26px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px">28/10/26 – {{ venueUpper }}</div>
+<sc-for list="{{ fullRaces }}" as="R" hint-placeholder-count="2">
+<div style="margin-top:14px;padding-bottom:4px;border-bottom:2px solid rgb(9,9,11);font-size:14px;line-height:20px;font-weight:700;text-wrap:pretty">{{ R.heading }}</div>
+<sc-for list="{{ R.horses }}" as="h" hint-placeholder-count="2">
+<div style="margin-top:10px;break-inside:avoid">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:6px 8px;background:rgb(244,244,245);border-radius:6px"><span style="font-weight:700;text-decoration:{{ h.nameDeco }}">{{ h.no }}. {{ h.name }}</span><button type="button" data-detail="{{ h.tKey }}" style="justify-self:start;background:none;border:none;padding:0;cursor:pointer;font:inherit;font-weight:700;color:rgb(0,47,113);text-decoration:underline;text-underline-offset:2px">{{ h.trainer }}</button></div>
+<sc-if value="{{ h.none }}" hint-placeholder-val="{{ false }}"><div style="padding:8px 10px;color:rgb(113,113,122)">No history to show with the current filters.</div></sc-if>
+<sc-for list="{{ h.rows }}" as="e" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:8px 10px;border-bottom:1px solid rgb(228,228,231)">
+<div style="min-width:0;display:flex;flex-direction:column;gap:3px">
+<span style="font-weight:700;color:{{ e.headInk }}">{{ e.head }}</span>
+<sc-if value="{{ e.hasPath }}" hint-placeholder-val="{{ false }}"><span style="color:rgb(63,63,70)">{{ e.path }}</span></sc-if>
+<sc-if value="{{ e.isExam }}" hint-placeholder-val="{{ false }}"><span style="display:flex;flex-wrap:wrap;gap:2px 16px"><sc-for list="{{ e.facts }}" as="f" hint-placeholder-count="2"><span><b style="font-weight:600">{{ f.k }}:</b> {{ f.v }}</span></sc-for></span></sc-if>
+<sc-if value="{{ e.hasComment }}" hint-placeholder-val="{{ false }}"><span style="color:rgb(82,82,91);font-style:italic">“{{ e.comment }}”</span></sc-if>
+</div>
+<div style="text-align:right;font-size:12px;line-height:16px;color:rgb(82,82,91);white-space:nowrap"><div>{{ e.where }}</div><div style="font-variant-numeric:tabular-nums">{{ e.when }}</div><sc-if value="{{ e.hasBy }}" hint-placeholder-val="{{ false }}"><div>{{ e.by }}</div></sc-if></div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+<!-- Activity: what has been recorded today and still needs reviewing -->
+<sc-if value="{{ isActivity }}" hint-placeholder-val="{{ false }}">
+<sc-if value="{{ acEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:48px 16px;text-align:center;background:#fff;border:1px solid rgb(228,228,231);border-radius:14px">
+<span style="width:48px;height:48px;border-radius:9999px;background:rgb(244,244,245);display:flex;align-items:center;justify-content:center;color:rgb(82,82,91)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ acEmptyIcon }}" size="22" hint-size="22px,22px"></x-import></span>
+<div style="font-size:15px;line-height:22px;font-weight:600">{{ acEmptyTitle }}</div>
+<div style="font-size:14px;line-height:20px;color:rgb(82,82,91);max-width:46ch">{{ acEmptySub }}</div>
+<sc-if value="{{ acCanMarkNothing }}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{ acMarkNothing }}" style="min-height:40px;padding:0 16px;border:1px solid rgb(0,47,113);border-radius:10px;background:rgb(0,47,113);color:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Mark nothing to report</button></sc-if>
+<sc-if value="{{ acMarked }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ acUndoNothing }}" style="min-height:36px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Undo</button></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ acHasItems }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 12px">
+<span style="font-size:14px;font-weight:600">{{ acCount }}</span>
+<div style="flex:1"></div>
+<button type="button" onClick="{{ acReviewAll }}" style="min-height:36px;padding:0 14px;border:1px solid rgb(0,47,113);border-radius:10px;background:rgb(0,47,113);color:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Mark all reviewed</button>
+</div>
+<div style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;overflow:hidden">
+<sc-for list="{{ acItems }}" as="a" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:56px 28px minmax(0,1fr) auto;column-gap:12px;align-items:center;padding:12px 16px;border-top:1px solid rgb(244,244,245);background:{{ a.rowBg }}">
+<span style="font-size:13px;font-weight:600;color:rgb(82,82,91);font-variant-numeric:tabular-nums">{{ a.time }}</span>
+<span style="width:28px;height:28px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:{{ a.bg }};color:{{ a.ink }}"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ a.icon }}" size="14" hint-size="14px,14px"></x-import></span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;line-height:20px;font-weight:600">{{ a.title }}</span><span style="font-size:13px;line-height:18px;color:rgb(82,82,91)">{{ a.sub }}</span></div>
+<label style="display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 10px;border:1px solid {{ a.revBorder }};border-radius:10px;background:{{ a.revBg }};font-size:13px;font-weight:600;color:{{ a.revInk }};cursor:pointer;white-space:nowrap"><input type="checkbox" checked="{{ a.reviewed }}" onChange="{{ a.toggle }}" style="width:18px;height:18px;accent-color:rgb(0,47,113);margin:0">Reviewed</label>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- Horse record -->
+<sc-if value="{{ panelOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closePanel }}" style="position:fixed;inset:0;background:var(--custom-overlay, rgba(0,0,0,0.18));z-index:400"></div>
+<div role="dialog" aria-modal="true" aria-label="Entry details" style="position:fixed;top:0;right:0;bottom:0;width:{{ panelWidth }};background:#fff;border-left:1px solid rgb(228,228,231);box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);z-index:410;display:flex;flex-direction:column">
+
+<!-- Title bar -->
+<div style="display:flex;align-items:center;gap:8px;padding:10px 12px 10px 8px;border-bottom:1px solid rgb(228,228,231)">
+<button type="button" onClick="{{ closePanel }}" aria-label="Back to runners" style="flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:none;border-radius:10px;background:transparent;cursor:pointer;color:rgb(63,63,70)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ closeIcon }}" size="20" hint-size="20px,20px"></x-import></button>
+<span style="font-size:16px;line-height:24px;font-weight:600">Entry details</span>
+<span style="flex:1"></span>
+<span style="font-size:12px;line-height:16px;font-weight:600;padding:3px 10px;border-radius:26px;background:rgb(0,47,113);color:#fff">Runner</span>
+</div>
+
+<div style="flex:1;min-height:0;overflow-y:auto">
+
+<!-- Horse -->
+<div style="display:flex;gap:14px;align-items:flex-start;padding:16px 16px 14px">
+<div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:18px;line-height:24px;font-weight:700;letter-spacing:-0.2px">{{ sel.horse }}</span>
+<span style="font-size:14px;line-height:20px;color:rgb(63,63,70)">{{ sel.desc }} · {{ sel.trainer }}</span>
+<sc-if value="{{ sel.hasItems }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;line-height:18px;color:rgb(63,63,70)">{{ sel.itemsLine }}</span></sc-if>
+<span style="font-size:13px;line-height:18px;color:rgb(82,82,91)">{{ sel.jockey }} · {{ sel.owner }} · No.{{ sel.no }}</span>
+<span style="font-size:13px;line-height:18px;color:rgb(82,82,91)">Last run <b style="color:{{ sel.daysInk }}">{{ sel.daysLabel }}</b> · Last exam <b style="color:{{ sel.examInk }}">{{ sel.examLabel }}</b></span>
+<sc-if value="{{ sel.strWarn }}" hint-placeholder-val="{{ false }}"><span style="align-self:flex-start;margin-top:4px;font-size:12px;line-height:16px;font-weight:600;padding:2px 8px;border-radius:26px;background:rgb(255,247,230);color:rgb(146,90,0);border:1px solid rgb(240,213,168)">Suitability to race: information awaited</span></sc-if>
+</div>
+</div>
+
+<!-- Comments -->
+<div style="padding:0 16px 14px;font-size:14px;line-height:20px;color:rgb(63,63,70)">{{ comment }}</div>
+
+<!-- Record type: tabs on desktop, dropdown on phone -->
+<sc-if value="{{ notPhone }}" hint-placeholder-val="{{ true }}">
+<div role="tablist" aria-label="Record type" style="position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid rgb(228,228,231);padding:0 16px;display:flex;gap:18px;overflow-x:auto">
+<sc-for list="{{ panelTabs }}" as="t" hint-placeholder-count="5"><button type="button" role="tab" aria-selected="{{ t.current }}" onClick="{{ t.select }}" style="flex-shrink:0;background:none;border:none;border-bottom:2px solid {{ t.line }};margin-bottom:-1px;padding:10px 0;font:inherit;font-size:14px;line-height:20px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;white-space:nowrap">{{ t.label }}</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ phone }}" hint-placeholder-val="{{ false }}">
+<div style="position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid rgb(228,228,231);padding:10px 16px;display:flex;align-items:center;gap:10px">
+<label for="vet-rec-type" style="font-size:14px;line-height:20px;font-weight:600;flex-shrink:0">Show</label>
+<div style="position:relative;flex:1;min-width:0">
+<select id="vet-rec-type" value="{{ tabValue }}" onChange="{{ pickTab }}" style="width:100%;min-height:44px;padding:0 40px 0 12px;border:1px solid rgb(212,212,216);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);appearance:none;-webkit-appearance:none;cursor:pointer">
+<sc-for list="{{ panelTabs }}" as="t" hint-placeholder-count="5"><option value="{{ t.key }}">{{ t.label }}</option></sc-for>
+</select>
+<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:rgb(82,82,91);display:flex"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="16" hint-size="16px,16px"></x-import></span>
+</div>
+</div>
+</sc-if>
+
+<!-- Records -->
+<div style="padding:0 16px 24px;display:flex;flex-direction:column">
+<sc-for list="{{ records }}" as="e" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:14px 0;border-bottom:1px solid rgb(228,228,231)">
+<span style="grid-column:1;grid-row:1;font-size:14px;line-height:20px;font-weight:700">{{ e.head }}</span>
+<span style="grid-column:2;grid-row:1 / span 3;text-align:right;font-size:12px;line-height:16px;color:rgb(113,113,122);font-variant-numeric:tabular-nums;max-width:150px">{{ e.where }}<br>{{ e.when }}<br>{{ e.by }}</span>
+<sc-if value="{{ e.hasFacts }}" hint-placeholder-val="{{ true }}"><span style="grid-column:1;display:flex;flex-wrap:wrap;gap:2px 14px;font-size:13px;line-height:18px"><sc-for list="{{ e.facts }}" as="f" hint-placeholder-count="2"><span><b style="font-weight:600">{{ f.k }}:</b> {{ f.v }}</span></sc-for></span></sc-if>
+<sc-if value="{{ e.hasStatus }}" hint-placeholder-val="{{ false }}"><span style="grid-column:1"><span style="display:inline-block;font-size:12px;line-height:16px;font-weight:600;padding:2px 8px;border-radius:26px;background:{{ e.statusBg }};color:{{ e.statusInk }}">{{ e.status }}</span></span></sc-if>
+<sc-if value="{{ e.hasNote }}" hint-placeholder-val="{{ false }}"><span style="grid-column:1 / -1;font-size:13px;line-height:18px;color:rgb(63,63,70);text-wrap:pretty">{{ e.note }}</span></sc-if>
+<sc-if value="{{ e.hasSteps }}" hint-placeholder-val="{{ false }}">
+<div style="grid-column:1 / -1;display:flex;flex-direction:column;border-left:2px solid rgb(228,228,231);padding-left:12px;margin-top:4px">
+<sc-for list="{{ e.steps }}" as="st" hint-placeholder-count="3">
+<div style="padding:5px 0;font-size:13px;line-height:18px"><span style="color:rgb(113,113,122);font-variant-numeric:tabular-nums">{{ st.when }}</span> <b style="font-weight:600">{{ st.what }}</b><sc-if value="{{ st.hasNote }}" hint-placeholder-val="{{ false }}"><span style="display:block;color:rgb(63,63,70);text-wrap:pretty">{{ st.note }}</span></sc-if></div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ e.hasFiles }}" hint-placeholder-val="{{ false }}">
+<div style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;margin-top:6px">
+<sc-for list="{{ e.files }}" as="f" hint-placeholder-count="2">
+<a href="#" onClick="{{ f.open }}" style="display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 10px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;color:rgb(9,9,11);text-decoration:none" style-hover="background:rgb(244,244,245)">
+<span style="flex-shrink:0;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:{{ f.bg }};color:{{ f.ink }}"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ f.icon }}" size="16" hint-size="16px,16px"></x-import></span>
+<span style="min-width:0;flex:1;display:flex;flex-direction:column"><span style="font-size:13px;line-height:18px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span><span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ f.meta }}</span></span>
+<span style="flex-shrink:0;color:rgb(113,113,122)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-right" size="16" hint-size="16px,16px"></x-import></span>
+</a>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ noRecords }}" hint-placeholder-val="{{ false }}">
+<div style="padding:20px 0;font-size:14px;line-height:20px;color:rgb(113,113,122)">{{ emptyText }}</div>
+</sc-if>
+</div>
+</div>
+
+<div style="padding:10px 16px;border-top:1px solid rgb(228,228,231);font-size:12px;line-height:16px;color:rgb(113,113,122)">Records are read-only here. To edit history, use horse search.</div>
+</div>
+</sc-if>
+
+<!-- Customise card (used when the screen is opened on its own; inside the app the shared panel opens) -->
+<sc-if value="{{ ccOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ ccClose }}" style="position:fixed;inset:0;background:rgba(9,9,11,0.3);z-index:520"></div>
+<div role="dialog" aria-modal="true" aria-label="Customise card" style="position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:#fff;border-left:1px solid rgb(228,228,231);box-shadow:0 10px 30px rgba(0,0,0,0.15);z-index:530;display:flex;flex-direction:column">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid rgb(228,228,231)">
+<div><div style="font-size:16px;line-height:22px;font-weight:600">Customise card</div><div style="font-size:13px;line-height:18px;color:rgb(113,113,122)">Changes save automatically.</div></div>
+<button type="button" onClick="{{ ccClose }}" aria-label="Close" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;border-radius:8px;background:transparent;cursor:pointer;color:rgb(63,63,70)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="18" hint-size="18px,18px"></x-import></button>
+</div>
+<div style="flex:1;min-height:0;overflow:auto;padding:16px">
+<div style="font-size:14px;line-height:20px;font-weight:600;margin-top:4px">Declared items</div>
+<div style="font-size:13px;line-height:18px;color:rgb(113,113,122);margin-bottom:6px">Declared at entry, 48 hours before the race.</div>
+<table style="width:100%;border-collapse:collapse;margin-bottom:18px"><thead><tr><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:26px"></th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Item</th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:64px">Abbrev</th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:116px">Display</th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:48px">Colour</th></tr></thead><tbody>
+<sc-for list="{{ ccDecl }}" as="c" hint-placeholder-count="6"><tr>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" aria-label="Show {{ c.label }}" style="width:18px;height:18px;accent-color:rgb(0,47,113);cursor:pointer"></td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px">{{ c.label }}</td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><input value="{{ c.abbrev }}" onInput="{{ c.setAbbrev }}" aria-label="Abbreviation" style="width:52px;box-sizing:border-box;height:32px;border:1px solid rgb(212,212,216);border-radius:8px;text-align:center;font:inherit;font-size:13px"></td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><select value="{{ c.displayVal }}" onChange="{{ c.setDisplay }}" style="width:100%;height:32px;border:1px solid rgb(212,212,216);border-radius:8px;font:inherit;font-size:13px;background:#fff"><option value="abbrev">Abbrev only</option><option value="full">Full name</option></select></td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><input type="color" value="{{ c.colour }}" onInput="{{ c.setColour }}" aria-label="Colour" style="width:30px;height:30px;padding:0;border:1px solid rgb(212,212,216);border-radius:9999px;background:none;cursor:pointer"></td>
+</tr></sc-for></tbody></table>
+<div style="font-size:14px;line-height:20px;font-weight:600;margin-top:4px">Privileges</div>
+<div style="font-size:13px;line-height:18px;color:rgb(113,113,122);margin-bottom:6px">Requested separately, the day after declaration.</div>
+<table style="width:100%;border-collapse:collapse;margin-bottom:18px"><thead><tr><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:26px"></th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Item</th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:64px">Abbrev</th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:116px">Display</th><th style="text-align:left;padding:6px 6px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:48px">Colour</th></tr></thead><tbody>
+<sc-for list="{{ ccPriv }}" as="c" hint-placeholder-count="6"><tr>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><input type="checkbox" checked="{{ c.on }}" onChange="{{ c.toggle }}" aria-label="Show {{ c.label }}" style="width:18px;height:18px;accent-color:rgb(0,47,113);cursor:pointer"></td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px">{{ c.label }}</td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><input value="{{ c.abbrev }}" onInput="{{ c.setAbbrev }}" aria-label="Abbreviation" style="width:52px;box-sizing:border-box;height:32px;border:1px solid rgb(212,212,216);border-radius:8px;text-align:center;font:inherit;font-size:13px"></td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><select value="{{ c.displayVal }}" onChange="{{ c.setDisplay }}" style="width:100%;height:32px;border:1px solid rgb(212,212,216);border-radius:8px;font:inherit;font-size:13px;background:#fff"><option value="abbrev">Abbrev only</option><option value="full">Full name</option></select></td>
+<td style="padding:6px;border-bottom:1px solid rgb(244,244,245)"><input type="color" value="{{ c.colour }}" onInput="{{ c.setColour }}" aria-label="Colour" style="width:30px;height:30px;padding:0;border:1px solid rgb(212,212,216);border-radius:9999px;background:none;cursor:pointer"></td>
+</tr></sc-for></tbody></table>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid rgb(228,228,231);background:rgb(250,250,250)">
+<button type="button" onClick="{{ ccReset }}" style="min-height:36px;padding:0 14px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Reset to defaults</button>
+<button type="button" onClick="{{ ccClose }}" style="min-height:36px;padding:0 14px;border:1px solid rgb(0,47,113);border-radius:10px;background:rgb(0,47,113);color:#fff;font:inherit;font-size:14px;font-weight:500;cursor:pointer">Done</button>
+</div>
+</div>
+</sc-if>
+
+<!-- Fixture action dialog -->
+<sc-if value="{{ fxDlg }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ fxClose }}" style="position:fixed;inset:0;background:rgba(9,9,11,0.45);z-index:500"></div>
+<div role="dialog" aria-modal="true" aria-label="{{ fxTitle }}" style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 48px);display:flex;flex-direction:column;background:#fff;border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,0.25);z-index:510;overflow:hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid rgb(228,228,231)">
+<div style="display:flex;flex-direction:column"><span style="font-size:16px;line-height:22px;font-weight:600">{{ fxTitle }}</span><span style="font-size:13px;line-height:18px;color:rgb(113,113,122)">{{ fxSub }}</span></div>
+<button type="button" onClick="{{ fxClose }}" aria-label="Close" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;border-radius:8px;background:transparent;cursor:pointer;color:rgb(63,63,70)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="18" hint-size="18px,18px"></x-import></button>
+</div>
+<div style="flex:1;min-height:0;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+<sc-if value="{{ fxIsComment }}" hint-placeholder-val="{{ false }}">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Comment for this fixture<textarea value="{{ fxComment }}" onInput="{{ fxSetComment }}" rows="4" placeholder="Going, facilities, anything the next vet should know" style="width:100%;box-sizing:border-box;min-height:40px;border:1px solid rgb(212,212,216);border-radius:10px;padding:8px 12px;font:inherit;font-size:14px;line-height:20px;background:#fff;resize:vertical;font-weight:400"></textarea></label>
+<sc-for list="{{ fxComments }}" as="c" hint-placeholder-count="0"><div style="padding:10px 12px;border-radius:10px;background:rgb(250,250,250);font-size:14px;line-height:20px"><div style="font-size:12px;color:rgb(113,113,122)">{{ c.when }}</div>{{ c.text }}</div></sc-for>
+</sc-if>
+<sc-if value="{{ fxIsOfficials }}" hint-placeholder-val="{{ false }}">
+<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px 10px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Role</th><th style="text-align:left;padding:8px 10px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Name</th><th style="text-align:left;padding:8px 10px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Phone</th></tr></thead><tbody>
+<sc-for list="{{ fxOfficials }}" as="o" hint-placeholder-count="5"><tr><td style="padding:8px 10px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px;color:rgb(82,82,91)">{{ o.role }}</td><td style="padding:8px 10px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px;font-weight:600">{{ o.name }}</td><td style="padding:8px 10px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px"><a href="tel:{{ o.phone }}" style="color:rgb(0,47,113);font-variant-numeric:tabular-nums">{{ o.phone }}</a></td></tr></sc-for>
+</tbody></table>
+</sc-if>
+<sc-if value="{{ fxIsChips }}" hint-placeholder-val="{{ false }}">
+<table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px 10px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231);width:36px">No.</th><th style="text-align:left;padding:8px 10px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Horse</th><th style="text-align:left;padding:8px 10px;font-size:12px;font-weight:500;color:rgb(113,113,122);border-bottom:1px solid rgb(228,228,231)">Microchip</th></tr></thead><tbody>
+<sc-for list="{{ fxChips }}" as="c" hint-placeholder-count="8"><tr><td style="padding:8px 10px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px;font-weight:700;color:rgb(0,47,113)">{{ c.no }}</td><td style="padding:8px 10px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px">{{ c.horse }}</td><td style="padding:8px 10px;border-bottom:1px solid rgb(244,244,245);font-size:14px;line-height:20px;font-variant-numeric:tabular-nums;letter-spacing:0.3px">{{ c.chip }}</td></tr></sc-for>
+</tbody></table>
+</sc-if>
+<sc-if value="{{ fxIsTrot }}" hint-placeholder-val="{{ false }}">
+<div style="font-size:13px;line-height:18px;color:rgb(82,82,91)">Pick the horses to trot up. The list goes to the stable staff and the racecourse vet.</div>
+<sc-for list="{{ fxTrot }}" as="t" hint-placeholder-count="8"><label style="display:flex;align-items:center;gap:12px;min-height:44px;padding:0 10px;border:1px solid {{ t.border }};border-radius:10px;background:{{ t.bg }};cursor:pointer"><input type="checkbox" checked="{{ t.on }}" onChange="{{ t.toggle }}" style="width:20px;height:20px;accent-color:rgb(0,47,113)"><span style="font-weight:700;color:rgb(0,47,113);width:20px">{{ t.no }}</span><span style="flex:1;font-size:14px">{{ t.horse }}</span><span style="font-size:12px;color:rgb(113,113,122)">{{ t.time }}</span></label></sc-for>
+</sc-if>
+<sc-if value="{{ fxIsVet }}" hint-placeholder-val="{{ false }}">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Name<input value="{{ fxVetName }}" onInput="{{ fxSetVetName }}" placeholder="e.g. Jane Morris MRCVS" style="width:100%;box-sizing:border-box;min-height:40px;border:1px solid rgb(212,212,216);border-radius:10px;padding:8px 12px;font:inherit;font-size:14px;line-height:20px;background:#fff;font-weight:400"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Mobile<input value="{{ fxVetPhone }}" onInput="{{ fxSetVetPhone }}" inputmode="tel" placeholder="07700 900000" style="width:100%;box-sizing:border-box;min-height:40px;border:1px solid rgb(212,212,216);border-radius:10px;padding:8px 12px;font:inherit;font-size:14px;line-height:20px;background:#fff;font-weight:400"></label>
+<sc-if value="{{ fxHasVets }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;font-weight:600;color:rgb(113,113,122)">Added for this fixture</div><sc-for list="{{ fxVets }}" as="v" hint-placeholder-count="0"><div style="font-size:14px;line-height:20px"><b>{{ v.name }}</b> <span style="color:rgb(82,82,91)">{{ v.phone }}</span></div></sc-for></sc-if>
+</sc-if>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid rgb(228,228,231);background:rgb(250,250,250)">
+<button type="button" onClick="{{ fxClose }}" style="display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;font:inherit;font-size:13px;font-weight:500;color:rgb(9,9,11);cursor:pointer">{{ fxCancelLabel }}</button>
+<sc-if value="{{ fxHasPrimary }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ fxPrimary }}" disabled="{{ fxPrimaryDisabled }}" style="display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border:1px solid rgb(0,47,113);border-radius:10px;background:rgb(0,47,113);font:inherit;font-size:13px;font-weight:500;color:#fff;cursor:pointer">{{ fxPrimaryLabel }}</button></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ fxToast }}" hint-placeholder-val="{{ false }}"><div role="status" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:520;background:#fff;border:1px solid rgb(228,228,231);border-radius:18px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1);padding:12px 16px;font-size:14px">{{ fxToast }}</div></sc-if>
+
+<!-- File viewer -->
+<sc-if value="{{ fileOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeFile }}" style="position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500"></div>
+<div role="dialog" aria-modal="true" aria-label="{{ file.name }}" style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 24px);background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.35);z-index:510;display:flex;flex-direction:column;overflow:hidden">
+<div style="display:flex;align-items:center;gap:10px;padding:12px 12px 12px 16px;border-bottom:1px solid rgb(228,228,231)">
+<div style="min-width:0;flex:1;display:flex;flex-direction:column"><span style="font-size:15px;line-height:20px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ file.name }}</span><span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ file.meta }}</span></div>
+<button type="button" onClick="{{ closeFile }}" aria-label="Close" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:none;border-radius:8px;background:transparent;cursor:pointer;color:rgb(63,63,70)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+</div>
+<div style="padding:16px;display:flex;flex-direction:column;gap:12px;overflow:auto">
+<div style="aspect-ratio:4/3;border-radius:10px;background:{{ file.previewBg }};display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:{{ file.previewInk }}"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ file.icon }}" size="40" hint-size="40px,40px"></x-import><span style="font-size:13px;font-weight:600">{{ file.previewLabel }}</span></div>
+<div style="font-size:13px;line-height:18px;color:rgb(63,63,70);text-wrap:pretty">{{ file.summary }}</div>
+<div style="font-size:12px;line-height:16px;color:rgb(113,113,122)">Held in the vet system against this horse. Opens in the viewer; no OneDrive needed.</div>
+</div>
+</div>
+</sc-if>
+
+<!-- Print sheet -->
+<div id="vets-print-sheet" style="display:none">
+<div style="font-family:Inter,-apple-system,sans-serif;color:#000;font-size:11px;line-height:1.3">
+<div style="font-size:16px;font-weight:700">{{ venueTitle }} · {{ dateLine }}</div>
+<div style="margin:2px 0 8px;font-size:12px"><b>{{ race.t }}</b> · {{ race.dist }} {{ race.title }}</div>
+<table style="width:100%;border-collapse:collapse">
+<thead><tr>
+<th style="text-align:left;padding:4px;border-bottom:1px solid #000;width:28px">No.</th>
+<th style="text-align:left;padding:4px;border-bottom:1px solid #000">Horse / trainer</th>
+<th style="text-align:left;padding:4px;border-bottom:1px solid #000;width:70px">Last run</th>
+<th style="text-align:left;padding:4px;border-bottom:1px solid #000;width:70px">Last exam</th>
+<th style="text-align:center;padding:4px;border-bottom:1px solid #000;width:36px">T</th>
+<th style="text-align:center;padding:4px;border-bottom:1px solid #000;width:36px">P</th>
+<th style="text-align:left;padding:4px;border-bottom:1px solid #000;width:30%">Notes</th>
+<th style="text-align:left;padding:4px;border-bottom:1px solid #000;width:44px">Pos.</th>
+</tr></thead>
+<tbody>
+<sc-for list="{{ runners }}" as="r" hint-placeholder-count="8">
+<tr>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top;font-weight:700">{{ r.no }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top"><b>{{ r.horse }}</b><br>{{ r.trainer }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top">{{ r.daysLabel }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top">{{ r.examLabel }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top;text-align:center;font-weight:700">{{ r.testMark }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top;text-align:center;font-weight:700">{{ r.preMark }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top">{{ r.note }}</td>
+<td style="padding:5px 4px;border-bottom:1px solid #999;vertical-align:top;font-weight:700">{{ r.pos }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;highlight&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;array&quot;},&quot;fixtureVenue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onFixtureClick&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(e) =&gt; void&quot;},&quot;phone&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;gearSettings&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;onCustomise&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;openRunner&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;number&quot;},&quot;openTab&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;seedMarks&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;colsOpen&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;boolean&quot;}}">
+// Print: the app runs inside a sandboxed frame where the browser's print dialog is blocked, so Print saves a
+// print-ready copy of the sheet. Opening it brings up the print dialog straight away (and it has its own Print button).
+window.__bhaPrint = window.__bhaPrint || function (bodyHtml, title, pageSize) {
+  var esc = function (t) { return String(t || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var css = Array.prototype.map.call(document.querySelectorAll('style'), function (s) { return s.textContent; }).join('\n');
+  var doc = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' + esc(title) + '</title>'
+    + '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">'
+    + '<style>' + css + '\n@page { size: ' + (pageSize || 'A4 landscape') + '; margin: 10mm; }'
+    + ' html, body { background: #fff !important; height: auto !important; overflow: visible !important; }'
+    + ' body { margin: 0; padding: 16px; font-family: Inter, -apple-system, "Segoe UI", sans-serif; color: rgb(9,9,11); -webkit-print-color-adjust: exact; print-color-adjust: exact; }'
+    + ' .bha-print-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: -16px -16px 16px; padding: 12px 16px; background: rgb(244,244,245); border-bottom: 1px solid rgb(228,228,231); font-size: 14px; }'
+    + ' .bha-print-bar button { min-height: 36px; padding: 0 16px; border: 1px solid rgb(0,47,113); border-radius: 10px; background: rgb(0,47,113); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }'
+    + ' textarea { resize: none; } table { min-width: 0 !important; } tr { break-inside: avoid; }'
+    + ' @media print { .bha-print-bar { display: none !important; } body { padding: 0; } }'
+    + '</style></head><body><div class="bha-print-bar"><span><b>' + esc(title) + '</b></span><button type="button" onclick="window.print()">Print</button></div>'
+    + bodyHtml
+    + '<script>window.addEventListener("load", function () { setTimeout(function () { try { window.print(); } catch (e) {} }, 400); });<\/script></body></html>';
+  var url = URL.createObjectURL(new Blob([doc], { type: 'text/html' }));
+  var a = document.createElement('a');
+  a.href = url; a.download = String(title || 'Racecard').replace(/\s*\u00b7\s*/g, ' - ').replace(/[^\x20-\x7e]+/g, '').replace(/[\\/:*?"<>|]+/g, '.').replace(/\s+/g, ' ').trim() + '.html';
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { try { a.remove(); URL.revokeObjectURL(url); } catch (e) {} }, 4000);
+};
+class Component extends DCLogic {
+  RACES = [
+    { t: '1:06', dist: '2m', title: 'Novices’ hurdle (Class 4)' },
+    { t: '1:36', dist: '2m 4f', title: 'Handicap hurdle (Class 5)' },
+    { t: '2:06', dist: '2m 7f', title: 'Novices’ handicap chase (Class 4)' },
+    { t: '2:36', dist: '2m 4f', title: 'Mares’ handicap hurdle (Class 4)' },
+    { t: '3:06', dist: '3m 1f', title: 'Handicap chase (Class 3)' },
+    { t: '3:36', dist: '2m 3f 189y', title: 'The Christmas Parties 2026 At Huntingdon Racecourse Handicap Steeple Chase (Class 4) (GBB Race)' },
+    { t: '4:06', dist: '2m', title: 'Standard open NH flat race (Class 5)' },
+  ];
+  GEAR = { B1: 'Blinkers first time', B: 'Blinkers', TT: 'Tongue tie', CP: 'Cheekpieces', V: 'Visor', H: 'Hood', ES: 'Eyeshield', WS: 'Wind surgery since last run' };
+  // Declared items and privileges: same master list as the stewards card.
+  PRIV = { RH: 'Red hood', EP: 'Early to post', MC: 'Mounting in the chute', HP: 'Hood in the parade ring', 'Ear out': 'Earplugs taken out', 'Ear in': 'Earplugs staying in', WITS: 'Withdrawn if tongue strap', W: 'Withdrawn if plate lost', FW: 'Withdrawn if front plate lost', LL: 'Late load (no code yet)', SR: 'Stable rep at the start (no code yet)', Rug: 'Rug, unconfirmed' };
+  TODAY = new Date(2026, 9, 28);
+  MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  daysSince = (iso) => { const [y, m, d] = iso.split('-').map(Number); return Math.round((this.TODAY - new Date(y, m - 1, d)) / 86400000); };
+  fmtDate = (iso) => { const [y, m, d] = iso.split('-').map(Number); return d + ' ' + this.MON[m - 1] + ' ' + y; };
+  RUNNERS = [
+    { no: 1, horse: 'Clap of Thunder (IRE)', desc: '6yo bay gelding', form: '1533/43-', jockey: 'Sam Twiston-Davies', lr: ['2026-01-01', 'Cheltenham', '2m 4f chase', '5th', 11], trainer: 'Nigel & Willy Twiston-Davies', email: 'lynne@nigeltwistondavies.co.uk', ex: ['2025-12-07', 'Pre race', 'Huntingdon', 'NSF'], owner: 'Mr Robert Frosell', gear: [], priv: ['RH'], pos: '3rd', flag: 'STR cleared' },
+    { no: 2, horse: 'Krak (FR)', desc: '6yo chesnut gelding', form: '243225', jockey: 'Tristan Durrell', lr: ['2026-10-13', 'Southwell', '2m 4f chase', '5th', 8], trainer: 'Dan Skelton', email: 'dan@danskeltonracing.com', phone: '01789 336339', ex: ['2026-10-13', 'Post race', 'Southwell', 'NSF'], gear: ['B'], priv: [], pos: '1st', owner: 'Mr J. Hales' },
+    { no: 3, horse: 'Cuban Court (IRE)', desc: '8yo bay gelding', form: '616114-', jockey: 'Jack Quinlan', lr: ['2026-04-14', 'Fakenham', '2m 5f chase', '4th', 7], trainer: 'Neil King', email: 'neil@neil-king.co.uk', phone: '01793 845011', ex: ['2026-04-14', 'Pre race', 'Fakenham', 'NSF'], gear: ['TT'], priv: ['EP'], pos: '5th', owner: 'Mrs H. M. Buckle' },
+    { no: 4, horse: 'It’s Top (FR)', desc: '6yo bay gelding', form: '00/21P5-', jockey: 'Gavin Sheehan', lr: ['2026-04-09', 'Warwick', '2m 5f chase', '5th', 9], trainer: 'Oliver Signy', email: 'oliver@oliversignyracing.com', ex: ['2026-04-09', 'Post race', 'Warwick', '1 finding, upper airway noise'], gear: ['TT', 'WS'], priv: [], pos: 'PU', owner: 'The Top Partnership' },
+    { no: 5, horse: 'Legal Weapon (GER)', desc: '6yo bay gelding', form: '232440-', jockey: 'Ben Jones', lr: ['2026-04-25', 'Stratford', '2m 3f chase', 'PU', 10], trainer: 'Ben Pauling', email: 'ben@benpaulingracing.com', phone: '01451 821252', ex: ['2026-04-25', 'Post race', 'Stratford', 'NSF'], gear: ['WS'], priv: [], pos: '2nd', owner: 'Mr & Mrs N. Tilley' },
+    { no: 6, horse: 'Nazare (FR)', desc: '6yo bay gelding', form: '1F06-31', jockey: 'Harry Cobden', lr: ['2026-06-09', 'Newton Abbot', '2m 5f chase', '1st', 6], trainer: 'James Owen', email: 'james@jamesowenracing.com', phone: '01638 508967', ex: null, gear: [], priv: [], pos: '4th', owner: 'Nazare Racing Club' },
+    { no: 7, horse: 'Sopran Thor (FR)', desc: '11yo bay gelding', form: '01/U5P/P/-', jockey: 'Murray Dodd', lr: ['2025-02-21', 'Huntingdon', '3m chase', 'PU', 8], trainer: 'Louise Allan', email: 'louiseallan1@hotmail.co.uk', phone: '01638 810205', ex: ['2025-02-21', 'Post race', 'Huntingdon', '1 finding, tendon RF'], gear: ['CP'], priv: ['MC', 'HP'], pos: 'F', owner: 'Mr P. Allan' },
+    { no: 8, horse: 'Scavengers Reign (IRE)', desc: '7yo bay gelding', form: '3P2-41', jockey: 'Charlie Hammond', lr: ['2026-07-22', 'Uttoxeter', '2m 4f chase', '1st', 9], trainer: 'James Owen', email: 'james@jamesowenracing.com', phone: '01638 508967', ex: ['2026-07-22', 'Pre race', 'Uttoxeter', 'NSF'], gear: [], priv: ['EP'], pos: 'NR', nr: ['Vet Cert', 'Lame left fore', '14:32'], owner: 'Reign Racing' },
+  ];
+  // Everything the vet system and OneDrive hold about each horse, in one place
+  RECORDS = {
+    1: {
+      observations: [
+        { head: 'Tested', where: 'Huntingdon', when: '07/12/2025 at 4:30 pm', facts: [], by: 'Stuart Thorne' },
+        { head: 'Tested', where: 'Ascot', when: '02/11/2024 at 3:25 pm', facts: [], by: 'Howard Newitt' }
+      ],
+      legacy: [
+        { head: 'NSF', where: 'Fontwell', when: '14/02/2022 at 2:10 pm', facts: [['Timing', 'Pre race'], ['Reason', 'All horse trot up']], by: 'Legacy import' }
+      ],
+      examinations: [
+        { head: 'NSF', where: 'Huntingdon', when: '07/12/2025 at 1:15 pm', facts: [['Timing', 'Pre race'], ['Reason', 'All horse trot up']], note: 'Been off 308 days, had wind op.', by: 'Stuart Thorne' },
+        { head: '1 finding', finding: true, path: ['Musculoskeletal', 'Left hind', 'Other', 'Laceration'], where: 'Ascot', when: '02/11/2024 at 2:35 pm', facts: [['Timing', 'Post race'], ['Reason', 'Veterinary'], ['Result', 'Short term']], note: 'Laceration LH med cannon post race. No tx sought, wound appeared superficial in winners enclosure.', by: 'Howard Newitt' },
+        { head: 'NSF', where: 'Chepstow', when: '11/10/2024 at 2:10 pm', facts: [['Timing', 'Pre race'], ['Reason', 'All horse trot up']], by: 'Lucinda Tyler' },
+      ],
+      reports: [
+        { head: 'Veterinary report', where: 'Cheltenham', when: '02/01/2025', facts: [['Reason', 'Withdrawn lame, pre race']], note: 'Right hock, moderate effusion. 3/10 lame right hind on the trot. Advised trainer to withdraw and investigate.', by: 'Howard Newitt',
+          files: [{ kind: 'pdf', name: 'Vet report, Cheltenham 02 Jan 2025.pdf', meta: 'PDF · 2 pages · Howard Newitt', summary: 'Pre-race examination. Right hind lameness 3/10, hock effusion. Withdrawn on veterinary advice. Trainer asked to supply a vet report before the horse runs again.' }] }
+      ],
+      imaging: [
+        { head: 'X-ray, right hock', where: 'Rossdales, Newmarket', when: '14/01/2025', facts: [['Views', '4'], ['Finding', 'Mild to moderate OA, distal intertarsal joint']], by: 'Submitted by trainer',
+          files: [{ kind: 'xray', name: 'Right hock, DP view.dcm', meta: 'X-ray · 14 Jan 2025 · Rossdales', summary: 'Dorsoplantar view. Mild periarticular new bone on the distal intertarsal joint, no lysis.' }, { kind: 'xray', name: 'Right hock, lateral view.dcm', meta: 'X-ray · 14 Jan 2025 · Rossdales', summary: 'Lateromedial view. Joint space preserved. Changes consistent with low grade bone spavin.' }] }
+      ],
+      videos: [
+        { head: 'Trot up, hard surface', where: 'Trainer’s yard', when: '20/01/2025', facts: [['Length', '0:48'], ['Surface', 'Hard, straight line']], note: 'Sound in a straight line after medication and two weeks’ rest.', by: 'Submitted by trainer',
+          files: [{ kind: 'video', name: 'Trot up, 20 Jan 2025.mp4', meta: 'Video · 0:48 · Trainer’s yard', summary: 'Straight line trot on a hard surface, both directions. No lameness visible at walk or trot.' }, { kind: 'video', name: 'Lunge, 20 Jan 2025.mp4', meta: 'Video · 1:12 · Trainer’s yard', summary: 'Lunged left and right on a soft surface. Sound both reins.' }] }
+      ],
+      str: [
+        { head: 'Suitability to race', status: 'Cleared to race', statusKind: 'ok', where: 'BHA veterinary team', when: 'Cleared 28/01/2025', facts: [['Trigger', 'Withdrawn lame, Cheltenham 02/01/2025'], ['Condition', 'Right hock osteoarthritis, low grade']],
+          steps: [
+            { when: '02/01/2025', what: 'Withdrawn lame, pre race', note: 'Right hind 3/10, hock effusion. Suitability to race process started.' },
+            { when: '14/01/2025', what: 'Trainer’s vet report and X-rays received', note: 'Rossdales, 4 views. Mild to moderate OA of the distal intertarsal joint.' },
+            { when: '20/01/2025', what: 'Trot up videos received', note: 'Sound on hard and soft surfaces after treatment and rest.' },
+            { when: '28/01/2025', what: 'Cleared to race', note: 'Reviewed by BHA veterinary team. Clear to run. Pre-race trot up required at next two runs.' }
+          ],
+          files: [
+            { kind: 'pdf', name: 'Trainer’s vet report, Rossdales.pdf', meta: 'PDF · 3 pages · 14 Jan 2025', summary: 'Clinical examination and radiographic findings for the right hock. Mild to moderate osteoarthritis of the distal intertarsal joint, treated with intra-articular medication. Prognosis for racing good.' },
+            { kind: 'xray', name: 'Right hock, 4 views.zip', meta: 'X-rays · 4 files · 14 Jan 2025', summary: 'Full radiographic series of the right hock. Also listed under X-rays.' },
+            { kind: 'video', name: 'Trot up and lunge, 20 Jan 2025', meta: 'Videos · 2 files · 2:00', summary: 'Straight line and lunge. Also listed under Videos.' },
+            { kind: 'pdf', name: 'BHA clearance letter.pdf', meta: 'PDF · 1 page · 28 Jan 2025', summary: 'Cleared to race with a condition: pre-race trot up at the next two runs. Signed off by the BHA veterinary team.' }
+          ], by: 'BHA veterinary team' }
+      ]
+    },
+    4: {
+      examinations: [
+        { head: '1 finding', finding: true, path: ['Respiratory', 'Upper airway', 'Noise'], where: 'Warwick', when: '09/04/2026 at 3:10 pm', facts: [['Timing', 'Post race'], ['Reason', 'Stewards’ referral'], ['Result', 'Short term']], note: 'Made a noise. Trainer reports wind surgery since.', by: 'Rachael Frost' }
+      ]
+    },
+    7: {
+      examinations: [
+        { head: '1 finding', finding: true, path: ['Musculoskeletal', 'Right fore', 'Tendon'], where: 'Huntingdon', when: '21/02/2025 at 2:48 pm', facts: [['Timing', 'Post race'], ['Reason', 'Pulled up'], ['Result', 'Long term']], note: 'Pulled up lame RF. Heat and swelling SDFT. Referred to trainer’s vet.', by: 'Howard Newitt' }
+      ],
+      str: [
+        { head: 'Suitability to race', status: 'Information awaited', statusKind: 'warn', where: 'BHA veterinary team', when: 'Opened 21/02/2025', facts: [['Trigger', 'Pulled up lame, Huntingdon 21/02/2025'], ['Condition', 'Right fore SDFT injury']],
+          steps: [
+            { when: '21/02/2025', what: 'Pulled up lame, post race exam', note: 'Right fore tendon. Suitability to race process started.' },
+            { when: '04/03/2025', what: 'Trainer asked for vet report and scans' },
+            { when: 'Today', what: 'Declared without clearance', note: 'No vet report or scans received. Horse should not run until the process is complete. Flag to stewards.' }
+          ], files: [], by: 'BHA veterinary team' }
+      ]
+    }
+  };
+  TABS = [['observations', 'Observations'], ['examinations', 'Examinations'], ['documents', 'Documents'], ['str', 'Suitability to race'], ['legacy', 'Legacy data']];
+  STORE = 'bha_vets_marks_v1';
+  FX = [['comment', 'Add comment'], ['officials', 'View officials'], ['chips', 'View microchips'], ['trot', 'Prepare trot up'], ['vet', 'Add racecourse vet']];
+  OFFICIALS = [['BHA veterinary officer', 'Dr Sarah Pennington', '07700 900 412'], ['Racecourse vet', 'Tom Ashworth MRCVS', '07700 900 518'], ['Racecourse vet', 'Hannah Reid MRCVS', '07700 900 733'], ['Clerk of the course', 'Sulekha Varma', '07700 900 241'], ['Stipendiary steward', 'Kate Smith', '07700 900 655'], ['Equine welfare integrity officer', 'Mark Ellis', '07700 900 890']];
+  fxFlash = (m) => { clearTimeout(this._fxT); this.setState({ fxToast: m }); this._fxT = setTimeout(() => this.setState({ fxToast: '' }), 3000); };
+  fxSave = (k, v) => { try { localStorage.setItem('bha_vets_fx_' + k, JSON.stringify(v)); } catch (e) {} };
+  fxLoad = (k, d) => { try { const v = JSON.parse(localStorage.getItem('bha_vets_fx_' + k) || 'null'); return v == null ? d : v; } catch (e) { return d; } };
+  fxVals = () => {
+    const s = this.state, k = s.fxDlg, item = this.FX.find(x => x[0] === k);
+    const chip = (r) => '826 0' + String(98000000000 + r.no * 7368421 + r.horse.length * 1013).slice(-11).replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3');
+    const trot = s.fxTrotSel || this.fxLoad('trot', {});
+    const comments = s.fxComments || this.fxLoad('comments', []), vets = s.fxVets || this.fxLoad('vets', []);
+    const close = () => this.setState({ fxDlg: null });
+    const prim = {
+      comment: ['Save comment', !String(s.fxComment || '').trim(), () => { const n = [{ when: 'Today ' + new Date().toTimeString().slice(0, 5), text: s.fxComment.trim() }].concat(comments); this.fxSave('comments', n); this.setState({ fxComments: n, fxComment: '', fxDlg: null }); this.fxFlash('Comment added to the fixture.'); }],
+      trot: ['Save trot up list', false, () => { this.fxSave('trot', trot); const n = Object.keys(trot).filter(x => trot[x]).length; this.setState({ fxDlg: null }); this.fxFlash(n ? n + (n === 1 ? ' horse' : ' horses') + ' on the trot up list.' : 'Trot up list cleared.'); }],
+      vet: ['Add vet', !String(s.fxVetName || '').trim(), () => { const n = vets.concat([{ name: s.fxVetName.trim(), phone: String(s.fxVetPhone || '').trim() }]); this.fxSave('vets', n); this.setState({ fxVets: n, fxVetName: '', fxVetPhone: '', fxDlg: null }); this.fxFlash('Racecourse vet added for this fixture.'); }],
+    }[k];
+    return {
+      fxOpen: !!s.fxOpen, fxOpenAttr: s.fxOpen ? 'true' : 'false', toggleFx: () => this.setState(x => ({ fxOpen: !x.fxOpen })),
+      fxItems: this.FX.map(([key, label]) => ({ label, run: () => this.setState({ fxOpen: false, fxDlg: key, fxTrotSel: this.fxLoad('trot', {}) }) })),
+      fxDlg: !!k, fxClose: close, fxTitle: item ? item[1] : '', fxSub: (this.props.fixtureVenue || 'Huntingdon') + ' \u00b7 today',
+      fxIsComment: k === 'comment', fxIsOfficials: k === 'officials', fxIsChips: k === 'chips', fxIsTrot: k === 'trot', fxIsVet: k === 'vet',
+      fxComment: s.fxComment || '', fxSetComment: (e) => this.setState({ fxComment: e.target.value }), fxComments: comments,
+      fxOfficials: this.OFFICIALS.concat(vets.map(v => ['Racecourse vet', v.name, v.phone || '\u2013'])).map(([role, name, phone]) => ({ role, name, phone })),
+      fxChips: this.RUNNERS.map(r => ({ no: r.no, horse: r.horse, chip: chip(r) })),
+      fxTrot: this.RUNNERS.map(r => { const on = !!trot[r.no]; return { no: r.no, horse: r.horse, time: on ? 'On list' : '', on, border: on ? 'rgb(0,47,113)' : 'rgb(228,228,231)', bg: on ? 'rgb(233,244,250)' : '#fff', toggle: () => this.setState({ fxTrotSel: { ...trot, [r.no]: !on } }) }; }),
+      fxVetName: s.fxVetName || '', fxVetPhone: s.fxVetPhone || '', fxSetVetName: (e) => this.setState({ fxVetName: e.target.value }), fxSetVetPhone: (e) => this.setState({ fxVetPhone: e.target.value }),
+      fxVets: vets, fxHasVets: !!vets.length,
+      fxHasPrimary: !!prim, fxPrimaryLabel: prim ? prim[0] : '', fxPrimaryDisabled: prim ? prim[1] : true, fxPrimary: prim ? prim[2] : close,
+      fxCancelLabel: prim ? 'Cancel' : 'Close', fxToast: s.fxToast || '',
+    };
+  };
+
+  // ---- Report and Activity ----
+  ACT = {
+    obs: ['Observation', 'eye', 'rgb(233,244,250)', 'rgb(0,47,113)', 'rgb(191,219,254)'],
+    exam: ['Examination', 'heart', 'rgb(233,246,239)', 'rgb(0,120,63)', 'rgb(190,226,206)'],
+    finding: ['Finding', 'circle-alert', 'rgb(255,247,230)', 'rgb(146,90,0)', 'rgb(240,213,168)'],
+    test: ['Test', 'flag', 'rgb(243,240,255)', 'rgb(91,33,182)', 'rgb(221,214,254)'],
+    notseen: ['Not seen', 'eye-off', 'rgb(244,244,245)', 'rgb(82,82,91)', 'rgb(228,228,231)'],
+    note: ['Note', 'pencil', 'rgb(244,244,245)', 'rgb(63,63,70)', 'rgb(228,228,231)'],
+    nr: ['Non-runner', 'x', 'rgb(254,242,242)', 'rgb(185,28,28)', 'rgb(254,202,202)'],
+    trot: ['Trot up', 'activity', 'rgb(233,244,250)', 'rgb(0,47,113)', 'rgb(191,219,254)'],
+    comment: ['Fixture comment', 'file-text', 'rgb(244,244,245)', 'rgb(63,63,70)', 'rgb(228,228,231)'],
+  };
+  // Sample activity from earlier races today (already reviewed). Fictional horses.
+  REPORT = {
+    0: [{ no: 3, horse: 'Harbour Keeper (IRE)', hist: [['note', 'Stewards noted last time out the horse hung right', 'Warwick', '12/09/2026 at 3:40 pm', ''], ['exam', 'NSF', 'Pre race', 'All horse trot up', '', '', 'Huntingdon', '28/10/2026 at 12:40 pm', 'Rachael Frost'], ['exam', 'finding', 'Post race', 'Veterinary', 'Short term', 'Gait > Right hind > Lame|1/5 RH WAL', 'Warwick', '12/09/2026 at 4:05 pm', 'Howard Newitt'], ['exam', 'NSF', 'Pre race', 'All horse trot up', '', '', 'Market Rasen', '02/06/2022 at 2:10 pm', 'Stuart Thorne']], desc: '5yo bay gelding', jockey: 'Sean Bowen', days: 41, trainer: 'Olly Murphy', acts: [['obs', '12:58', 'Sweating in the paddock, settled before the off'], ['exam', '13:14', 'Post race, NSF']] },
+        { no: 7, horse: 'Copper Lane (GB)', hist: [['exam', 'NSF', 'Pre race', 'Days since', '', 'Long lay off, nothing to report', 'Huntingdon', '28/10/2026 at 12:44 pm', 'Rachael Frost']], desc: '4yo chesnut filly', jockey: 'Kielan Woods', days: 63, trainer: 'Ben Pauling', acts: [['test', '13:15', 'Random selection, urine']] }],
+    1: [{ no: 2, horse: 'Mister Moss (FR)', hist: [['nr', 'Non Runner – Self Cert (Runny nose)', 'Fakenham', '03/10/2026 at 11:20 am', ''], ['exam', 'NSF', 'Post race', 'Poor performance', '', 'EFS, NTR', 'Southwell', '14/09/2026 at 5:10 pm', 'Colin Roberts'], ['exam', 'NSF', 'Pre race', 'All horse trot up', '', '', 'Huntingdon', '02/03/2023 at 1:30 pm', 'Kanichi Kusano']], desc: '7yo bay gelding', jockey: 'Harry Skelton', days: 28, trainer: 'Dan Skelton', acts: [['notseen', '13:40', 'Trainer’s vet already examined at the yard']] }],
+    2: [{ no: 5, horse: 'Kingsbarns (IRE)', hist: [['exam', 'finding', 'Post race', 'Veterinary', 'Short term', 'Skin > Right fore > Wound|Cut RF, cleaned and dressed', 'Huntingdon', '28/10/2026 at 2:13 pm', 'Rachael Frost'], ['note', 'Stewards noted last time out the horse ran too free', 'Towcester', '06/07/2026 at 3:15 pm', ''], ['exam', 'NSF', 'Pre race', 'All horse trot up', '', 'Poor mover behind', 'Sandown Park', '05/07/2023 at 1:55 pm', 'Sally Taylor']], desc: '8yo bay gelding', jockey: 'Gavin Sheehan', days: 112, trainer: 'Jamie Snowden', acts: [['finding', '14:13', 'Cut right fore, cleaned and dressed'], ['exam', '14:12', 'Post race']] },
+        { no: 9, horse: 'Bold Quest (GB)', hist: [['exam', 'NSF', 'Pre race', 'All horse trot up', '', 'AHTU NSF', 'Huntingdon', '28/10/2026 at 1:58 pm', 'Rachael Frost']], desc: '6yo grey gelding', jockey: 'Jack Quinlan', days: 19, trainer: 'Neil King', acts: [['trot', '13:58', 'Trotted up sound before the race']] }],
+    3: [],
+    4: [{ no: 1, horse: 'Fenland Star (GB)', hist: [['exam', 'NSF', 'Post race', 'Stewards request', '', 'Blowing hard, recovered in 10 minutes', 'Huntingdon', '28/10/2026 at 3:15 pm', 'Rachael Frost'], ['exam', 'finding', 'Pre race', 'All horse trot up', 'Short term', 'Gait > Left fore > Lame|1.5/5 LF WAL', 'Kempton Park', '17/03/2026 at 6:00 pm', 'Amy Hawthorn'], ['exam', 'NSF', 'Pre race', 'All horse trot up', '', '', 'Chepstow', '13/05/2021 at 4:55 pm', 'Katie Byam-Cook']], desc: '9yo bay gelding', jockey: 'Ben Jones', days: 205, trainer: 'Ben Pauling', acts: [['exam', '15:15', 'Post race, blowing hard, recovered in 10 minutes'], ['test', '15:16', 'Stewards’ request, blood']] }],
+  };
+  // Full report: each horse's history, newest first. Rows: [kind, ...]
+  // exam: ['exam', 'NSF'|'finding', timing, reason, result, 'path|comment' or comment, where, when, by]
+  // note / nr: [kind, text, where, when, by]
+  parseWhen = (w) => { const m = /(\d{2})\/(\d{2})\/(\d{4})/.exec(w || ''); return m ? new Date(+m[3], +m[2] - 1, +m[1]) : null; };
+  sexOf = (desc) => { const m = /(\d+)yo .*?(gelding|filly|mare|colt|horse)/.exec(desc || ''); return m ? '(' + (2026 - +m[1]) + ' ' + ({ gelding: 'G', filly: 'F', mare: 'M', colt: 'C', horse: 'H' })[m[2]] + ')' : ''; };
+  histFromRecords = (r) => { const R = this.RECORDS[r.no] || {}, out = [];
+    if (r.nr) out.push(['nr', 'Non Runner – ' + r.nr[0] + ' (' + r.nr[1] + ')', 'Huntingdon', '28/10/2026 at ' + r.nr[2], '']);
+    (R.examinations || []).concat(R.legacy || []).forEach(e => { const f = Object.fromEntries(e.facts || []);
+      out.push(['exam', e.finding ? 'finding' : 'NSF', f.Timing || '', f.Reason || '', f.Result || '', e.finding ? (e.path || []).join(' > ') + '|' + (e.note || '') : (e.note || ''), e.where, e.when, e.by]); });
+    (R.observations || []).forEach(e => out.push(['note', e.head + (e.note ? ': ' + e.note : ''), e.where, e.when, e.by]));
+    return out; };
+  histRows = (hist) => { const s = this.state, cut = new Date(2023, 9, 28);
+    return hist.map(h => { const isExam = h[0] === 'exam', when = isExam ? h[7] : h[3], d = this.parseWhen(when);
+      const ahtu = isExam && /trot up/i.test(h[3]); const old = d && d < cut;
+      if ((s.hideAhtu && ahtu) || (s.hideOld && old)) return null;
+      const finding = isExam && h[1] === 'finding', parts = isExam ? String(h[5] || '').split('|') : [];
+      return { d: d ? d.getTime() : 0, isExam, isText: !isExam, isNr: h[0] === 'nr',
+        head: isExam ? (finding ? '1 finding' : 'NSF') : h[1], headInk: finding ? 'rgb(146,90,0)' : h[0] === 'nr' ? 'rgb(185,28,28)' : 'rgb(9,9,11)',
+        hasPath: finding, path: finding ? parts[0] : '', comment: finding ? (parts[1] || '') : (isExam ? h[5] : ''), hasComment: !!(finding ? parts[1] : (isExam && h[5])),
+        facts: isExam ? [['Timing', h[2]], ['Reason', h[3]], ['Result', h[4]]].filter(x => x[1]).map(([k, v]) => ({ k, v })) : [],
+        where: isExam ? h[6] : h[2], when: when || '', by: (isExam ? h[8] : h[4]) ? 'Updated by ' + (isExam ? h[8] : h[4]) : '', hasBy: !!(isExam ? h[8] : h[4]) }; })
+      .filter(Boolean).sort((a, b) => b.d - a.d); };
+  nowHM = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+  liveActs = (r) => { const m = this.state.marks[r.no] || {}, out = [];
+    if (r.nr) out.push(['nr', r.nr[2], r.nr[0] + ', ' + r.nr[1].toLowerCase()]);
+    if (m.test) out.push(['test', m.testAt || '15:30', 'Marked for testing']);
+    if (m.pre) out.push(['exam', m.preAt || '15:30', 'Post-race exam requested']);
+    if (m.note) out.push(['note', m.noteAt || '15:30', m.note]);
+    return out; };
+  allActivity = () => { const out = [], ri = 5;
+    Object.keys(this.REPORT).forEach(i => this.REPORT[i].forEach(h => h.acts.forEach((a, k) => out.push({ id: 'r' + i + '-' + h.no + '-' + k, race: +i, no: h.no, horse: h.horse, type: a[0], time: a[1], text: a[2], seeded: true }))));
+    this.RUNNERS.forEach(r => this.liveActs(r).forEach(a => out.push({ id: 'l' + r.no + '-' + a[0], race: ri, no: r.no, horse: r.horse, type: a[0], time: a[1], text: a[2] })));
+    (this.fxLoad('comments', []) || []).forEach((c, k) => out.push({ id: 'c' + k + c.when, race: null, type: 'comment', time: String(c.when).replace('Today ', ''), text: c.text }));
+    return out.sort((a, b) => b.time.localeCompare(a.time)); };
+  reportVals = () => {
+    const s = this.state, navy = 'rgb(0,47,113)', full = s.rpMode === 'full';
+    const reviewed = s.reviewed || this.fxLoad('reviewed', {});
+    const seg = (on) => ({ bg: on ? '#fff' : 'transparent', shadow: on ? '0 1px 2px rgba(0,0,0,0.08)' : 'none', ink: on ? navy : 'rgb(63,63,70)', selected: on ? 'true' : 'false' });
+    const daysInk = (d) => d >= 180 ? 'rgb(185,28,28)' : d >= 90 ? 'rgb(146,90,0)' : 'rgb(9,9,11)';
+    const chip = (a) => { const t = this.ACT[a[0]], nr = a[0] === 'nr'; return { label: t[0], cls: 'bha-badge bha-badge-outline', bg: nr ? 'rgb(82,82,91)' : 'transparent', ink: nr ? '#fff' : a[0] === 'finding' ? 'rgb(146,90,0)' : 'var(--foreground, rgb(9,9,11))', title: a[1] + ' · ' + a[2] }; };
+    const slug = (x) => 'k_t_' + String(x).toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z]+/g, '');
+    let horses = 0;
+    const rpRaces = this.RACES.map((R, i) => {
+      let rows;
+      if (i === 5) rows = this.RUNNERS.map(r => ({ r, acts: this.liveActs(r) })).filter(x => full || x.acts.length).map(({ r, acts }) => ({
+          no: r.no, horse: r.horse, desc: r.desc, jockey: r.jockey, days: this.daysSince(r.lr[0]), trainer: r.trainer, tKey: slug(r.trainer),
+          items: this.gearSettings((r.gear || []).map(g => ({ code: g, title: this.GEAR[g] || g }))).concat(this.privPills(r.priv || [])),
+          acts: acts.map(chip), none: !acts.length, open: () => this.setState({ sel: r.no, tab: 'observations', file: null }), noOpen: false, cursor: 'pointer',
+          hatch: r.nr ? 'repeating-linear-gradient(-45deg, rgba(113,113,122,0.16) 0 7px, rgba(113,113,122,0) 7px 18px)' : 'none', horseInk: r.nr ? 'rgb(82,82,91)' : navy, horseDeco: r.nr ? 'line-through' : 'underline' }));
+      else rows = (this.REPORT[i] || []).map(h => ({ no: h.no, horse: h.horse, desc: h.desc, jockey: h.jockey, days: h.days, trainer: h.trainer, tKey: slug(h.trainer), items: [], acts: h.acts.map(chip), none: false,
+          open: () => {}, noOpen: true, cursor: 'default', hatch: 'none', horseInk: 'rgb(9,9,11)', horseDeco: 'none' }));
+      rows.forEach(r => { r.daysInk = daysInk(r.days); });
+      horses += rows.filter(r => !r.none).length;
+      return { n: i + 1, t: R.t, dist: R.dist, title: R.title, rows, count: rows.length ? rows.length + (rows.length === 1 ? ' horse' : ' horses') : '', show: rows.length > 0 };
+    }).filter(R => R.show);
+    // Activity list: anything not yet reviewed
+    // Activity is left blank for now (empty state only). The review list below is kept for later.
+    const ACTIVITY_ON = false;
+    const acts = ACTIVITY_ON ? this.allActivity().filter(a => !(a.seeded ? reviewed[a.id] !== false : reviewed[a.id])) : [];
+    const nothingAt = s.nothingAt != null ? s.nothingAt : this.fxLoad('nothing', null);
+    const setRev = (id, v) => { const n = { ...reviewed, [id]: v }; this.fxSave('reviewed', n); this.setState({ reviewed: n }); };
+    const total = ACTIVITY_ON ? this.allActivity().length : 0;
+    const slug2 = (x) => 'k_t_' + String(x).toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z]+/g, '');
+    const fullRaces = this.RACES.map((R, i) => {
+      const horses = (i === 5 ? this.RUNNERS.map(r => ({ no: r.no, horse: r.horse, desc: r.desc, trainer: r.trainer, nr: !!r.nr, hist: this.histFromRecords(r) }))
+        : (this.REPORT[i] || []).map(h => ({ no: h.no, horse: h.horse, desc: h.desc, trainer: h.trainer, hist: h.hist || [] })))
+        .map(h => { const rows = this.histRows(h.hist); return { name: h.horse.toUpperCase() + ' ' + this.sexOf(h.desc), no: h.no, trainer: h.trainer, tKey: slug2(h.trainer), rows, none: !rows.length, nameDeco: h.nr ? 'line-through' : 'none' }; });
+      return { show: horses.length > 0, heading: 'Race ' + (i + 1) + ' \u2013 ' + R.dist + ' \u2013 ' + R.t + ' pm \u2013 ' + R.title, horses };
+    }).filter(R => R.show);
+    const sw = (on) => ({ track: on ? navy : 'rgb(212,212,216)', thumb: on ? '16px' : '2px', attr: on ? 'true' : 'false' });
+    return {
+      rpIsFull: full, rpIsSummary: !full, fullRaces, venueUpper: String(this.props.fixtureVenue || 'Huntingdon').toUpperCase(),
+      ahtuSw: sw(!!s.hideAhtu), toggleAhtu: () => this.setState(x => ({ hideAhtu: !x.hideAhtu })),
+      oldSw: sw(!!s.hideOld), toggleOld: () => this.setState(x => ({ hideOld: !x.hideOld })),
+      printReport: () => this.printSheet('vets-report'),
+      rpModes: [['activity', 'Summary'], ['full', 'Full report']].map(([k, l]) => ({ label: l, select: () => this.setState({ rpMode: k }), ...seg((s.rpMode || 'activity') === k) })),
+      rpRaces, rpEmpty: !rpRaces.length, rpSummary: horses + (horses === 1 ? ' horse' : ' horses') + ' with activity across ' + this.RACES.length + ' races',
+      rpGrid: (this.props.phone || (typeof window !== 'undefined' && window.innerWidth < 700)) ? 'minmax(0,1fr)' : 'minmax(240px,2fr) 72px minmax(140px,1.2fr) minmax(200px,1.6fr)',
+      acItems: acts.map(a => { const t = this.ACT[a.type]; return { time: a.time, icon: t[1], bg: t[2], ink: t[3],
+        title: t[0] + (a.horse ? ' · No.' + a.no + ' ' + a.horse : ''), sub: (a.race != null ? this.RACES[a.race].t + ' · ' : 'Fixture · ') + a.text,
+        reviewed: false, toggle: () => setRev(a.id, a.seeded ? true : true), rowBg: '#fff', revBorder: 'rgb(228,228,231)', revBg: '#fff', revInk: 'rgb(9,9,11)' }; }),
+      acHasItems: acts.length > 0, acEmpty: acts.length === 0,
+      acCount: acts.length + (acts.length === 1 ? ' item to review' : ' items to review'),
+      acReviewAll: () => { const n = { ...reviewed }; acts.forEach(a => { n[a.id] = true; }); this.fxSave('reviewed', n); this.setState({ reviewed: n }); this.fxFlash('All activity marked as reviewed.'); },
+      acEmptyIcon: nothingAt ? 'circle-check' : 'folder',
+      acEmptyTitle: nothingAt ? 'Marked nothing to report at ' + nothingAt : total ? 'All activity reviewed' : 'There is currently no activity to be reviewed for this fixture.',
+      acEmptySub: nothingAt ? 'The fixture report shows nothing to report. Undo if something comes up.' : total ? 'Everything recorded today has been reviewed. The Report tab has the full picture.' : '',
+      acCanMarkNothing: !nothingAt, acMarked: !!nothingAt,
+      acMarkNothing: () => { const t = this.nowHM(); this.fxSave('nothing', t); this.setState({ nothingAt: t }); this.fxFlash('Marked nothing to report.'); },
+      acUndoNothing: () => { this.fxSave('nothing', null); this.setState({ nothingAt: '' }); },
+    };
+  };
+  state = { ccLocal: (() => { try { return JSON.parse(localStorage.getItem('bha_vets_customise_v1') || 'null'); } catch (e) { return null; } })(), raceIdx: 5, sel: null, tab: 'observations', file: null, marks: (() => { try { return JSON.parse(localStorage.getItem('bha_vets_marks_v1') || '{}'); } catch (e) { return {}; } })() };
+  componentDidMount() {
+    const p = this.props;
+    if (p.seedMarks) this.setState({ marks: Object.assign({}, this.state.marks, p.seedMarks) });
+    if (p.openRunner != null) this.setState({ sel: +p.openRunner, tab: p.openTab || 'observations' });
+    if (p.colsOpen) this.setState({ colsOpen: true });
+  }
+  setMark = (no, k, v) => this.setState(s => { const m = { ...s.marks, [no]: { ...(s.marks[no] || {}), [k]: v, [k + 'At']: this.nowHM() } }; try { localStorage.setItem(this.STORE, JSON.stringify(m)); } catch (e) {} return { marks: m }; });
+  CC_DECL = [['Blinkers first time', 'B1', '#e7000b'], ['Blinkers', 'B', '#e9f4fa'], ['Tongue tie', 'TT', '#e9f4fa'], ['Cheekpieces', 'CP', '#e9f4fa'], ['Visor', 'V', '#e9f4fa'], ['Hood', 'H', '#e9f4fa'], ['Eyeshield', 'ES', '#e9f4fa']];
+  CC_PRIV = [['Red hood', 'RH', '#e7000b'], ['Early to post', 'EP', '#e7000b'], ['Mounting in the chute', 'MC', '#e7000b'], ['Hood in the parade ring', 'HP', '#e7000b'], ['Earplugs taken out', 'Ear out', '#e7000b'], ['Earplugs staying in', 'Ear in', '#e7000b'], ['Withdrawn if tongue strap', 'WITS', '#e7000b'], ['Withdrawn if plate lost', 'W', '#e7000b'], ['Withdrawn if front plate lost', 'FW', '#e7000b'], ['Late load (no code yet)', 'LL', '#2563eb'], ['Stable rep at the start (no code yet)', 'SR', '#2563eb'], ['Rug, unconfirmed', 'Rug', '#2563eb']];
+  ccDefaults = () => { const o = {}; this.CC_DECL.concat(this.CC_PRIV).forEach(([l, a, c]) => { o[l.toLowerCase()] = { label: l, abbrev: a, colour: c, display: 'abbrev', show: true }; }); return o; };
+  ccSet = (k, patch) => this.setState(x => { const cur = x.ccLocal || this.ccDefaults(); const n = { ...cur, [k]: { ...cur[k], ...patch } }; try { localStorage.setItem('bha_vets_customise_v1', JSON.stringify(n)); } catch (e) {} return { ccLocal: n }; });
+  ccVals = () => {
+    const st = this.state.ccLocal || this.ccDefaults();
+    const row = ([l, a, c]) => { const k = l.toLowerCase(), v = st[k] || {}; return { label: l, abbrev: v.abbrev || a, colour: v.colour || c, on: v.show !== false, full: v.display === 'full',
+      toggle: () => this.ccSet(k, { show: v.show === false }), setAbbrev: (e) => this.ccSet(k, { abbrev: e.target.value.slice(0, 7) }), setDisplay: (e) => this.ccSet(k, { display: e.target.value }), displayVal: v.display || 'abbrev', setColour: (e) => this.ccSet(k, { colour: e.target.value }) }; };
+    return { ccOpen: !!this.state.ccOpen, ccClose: () => this.setState({ ccOpen: false }), ccReset: () => { try { localStorage.removeItem('bha_vets_customise_v1'); } catch (e) {} this.setState({ ccLocal: this.ccDefaults() }); },
+      ccDecl: this.CC_DECL.map(row), ccPriv: this.CC_PRIV.map(row) };
+  };
+  pillStyle = (hex) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return { bg: 'rgb(233,244,250)', ink: 'rgb(0,47,113)', border: 'rgb(228,228,231)' };
+    const v = parseInt(m[1], 16), c = [(v >> 16) & 255, (v >> 8) & 255, v & 255], rgba = (a) => 'rgba(' + c.join(',') + ',' + a + ')';
+    const strong = (Math.max(...c) - Math.min(...c)) > 90 || (c[0] * 299 + c[1] * 587 + c[2] * 114) / 1000 < 150;
+    return strong ? { bg: rgba(0.10), ink: '#' + m[1], border: rgba(0.35) } : { bg: '#' + m[1], ink: 'rgb(0,47,113)', border: 'rgb(228,228,231)' }; };
+  // Declared items then privileges under the name, styled like the stewards card
+  pillsFor = (r) => {
+    const gs = this.props.gearSettings || this.state.ccLocal || {}, ALIAS = { 'tongue strap': 'tongue tie' };
+    const one = (code, label, fallback) => { const k = ALIAS[label.toLowerCase()] || label.toLowerCase(), st = gs[k];
+      if (st && st.show === false) return null;
+      return { text: st ? (st.display === 'full' ? st.label : st.abbrev) : code, title: label, ...this.pillStyle(st ? st.colour : fallback) }; };
+    return (r.gear || []).map(g => one(g, this.GEAR[g] || g, '#e9f4fa')).concat((r.priv || []).map(c => one(c, this.PRIV[c] || c, /^(LL|SR|Rug)$/.test(c) ? '#2563eb' : '#e7000b'))).filter(Boolean);
+  };
+  privPills = (codes) => {
+    const gs = this.props.gearSettings || this.state.ccLocal || {};
+    const dark = (hex) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return true; const n = parseInt(m[1], 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 160; };
+    return codes.map(c => { const label = this.PRIV[c] || c, st = gs[label.toLowerCase()], colour = st ? st.colour : (/^(LL|SR|Rug)$/.test(c) ? '#2563eb' : '#e7000b');
+      return { text: st ? (st.display === 'full' ? st.label : st.abbrev) : c, title: label, bg: colour, ink: dark(colour) ? '#fff' : 'rgb(0,47,113)', show: !st || st.show !== false }; }).filter(x => x.show);
+  };
+  gearSettings = (items) => {
+    const gs = this.props.gearSettings || this.state.ccLocal || {};
+    const ALIAS = { 'tongue strap': 'tongue tie', 'tongue tie': 'tongue tie' };
+    const dark = (hex) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return true; const n = parseInt(m[1], 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 160; };
+    return items.map(g => { const k = ALIAS[String(g.title).toLowerCase()] || String(g.title).toLowerCase(); const st = gs[k];
+      if (!st) return { ...g, show: true, text: g.code, bg: 'rgb(245,245,245)', ink: 'rgb(63,63,70)', pill: false };
+      return { ...g, show: st.show !== false, text: st.display === 'full' ? st.label : st.abbrev, bg: st.colour, ink: dark(st.colour) ? '#fff' : 'rgb(0,47,113)', pill: true }; }).filter(g => g.show);
+  };
+  COLS = [['lastrun', 'Last run'], ['exam', 'Last exam'], ['test', 'Test'], ['pre', 'Post-race exam'], ['notes', 'Notes'], ['pos', 'Position']];
+  colVals = () => { const s = this.state, hid = s.hidCols || {};
+    return { colsOpen: !!s.colsOpen, colsOpenAttr: s.colsOpen ? 'true' : 'false', toggleCols: () => this.setState(x => ({ colsOpen: !x.colsOpen })), resetCols: () => this.setState({ hidCols: {} }),
+      hideAttr: Object.keys(hid).filter(k => hid[k]).join(' '),
+      colToggles: this.COLS.map(([k, l]) => ({ label: l, on: !hid[k], toggle: () => this.setState(x => ({ hidCols: { ...(x.hidCols || {}), [k]: !(x.hidCols || {})[k] } })) })) }; };
+  printSheet = (id) => {
+    const src = document.getElementById(typeof id === 'string' ? id : 'vets-print-sheet');
+    if (!src) { window.__bhaPrint(document.body.innerHTML, (typeof id === 'string' && id === 'vets-report' ? 'Vets fixture report' : 'Vets runner list'), 'A4 landscape'); return; }
+    let portal = document.getElementById('bha-print-portal');
+    if (!portal) { portal = document.createElement('div'); portal.id = 'bha-print-portal'; document.body.appendChild(portal); }
+    portal.innerHTML = src.innerHTML;
+    window.__bhaPrint(portal.innerHTML, (this.props.fixtureVenue || '') ? (this.props.fixtureVenue + ' \u00b7 ' + (typeof id === 'string' && id === 'vets-report' ? 'Vets fixture report' : 'Vets runner list')) : (typeof id === 'string' && id === 'vets-report' ? 'Vets fixture report' : 'Vets runner list'), 'A4 landscape'); portal.innerHTML = '';
+  };
+  renderVals() {
+    const s = this.state, navy = 'rgb(0,47,113)', R = this.RACES[s.raceIdx], live = s.raceIdx === 5, phone = !!this.props.phone;
+    const runners = live ? this.RUNNERS : [];
+    const hidV = s.hidCols || {};
+    const gridCols = [['horse', 'minmax(260px,2.4fr)'], ['lastrun', 'minmax(160px,1.2fr)'], ['exam', 'minmax(160px,1.2fr)'], ['test', '56px'], ['pre', '72px'], ['notes', 'minmax(140px,1.2fr)'], ['pos', '72px']].filter(c => !hidV[c[0]]).map(c => c[1]).join(' ');
+    const daysInk = (d) => d == null ? 'rgb(113,113,122)' : d >= 180 ? 'rgb(185,28,28)' : d >= 90 ? 'rgb(146,90,0)' : 'rgb(9,9,11)';
+    const tick = (on) => ({ border: on ? navy : 'rgb(228,228,231)', bg: on ? 'rgb(233,244,250)' : '#fff', ink: on ? navy : 'rgb(9,9,11)' });
+    const mk = (r) => { const m = s.marks[r.no] || {}, t = tick(!!m.test), p = tick(!!m.pre), days = this.daysSince(r.lr[0]);
+      return { ...r, tKey: 'k_t_' + String(r.trainer).toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z]+/g, ''), gear: this.gearSettings(r.gear.map(g => ({ code: g, title: this.GEAR[g] || g }))), hasPhone: !!r.phone, phone: r.phone || '', hasFlag: !!r.flag, flag: r.flag || '',
+        isNr: !!r.nr, nrLabel: r.nr ? 'NR \u2013 ' + r.nr[0] : '', nrTitle: r.nr ? 'Non-runner, ' + r.nr[0] + ' (' + r.nr[1] + '), declared ' + r.nr[2] : '',
+        hatch: r.nr ? 'repeating-linear-gradient(-45deg, rgba(113,113,122,0.16) 0 7px, rgba(113,113,122,0) 7px 18px)' : 'none', outline: (this.props.highlight || []).indexOf(r.no) >= 0 ? '2px solid rgb(27,142,201)' : 'none',
+        horseInk: r.nr ? 'rgb(82,82,91)' : 'rgb(0,47,113)', horseDeco: r.nr ? 'line-through' : 'underline',
+        days, daysLabel: days + ' days', daysInk: daysInk(days), lastRunLine: r.lr[1] + ' \u00b7 ' + this.fmtDate(r.lr[0]), lastRunLine2: r.lr[2] + ' \u00b7 ' + (/^\d/.test(r.lr[3]) ? r.lr[3] + ' of ' + r.lr[4] : r.lr[3] + ', ' + r.lr[4] + ' ran'),
+        hasItems: !!((r.gear || []).length || (r.priv || []).length), itemsLine: [(r.gear || []).length ? 'Declared items: ' + r.gear.map(c => this.GEAR[c] || c).join(', ') : '', (r.priv || []).length ? 'Privileges: ' + r.priv.map(c => this.PRIV[c] || c).join(', ') : ''].filter(Boolean).join(' \u00b7 '),
+        priv: this.privPills(r.priv || []), pills: this.pillsFor(r), hasPills: !!this.pillsFor(r).length, pos: r.pos || '\u2013', posTitle: r.nr ? 'Non-runner' : ({ PU: 'Pulled up', F: 'Fell', UR: 'Unseated rider', BD: 'Brought down', RO: 'Ran out', SU: 'Slipped up' })[r.pos] || '', posInk: r.nr ? 'rgb(82,82,91)' : /^(PU|F|UR|BD|RO|SU)$/.test(r.pos || '') ? 'rgb(185,28,28)' : 'rgb(9,9,11)',
+        examLabel: !r.ex ? 'Never' : this.daysSince(r.ex[0]) + ' days ago', examInk: r.ex && /finding/.test(r.ex[3]) ? 'rgb(146,90,0)' : !r.ex ? 'rgb(113,113,122)' : 'rgb(9,9,11)',
+        examSub: !r.ex ? 'Never examined' : (r.ex[3] === 'NSF' ? 'NSF' : r.ex[3].split(',')[0]) + ' \u00b7 ' + r.ex[1].toLowerCase(), examSub2: !r.ex ? '' : r.ex[2] + ' \u00b7 ' + this.fmtDate(r.ex[0]),
+        test: !!m.test, pre: !!m.pre, testMark: m.test ? 'T' : '', preMark: m.pre ? 'P' : '', note: m.note || '',
+        toggleTest: () => this.setMark(r.no, 'test', !m.test), togglePre: () => this.setMark(r.no, 'pre', !m.pre), setNote: (e) => this.setMark(r.no, 'note', e.target.value),
+        testBorder: t.border, testBg: t.bg, testInk: t.ink, preBorder: p.border, preBg: p.bg, preInk: p.ink,
+        bg: s.sel === r.no ? 'rgb(233,244,250)' : '#fff', open: () => this.setState({ sel: r.no, tab: 'observations', file: null }) }; };
+    const rows = runners.map(mk);
+    const selRaw = this.RUNNERS.find(r => r.no === s.sel) || this.RUNNERS[0];
+    const sel = mk(selRaw);
+    const rec = this.RECORDS[selRaw.no] || {};
+    const DOCS = ['reports', 'imaging', 'videos'];
+    const pick = s.tab === 'documents' ? DOCS.flatMap(k => rec[k] || []) : (rec[s.tab] || []);
+    const FILE = { pdf: { icon: 'file-text', bg: 'rgb(254,242,242)', ink: 'rgb(185,28,28)', label: 'PDF preview' }, xray: { icon: 'image', bg: 'rgb(239,246,255)', ink: navy, label: 'X-ray' }, video: { icon: 'play', bg: 'rgb(240,250,244)', ink: 'rgb(0,120,63)', label: 'Video' } };
+    const records = pick.map(e => ({
+      head: e.head, hasFacts: !!(e.facts && e.facts.length), facts: (e.facts || []).map(f => ({ k: f[0], v: f[1] })).concat(e.path ? [{ k: 'Finding', v: e.path.join(' / ') }] : []),
+      hasNote: !!e.note, note: e.note || '', where: e.where || '', when: e.when || '', by: e.by ? 'Updated by ' + e.by : '',
+      hasStatus: !!e.status, status: e.status || '', statusBg: e.statusKind === 'ok' ? 'rgb(240,250,244)' : 'rgb(255,247,230)', statusInk: e.statusKind === 'ok' ? 'rgb(0,120,63)' : 'rgb(146,90,0)',
+      hasSteps: !!(e.steps && e.steps.length), steps: (e.steps || []).map(st => ({ ...st, hasNote: !!st.note, note: st.note || '' })),
+      hasFiles: !!(e.files && e.files.length), files: (e.files || []).map(f => { const k = FILE[f.kind] || FILE.pdf; return { name: f.name, meta: f.meta, icon: k.icon, bg: k.bg, ink: k.ink, open: (ev) => { ev.preventDefault(); this.setState({ file: { ...f, icon: k.icon, previewBg: k.bg, previewInk: k.ink, previewLabel: k.label } }); } }; })
+    }));
+    const strOpen = (rec.str || []).some(e => e.statusKind === 'warn');
+    const done = runners.filter(r => (s.marks[r.no] || {}).test || (s.marks[r.no] || {}).pre).length;
+    return { ...this.colVals(), gridCols, phone, wide: !phone, h1Size: phone ? '26px' : '30px',
+      venueTitle: this.props.fixtureVenue || 'Huntingdon',
+      fixtureClick: (e) => { if (this.props.onFixtureClick) this.props.onFixtureClick(e); },
+      raceTabs: this.RACES.map((r, i) => { const on = i === s.raceIdx; return { label: r.t, select: () => this.setState({ raceIdx: i }), bg: on ? navy : '#fff', border: on ? navy : 'rgb(228,228,231)', color: on ? '#fff' : 'rgb(113,113,122)', weight: on ? 700 : 500 }; }),
+      race: R, dateLine: 'Wednesday 28 October 2026 · ' + ((this.props.view || this.state.view || 'runners') !== 'runners' ? this.RACES.length + ' races · fixture report' : live ? (() => { const nr = this.RUNNERS.filter(x => x.nr).length; return (this.RUNNERS.length - nr) + ' runners' + (nr ? ' \u00b7 ' + nr + ' non-runner' + (nr > 1 ? 's' : '') : ''); })() : 'Declarations pending'),
+      progress: live ? (done ? done + ' marked for test or exam' : 'Nothing marked yet') : 'Not yet declared',
+      noRunners: !runners.length, runners: rows, print: this.printSheet,
+      panelOpen: s.sel != null, closePanel: () => this.setState({ sel: null, file: null }), panelWidth: phone ? '100%' : 'min(560px,100%)', closeIcon: phone ? 'arrow-left' : 'x',
+      sel: { ...sel, strWarn: strOpen },
+      comment: rec.comment || 'No additional comments for this horse.',
+      tabCols: phone ? 'repeat(2, minmax(0,1fr))' : 'repeat(5, auto)',
+      ...this.fxVals(), ...this.reportVals(), ...(() => { const v = this.props.view || this.state.view || 'runners', seg = (on) => ({ bg: on ? '#fff' : 'transparent', shadow: on ? '0 1px 2px rgba(0,0,0,0.08)' : 'none', ink: on ? 'rgb(0,47,113)' : 'rgb(63,63,70)', selected: on ? 'true' : 'false' });
+        return { isRunners: v === 'runners', isReport: v === 'report', isActivity: v === 'activity', showViewSwitch: !this.props.view,
+          viewTabs: [['runners', 'Runners'], ['report', 'Report'], ['activity', 'Activity']].map(([k, l]) => ({ label: l, select: () => this.setState({ view: k }), ...seg(v === k) })) }; })(), canCustomise: true, customise: () => { if (this.props.onCustomise) this.props.onCustomise(); else this.setState({ ccOpen: true }); }, ...this.ccVals(), tabValue: s.tab, pickTab: (e) => this.setState({ tab: e.target.value }), notPhone: !this.props.phone,
+      panelTabs: this.TABS.map(([k, l]) => { const on = s.tab === k; return { key: k, label: l, current: on ? 'true' : 'false', select: () => this.setState({ tab: k }), line: on ? navy : 'transparent', weight: on ? 600 : 500, color: on ? navy : 'rgb(63,63,70)' }; }),
+      records, noRecords: !records.length, emptyText: 'No ' + (this.TABS.find(t => t[0] === s.tab) || ['', 'records'])[1].toLowerCase() + ' for this horse.',
+      fileOpen: !!s.file, file: s.file || { name: '', meta: '', icon: 'file-text', summary: '', previewBg: '#fff', previewInk: '#000', previewLabel: '' }, closeFile: () => this.setState({ file: null })
+    };
+  }
+}
+</script>
+</body>
+</html>

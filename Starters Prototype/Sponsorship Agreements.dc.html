@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/aliases.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/core/core.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+</helmet>
+<section aria-label="{{ title }}" style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;font-family:Inter, var(--font-sans, sans-serif);color:rgb(9,9,11);overflow:hidden">
+<div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:14px 16px 10px">
+<h3 style="margin:0;font-size:16px;line-height:24px;font-weight:500">{{ title }}</h3>
+<span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ summary }}</span>
+</div>
+<sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding:0 16px 16px;font-size:14px;line-height:20px;color:rgb(82,82,91)">{{ emptyText }}</div>
+</sc-if>
+<sc-if value="{{ noLive }}" hint-placeholder-val="{{ false }}">
+<div style="padding:0 16px 12px;font-size:14px;line-height:20px;color:rgb(82,82,91)">{{ emptyText }} active for {{ raceDate }}.</div>
+</sc-if>
+<sc-for list="{{ live }}" as="a" hint-placeholder-count="1">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:12px 16px;border-top:1px solid rgb(228,228,231)">
+<div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px">
+<span style="font-size:14px;line-height:20px;font-weight:600">{{ a.sponsor }}</span>
+<sc-if value="{{ a.hasPlacement }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;font-size:12px;line-height:16px;font-weight:500;padding:1px 8px;border-radius:26px;border:1px solid rgb(228,228,231);color:rgb(63,63,70)">{{ a.placement }}</span></sc-if>
+</div>
+<span style="font-size:13px;line-height:18px;color:rgb(113,113,122);font-variant-numeric:tabular-nums">{{ a.start }} – {{ a.end }}</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+<span style="display:inline-flex;align-items:center;font-size:12px;line-height:16px;font-weight:600;padding:2px 8px;border-radius:26px;background:{{ a.bg }};color:{{ a.ink }}">{{ a.status }}</span>
+<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;line-height:16px;font-weight:600;color:{{ a.todayInk }}">{{ a.todayLabel }}</span>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ hasExpired }}" hint-placeholder-val="{{ false }}">
+<div style="border-top:1px solid rgb(228,228,231);background:rgb(250,250,250)">
+<button type="button" onClick="{{ toggleExpired }}" aria-expanded="{{ expiredOpen }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border:none;background:transparent;font:inherit;font-size:13px;line-height:20px;font-weight:500;color:rgb(63,63,70);cursor:pointer;text-align:left" style-hover="background:rgb(244,244,245)">
+<span>{{ expiredLabel }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ expiredIcon }}" size="16" hint-size="16px,16px"></x-import>
+</button>
+<sc-if value="{{ expiredOpen }}" hint-placeholder-val="{{ false }}">
+<sc-for list="{{ expired }}" as="a" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:10px 16px;border-top:1px solid rgb(228,228,231)">
+<div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px">
+<span style="font-size:14px;line-height:20px;font-weight:500;color:rgb(63,63,70)">{{ a.sponsor }}</span>
+<sc-if value="{{ a.hasPlacement }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;font-size:12px;line-height:16px;font-weight:500;padding:1px 8px;border-radius:26px;border:1px solid rgb(228,228,231);color:rgb(82,82,91)">{{ a.placement }}</span></sc-if>
+</div>
+<span style="font-size:13px;line-height:18px;color:rgb(113,113,122);font-variant-numeric:tabular-nums">{{ a.start }} – {{ a.end }}</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+<span style="display:inline-flex;align-items:center;font-size:12px;line-height:16px;font-weight:600;padding:2px 8px;border-radius:26px;background:{{ a.bg }};color:{{ a.ink }}">{{ a.status }}</span>
+<span style="font-size:12px;line-height:16px;font-weight:600;color:{{ a.todayInk }}">{{ a.todayLabel }}</span>
+</div>
+</div>
+</sc-for>
+</sc-if>
+</div>
+</sc-if>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:560,&quot;height&quot;:320},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Jockey sponsorship&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;emptyText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;No jockey sponsorship&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;raceDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;14/09/2026&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;items&quot;:{&quot;editor&quot;:null,&quot;default&quot;:[{&quot;sponsor&quot;:&quot;Bet365&quot;,&quot;start&quot;:&quot;01/03/2026&quot;,&quot;end&quot;:&quot;28/02/2027&quot;,&quot;placement&quot;:&quot;Breeches&quot;},{&quot;sponsor&quot;:&quot;Lambourn Equine Vets&quot;,&quot;start&quot;:&quot;01/06/2026&quot;,&quot;end&quot;:&quot;30/09/2026&quot;,&quot;placement&quot;:&quot;Collar&quot;},{&quot;sponsor&quot;:&quot;Sky Bet&quot;,&quot;start&quot;:&quot;01/03/2024&quot;,&quot;end&quot;:&quot;28/02/2026&quot;,&quot;placement&quot;:&quot;Breeches&quot;}],&quot;tsType&quot;:&quot;{sponsor:string,start:string,end:string,placement?:string}[]&quot;}}">
+class Component extends DCLogic {
+  state = { expiredOpen: false };
+  renderVals() {
+    var self = this, p = this.props;
+    var raceDate = p.raceDate || '14/09/2026';
+    var pd = function(v){ var a = String(v).split('/'); return new Date(+a[2], +a[1]-1, +a[0]); };
+    var T = pd(raceDate);
+    var STY = {
+      'Active': {bg:'rgb(233,246,239)', ink:'rgb(0,120,63)'},
+      'Expiring soon': {bg:'rgb(255,247,230)', ink:'rgb(146,90,0)'},
+      'Pending': {bg:'rgb(233,244,250)', ink:'rgb(0,47,113)'},
+      'Expired': {bg:'rgb(254,242,242)', ink:'rgb(185,28,28)'}
+    };
+    var items = (p.items || []).map(function(x){
+      var st = T < pd(x.start) ? 'Pending' : T > pd(x.end) ? 'Expired' : ((pd(x.end) - T) / 864e5 <= 30 ? 'Expiring soon' : 'Active');
+      var ok = st === 'Active' || st === 'Expiring soon';
+      return Object.assign({}, x, STY[st], {status: st, hasPlacement: !!x.placement,
+        todayLabel: ok ? '\u2713 Valid for ' + raceDate : (st === 'Pending' ? 'Not valid until ' + x.start : 'Not valid for ' + raceDate),
+        todayInk: ok ? 'rgb(0,120,63)' : 'rgb(185,28,28)', _ok: ok});
+    });
+    var order = {'Active':0,'Expiring soon':1,'Pending':2};
+    var live = items.filter(function(x){ return x.status !== 'Expired'; }).sort(function(a,b){ return order[a.status] - order[b.status]; });
+    var expired = items.filter(function(x){ return x.status === 'Expired'; }).sort(function(a,b){ return pd(b.end) - pd(a.end); });
+    var nOk = items.filter(function(x){ return x._ok; }).length;
+    return {
+      title: p.title || 'Sponsorship', emptyText: p.emptyText || 'No sponsorship', raceDate: raceDate,
+      isEmpty: items.length === 0, noLive: items.length > 0 && live.length === 0,
+      summary: items.length ? (nOk ? nOk + ' valid for today\u2019s race (' + raceDate + ')' : 'None valid for today\u2019s race (' + raceDate + ')') : '',
+      live: live, expired: expired, hasExpired: expired.length > 0,
+      expiredOpen: !!this.state.expiredOpen,
+      expiredLabel: (this.state.expiredOpen ? 'Hide ' : 'Show ') + expired.length + ' expired',
+      expiredIcon: this.state.expiredOpen ? 'chevron-up' : 'chevron-down',
+      toggleExpired: function(){ self.setState({expiredOpen: !self.state.expiredOpen}); }
+    };
+  }
+}
+</script>
+</body>
+</html>

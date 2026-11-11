@@ -1,0 +1,2084 @@
+{
+ "venue": "Kempton Park",
+ "date": "Wednesday 21 October 2026",
+ "surface": "All Weather (Flat)",
+ "races": [
+  {
+   "n": 1,
+   "t": "5:30",
+   "title": "Bluestone Insurance Novice Stakes (Plus 10 Race) (GBB Race)",
+   "sub": "Class 5 · 7f · Novice · 9 runners · 1 non-runner",
+   "cond": "For 2yo. Penalties: winners of a race after 1 Oct, 5lb; of two, 7lb. Claims allowed: 7, 5, 3.",
+   "runners": [
+    {
+     "no": 1,
+     "dr": 3,
+     "h": "FAIR PLAY (GB)",
+     "m": "4yo · C. Delaney",
+     "g": "h ts",
+     "j": "Molly Strand",
+     "c": "5",
+     "jm": "Age 20 · GB · 47 wins",
+     "w": "9st 7lb",
+     "ws": "9st 12lb -5 claim",
+     "md": "G",
+     "col": "Light blue, royal blue cross belts, gold cap",
+     "lr": {
+      "d": "06/09/26",
+      "c": "Southwell",
+      "x": "Class 5 · 1m · Standard",
+      "r": "8th of 10, beaten 12L",
+      "w": "9-06 · SP 5/1",
+      "days": 45
+     },
+     "wo": "9-7",
+     "wi": "9-7",
+     "res": "2nd"
+    },
+    {
+     "no": 2,
+     "dr": 9,
+     "h": "ASH MEADOW (IRE)",
+     "m": "6yo · J. Whitcombe",
+     "g": "h ts",
+     "j": "Ellie Marsh",
+     "c": "5",
+     "jm": "Age 19 · GB · 36 wins",
+     "w": "10st 0lb",
+     "ws": "9st 13lb +6 pen -5 claim",
+     "md": "G",
+     "col": "Purple, orange spots, yellow cap",
+     "lr": {
+      "d": "16/10/26",
+      "c": "Lingfield",
+      "x": "Class 5 · 1m · Standard",
+      "r": "3rd of 8, beaten hd",
+      "w": "8-11 · SP 3/1",
+      "days": 5
+     },
+     "wo": "10-0",
+     "wi": "10-0",
+     "res": "4th"
+    },
+    {
+     "no": 3,
+     "dr": 1,
+     "h": "HALF MEASURE (GB)",
+     "m": "5yo · P. Sallis",
+     "j": "Hugo Bessant",
+     "jm": "Age 30 · FR · 120 wins",
+     "jn": "Sponsor: Fenwick & Co, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 11lb",
+     "ws": "9st 11lb",
+     "md": "G",
+     "col": "Orange, pink spots, brown cap",
+     "lr": {
+      "d": "07/09/26",
+      "c": "Southwell",
+      "x": "Class 6 · 6f · Standard",
+      "r": "9th of 12, beaten 4½L",
+      "w": "9-12 · SP 4/1",
+      "days": 44
+     },
+     "wo": "9-11",
+     "wi": "9-11",
+     "res": "1st"
+    },
+    {
+     "no": 4,
+     "dr": 2,
+     "h": "ROSY OUTLOOK (GB)",
+     "m": "4yo · P. Sallis",
+     "g": "p",
+     "j": "Katie Rowe",
+     "c": "7",
+     "jm": "Age 18 · GB · 14 wins",
+     "w": "9st 4lb",
+     "ws": "9st 11lb -7 claim",
+     "md": "A",
+     "col": "Brown, navy diamond, red cap",
+     "lr": {
+      "d": "07/10/26",
+      "c": "Brighton",
+      "x": "Class 4 · 6f · Good",
+      "r": "4th of 7, beaten 1½L",
+      "w": "9-07 · SP 14/1",
+      "days": 14
+     },
+     "wo": "9-5",
+     "wi": "9-5",
+     "res": "6th"
+    },
+    {
+     "no": 5,
+     "dr": 5,
+     "h": "BLUE COBBLE (GB)",
+     "m": "3yo · P. Sallis",
+     "j": "Jack Fenwick",
+     "jm": "Age 27 · GB · 168 wins",
+     "w": "9st 11lb",
+     "ws": "9st 11lb",
+     "md": "G",
+     "col": "Gold, grey cross belts, light blue cap",
+     "lr": {
+      "d": "04/09/26",
+      "c": "Lingfield",
+      "x": "Class 4 · 1m · Standard",
+      "r": "2nd of 10, beaten hd",
+      "w": "8-10 · SP 7/2",
+      "days": 47
+     },
+     "wo": "9-11",
+     "wi": "9-11",
+     "res": "7th"
+    },
+    {
+     "no": 6,
+     "dr": 10,
+     "h": "PALE SIGNAL (GB)",
+     "m": "5yo · C. Delaney",
+     "g": "bl",
+     "j": "Niamh Brennan",
+     "c": "5",
+     "jm": "Age 20 · IRE · 44 wins",
+     "jn": "Sponsor: Northgate Motors, starts 1 Nov 26",
+     "jt": "amber",
+     "w": "9st 2lb",
+     "ws": "9st 7lb -5 claim",
+     "md": "G",
+     "col": "Maroon, red star, pink cap",
+     "lr": {
+      "d": "25/08/26",
+      "c": "Chelmsford",
+      "x": "Class 6 · 7f · Standard to slow",
+      "r": "3rd of 12, beaten 1L",
+      "w": "9-03 · SP 12/1",
+      "days": 57
+     },
+     "wo": "9-2",
+     "wi": "9-0",
+     "res": "3rd"
+    },
+    {
+     "no": 7,
+     "dr": 7,
+     "h": "GOOD MEASURE (GB)",
+     "m": "4yo · S. Ingram",
+     "g": "p",
+     "j": "Luke Penrose",
+     "jm": "Age 33 · GB · 310 wins",
+     "w": "10st 0lb",
+     "ws": "10st 0lb",
+     "md": "G",
+     "bt": 1,
+     "col": "Pink, light blue hoop, purple cap",
+     "lr": {
+      "d": "22/09/26",
+      "c": "Chelmsford",
+      "x": "Class 5 · 1m · Standard to slow",
+      "r": "5th of 13, beaten 1L",
+      "w": "8-06 · SP 5/1",
+      "days": 29
+     },
+     "wo": "10-0",
+     "wi": "10-0",
+     "res": "8th"
+    },
+    {
+     "no": 8,
+     "dr": 6,
+     "h": "FIELD DAY (GB)",
+     "m": "3yo · J. Whitcombe",
+     "j": "Ruby Tallis",
+     "c": "7",
+     "jm": "Age 17 · GB · 9 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 2lb",
+     "ws": "9st 3lb +6 pen -7 claim",
+     "md": "G",
+     "col": "White, royal blue cross belts, yellow cap",
+     "lr": {
+      "d": "15/09/26",
+      "c": "Salisbury",
+      "x": "Class 4 · 7f · Good",
+      "r": "9th of 12, beaten 6L",
+      "w": "8-07 · SP 5/1",
+      "days": 36
+     },
+     "wo": "9-2",
+     "wi": "9-2",
+     "res": "5th"
+    },
+    {
+     "no": 9,
+     "dr": 8,
+     "h": "COPPER KITE (GB)",
+     "m": "4yo · C. Delaney",
+     "nr": 1,
+     "j": "Callum Reid",
+     "c": "3",
+     "jm": "Age 23 · GB · 61 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "8st 12lb",
+     "ws": "9st 1lb -3 claim",
+     "md": "G",
+     "col": "Maroon, gold chevrons, royal blue cap",
+     "lr": {
+      "d": "24/09/26",
+      "c": "Brighton",
+      "x": "Class 5 · 7f · Good to soft",
+      "r": "3rd of 8, beaten nk",
+      "w": "8-09 · SP 25/1",
+      "days": 27
+     }
+    },
+    {
+     "no": 10,
+     "dr": 4,
+     "h": "MOONRAKER (GB)",
+     "m": "7yo · T. Brannigan",
+     "g": "h ts",
+     "j": "Dan Okafor",
+     "jm": "Age 34 · GB · 270 wins",
+     "w": "9st 7lb",
+     "ws": "9st 7lb",
+     "md": "G",
+     "col": "Red, black spots, yellow cap",
+     "lr": {
+      "d": "03/09/26",
+      "c": "Southwell",
+      "x": "Class 5 · 1m · Standard",
+      "r": "Won by 1¼L, 9 ran",
+      "w": "9-05 · SP 20/1",
+      "days": 48
+     },
+     "wo": "9-7",
+     "wi": "9-7",
+     "res": "9th"
+    }
+   ],
+   "rc": {
+    "id": "34410",
+    "weights": "October 15, 2026",
+    "ratings": "October 13, 2026",
+    "closed": "October 14, 2026",
+    "value": "£5,600.00",
+    "sched": "(F)9.3.2",
+    "prizes": [
+     [
+      "1st",
+      "£2,957.36"
+     ],
+     [
+      "2nd",
+      "£1,360.80"
+     ],
+     [
+      "3rd",
+      "£680.40"
+     ],
+     [
+      "4th",
+      "£340.48"
+     ],
+     [
+      "5th",
+      "£169.68"
+     ]
+    ],
+    "dist": "SEVEN FURLONGS (7f)",
+    "info": [
+     "For 2yo.",
+     "Penalties: winners of a race after 1 Oct, 5lb; of two, 7lb.",
+     "Claims allowed: 7, 5, 3."
+    ],
+    "going": [
+     {
+      "at": "21/10/2026 at 7:32 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 4:10 PM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 7:45 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "19/10/2026 at 8:02 AM",
+      "g": "Standard",
+      "decl": 1
+     },
+     {
+      "at": "18/10/2026 at 8:15 AM",
+      "g": "Standard to Slow"
+     },
+     {
+      "at": "17/10/2026 at 8:20 AM",
+      "g": "Standard to Slow"
+     }
+    ],
+    "wfa": {
+     "type": "flat",
+     "typeLabel": "Flat",
+     "dist": "7f",
+     "band": "7f",
+     "month": 9,
+     "single": true,
+     "singleNote": "All runners are 2yo, so there is no older age group to receive weight from."
+    }
+   }
+  },
+  {
+   "n": 2,
+   "t": "6:00",
+   "title": "Hartley Feeds Handicap",
+   "sub": "Class 4 · 1m · Handicap · 12 runners",
+   "cond": "For 3yo+ rated 61-80. Penalty after declaration: 6lb for a win. Claims allowed: 7, 5, 3.",
+   "runners": [
+    {
+     "no": 1,
+     "dr": 12,
+     "h": "TALL ORDER (FR)",
+     "m": "3yo · J. Whitcombe",
+     "j": "Sean Doyle",
+     "c": "3",
+     "jm": "Age 24 · IRE · 88 wins",
+     "jn": "Sponsor: Fenwick & Co, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 10lb",
+     "ws": "9st 13lb -3 claim",
+     "md": "G",
+     "col": "Pink, brown star, red cap",
+     "lr": {
+      "d": "11/09/26",
+      "c": "Goodwood",
+      "x": "Class 3 · 1m 1f · Good to firm",
+      "r": "13th of 13, beaten 9L",
+      "w": "9-05 · SP 3/1",
+      "days": 40
+     },
+     "wo": "9-10",
+     "res": "3rd",
+     "wi": "9-10"
+    },
+    {
+     "no": 2,
+     "dr": 11,
+     "h": "KESTREL POINT (GB)",
+     "m": "3yo · A. Harrington",
+     "j": "Dan Okafor",
+     "jm": "Age 34 · GB · 270 wins",
+     "w": "9st 12lb",
+     "ws": "9st 12lb",
+     "md": "G",
+     "bt": 1,
+     "col": "Brown, maroon chevrons, red cap",
+     "lr": {
+      "d": "04/09/26",
+      "c": "Newmarket",
+      "x": "Class 4 · 7f · Good to soft",
+      "r": "4th of 13, beaten 1½L",
+      "w": "9-02 · SP 7/2",
+      "days": 47
+     },
+     "wo": "9-12",
+     "res": "7th"
+    },
+    {
+     "no": 3,
+     "dr": 6,
+     "h": "NORTHERN EMBER (FR)",
+     "m": "7yo · C. Delaney",
+     "g": "p ts",
+     "j": "Freya Dunne",
+     "c": "5",
+     "jm": "Age 21 · GB · 28 wins",
+     "jn": "Replaces J. Marlow (stood down, medical)",
+     "jt": "red",
+     "w": "9st 2lb",
+     "ws": "9st 7lb -5 claim",
+     "md": "G",
+     "col": "Yellow, brown chevrons, red cap",
+     "lr": {
+      "d": "30/08/26",
+      "c": "Leicester",
+      "x": "Class 5 · 7f · Good to firm",
+      "r": "3rd of 11, beaten 1¼L",
+      "w": "9-06 · SP 40/1",
+      "days": 52
+     },
+     "wo": "9-2",
+     "res": "1st",
+     "wi": "9-2"
+    },
+    {
+     "no": 4,
+     "dr": 3,
+     "h": "DANCING FERRIER (USA)",
+     "m": "3yo · C. Delaney",
+     "g": "h ts",
+     "j": "Katie Rowe",
+     "c": "7",
+     "jm": "Age 18 · GB · 14 wins",
+     "w": "9st 5lb",
+     "ws": "9st 12lb -7 claim",
+     "md": "G",
+     "col": "Light blue, black sash, pink cap",
+     "lr": {
+      "d": "27/08/26",
+      "c": "Lingfield",
+      "x": "Class 4 · 1m · Standard",
+      "r": "8th of 13, beaten 6L",
+      "w": "9-05 · SP 12/1",
+      "days": 55
+     },
+     "wo": "9-5",
+     "res": "9th"
+    },
+    {
+     "no": 5,
+     "dr": 5,
+     "h": "CIDER LANE (GB)",
+     "m": "5yo · P. Sallis",
+     "g": "bl",
+     "j": "Jack Fenwick",
+     "jm": "Age 27 · GB · 168 wins",
+     "w": "9st 2lb",
+     "ws": "9st 2lb",
+     "ow": "OW 1lb",
+     "md": "G",
+     "col": "White, yellow sash, dark green cap",
+     "lr": {
+      "d": "08/10/26",
+      "c": "Newcastle",
+      "x": "Class 3 · 1m 1f · Standard",
+      "r": "Won by 1L, 9 ran",
+      "w": "9-08 · SP 14/1",
+      "days": 13
+     },
+     "wo": "9-3",
+     "res": "4th",
+     "wi": "9-3"
+    },
+    {
+     "no": 6,
+     "dr": 2,
+     "h": "MELLOW TIDE (GB)",
+     "m": "4yo · P. Sallis",
+     "j": "Luke Penrose",
+     "jm": "Age 33 · GB · 310 wins",
+     "w": "9st 6lb",
+     "ws": "9st 0lb +6 pen",
+     "md": "A",
+     "col": "Brown, pink stripe, emerald cap",
+     "lr": {
+      "d": "03/09/26",
+      "c": "Nottingham",
+      "x": "Class 5 · 1m · Good to soft",
+      "r": "3rd of 9, beaten nk",
+      "w": "9-02 · SP 4/1",
+      "days": 48
+     },
+     "wo": "9-6",
+     "res": "10th"
+    },
+    {
+     "no": 7,
+     "dr": 4,
+     "h": "MORNING LEDGER (GB)",
+     "m": "6yo · J. Whitcombe",
+     "g": "ts",
+     "j": "Niamh Brennan",
+     "c": "5",
+     "jm": "Age 20 · IRE · 44 wins",
+     "jn": "Sponsor: Fenwick & Co, expired 30 Sep 26",
+     "jt": "red",
+     "w": "9st 3lb",
+     "ws": "9st 8lb -5 claim",
+     "md": "G",
+     "col": "Dark green, navy star, maroon cap",
+     "lr": {
+      "d": "27/08/26",
+      "c": "Southwell",
+      "x": "Class 4 · 7f · Standard",
+      "r": "5th of 8, beaten 1½L",
+      "w": "8-13 · SP 14/1",
+      "days": 55
+     },
+     "wo": "9-3",
+     "res": "6th"
+    },
+    {
+     "no": 8,
+     "dr": 7,
+     "h": "INKWELL (GB)",
+     "m": "7yo · J. Whitcombe",
+     "j": "Ruby Tallis",
+     "c": "7",
+     "jm": "Age 17 · GB · 9 wins",
+     "w": "9st 7lb",
+     "ws": "9st 8lb +6 pen -7 claim",
+     "md": "G",
+     "bt": 1,
+     "col": "Grey, pink cross belts, orange cap",
+     "lr": {
+      "d": "06/10/26",
+      "c": "Lingfield",
+      "x": "Class 4 · 1m · Standard to slow",
+      "r": "4th of 13, beaten 9L",
+      "w": "9-13 · SP 3/1",
+      "days": 15
+     },
+     "wo": "9-7",
+     "res": "12th"
+    },
+    {
+     "no": 9,
+     "dr": 1,
+     "h": "FULL CIRCLE (GB)",
+     "m": "3yo · J. Whitcombe",
+     "j": "Ben Carver",
+     "jm": "Age 29 · GB · 230 wins",
+     "w": "9st 5lb",
+     "ws": "9st 5lb",
+     "md": "G",
+     "col": "Emerald, light blue sash, yellow cap",
+     "lr": {
+      "d": "22/09/26",
+      "c": "Newmarket",
+      "x": "Class 5 · 7f · Good",
+      "r": "13th of 13, beaten 6L",
+      "w": "8-09 · SP 8/1",
+      "days": 29
+     },
+     "wo": "9-5",
+     "res": "2nd",
+     "wi": "9-5"
+    },
+    {
+     "no": 10,
+     "dr": 8,
+     "h": "BRIGHT IDEA (AUS)",
+     "m": "6yo · M. Okonjo",
+     "j": "Callum Reid",
+     "c": "3",
+     "jm": "Age 23 · GB · 61 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 11lb",
+     "ws": "9st 8lb +6 pen -3 claim",
+     "md": "G",
+     "col": "Gold, navy sash, white cap",
+     "lr": {
+      "d": "26/09/26",
+      "c": "Southwell",
+      "x": "Class 3 · 1m · Standard to slow",
+      "r": "3rd of 13, beaten ½L",
+      "w": "9-13 · SP 12/1",
+      "days": 25
+     },
+     "wo": "9-11",
+     "sh": {
+      "state": "yes",
+      "lb": 3,
+      "foaled": "14 Oct 2020",
+      "season": "Southern Hemisphere season",
+      "scale": "Flat SH scale",
+      "source": "Weatherbys",
+      "raised": {
+       "who": "Weatherbys",
+       "when": "20 Oct, 16:12",
+       "at": "declaration"
+      }
+     },
+     "res": "8th"
+    },
+    {
+     "no": 11,
+     "dr": 9,
+     "h": "SOFT LANDING (FR)",
+     "m": "7yo · M. Okonjo",
+     "g": "h",
+     "j": "Aidan Kerr",
+     "c": "3",
+     "jm": "Age 22 · IRE · 52 wins",
+     "w": "9st 8lb",
+     "ws": "9st 11lb -3 claim",
+     "md": "G",
+     "col": "Grey, gold spots, brown cap",
+     "lr": {
+      "d": "12/09/26",
+      "c": "Salisbury",
+      "x": "Class 3 · 1m · Good",
+      "r": "5th of 11, beaten 9L",
+      "w": "9-09 · SP 6/1",
+      "days": 39
+     },
+     "wo": "9-8",
+     "res": "11th"
+    },
+    {
+     "no": 12,
+     "dr": 10,
+     "h": "COPPER BEECH (GB)",
+     "m": "7yo · A. Harrington",
+     "j": "Owen Lacey",
+     "jm": "Age 36 · GB · 355 wins",
+     "jn": "Sponsor: Apex Saddlery, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 11lb",
+     "ws": "9st 5lb +6 pen",
+     "md": "G",
+     "col": "Maroon, dark green cross belts, royal blue cap",
+     "lr": {
+      "d": "24/09/26",
+      "c": "Wolverhampton",
+      "x": "Class 3 · 1m · Standard",
+      "r": "2nd of 13, beaten nk",
+      "w": "9-10 · SP 7/2",
+      "days": 27
+     },
+     "wo": "9-11",
+     "res": "5th",
+     "wi": "9-11"
+    }
+   ],
+   "rc": {
+    "id": "34417",
+    "weights": "October 15, 2026",
+    "ratings": "October 13, 2026",
+    "closed": "October 14, 2026",
+    "value": "£8,900.00",
+    "sched": "(F)9.3.2",
+    "prizes": [
+     [
+      "1st",
+      "£4,700.09"
+     ],
+     [
+      "2nd",
+      "£2,162.70"
+     ],
+     [
+      "3rd",
+      "£1,081.35"
+     ],
+     [
+      "4th",
+      "£541.12"
+     ],
+     [
+      "5th",
+      "£269.67"
+     ]
+    ],
+    "dist": "ONE MILE (1m)",
+    "info": [
+     "For 3yo+ rated 61-80.",
+     "Penalty after declaration: 6lb for a win.",
+     "Claims allowed: 7, 5, 3."
+    ],
+    "going": [
+     {
+      "at": "21/10/2026 at 7:32 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 4:10 PM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 7:45 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "19/10/2026 at 8:02 AM",
+      "g": "Standard",
+      "decl": 1
+     },
+     {
+      "at": "18/10/2026 at 8:15 AM",
+      "g": "Standard to Slow"
+     },
+     {
+      "at": "17/10/2026 at 8:20 AM",
+      "g": "Standard to Slow"
+     }
+    ],
+    "wfa": {
+     "type": "flat",
+     "typeLabel": "Flat",
+     "dist": "1m",
+     "band": "1m",
+     "month": 9,
+     "single": false,
+     "singleNote": ""
+    }
+   }
+  },
+  {
+   "n": 3,
+   "t": "6:30",
+   "title": "Riverside Vets Apprentice Handicap (Riders who have ridden 50 or fewer winners before 4 October 2026)",
+   "sub": "Class 6 · 1m 2f · Apprentice Handicap · 11 runners",
+   "cond": "Restricted to apprentice riders with 50 or fewer winners before 4 Oct 2026. Allowances: 10lb (up to 10 wins), 7lb (11-50). Penalty after declaration: 6lb. Check winners and claims at weigh out.",
+   "runners": [
+    {
+     "no": 1,
+     "dr": 7,
+     "h": "LOW TIDE (GB)",
+     "m": "5yo · R. Faulds",
+     "j": "Isla Varga",
+     "c": "7",
+     "jm": "Age 19 · GB · 19 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "8st 12lb",
+     "ws": "9st 5lb -7 claim",
+     "md": "G",
+     "bt": 1,
+     "col": "Pink, royal blue chevrons, purple cap",
+     "lr": {
+      "d": "03/09/26",
+      "c": "Salisbury",
+      "x": "Class 7 · 1m 3f · Good",
+      "r": "7th of 13, beaten 1¼L",
+      "w": "8-11 · SP 5/2",
+      "days": 48
+     }
+    },
+    {
+     "no": 2,
+     "dr": 1,
+     "h": "HARBOUR WALL (IRE)",
+     "m": "7yo · P. Sallis",
+     "g": "p",
+     "j": "Katie Rowe",
+     "c": "7",
+     "jm": "Age 18 · GB · 14 wins",
+     "w": "8st 8lb",
+     "ws": "9st 1lb -7 claim",
+     "ow": "OW 1lb",
+     "md": "G",
+     "col": "Red, grey star, white cap",
+     "lr": {
+      "d": "01/10/26",
+      "c": "Chelmsford",
+      "x": "Class 6 · 1m 3f · Standard",
+      "r": "8th of 13, beaten 12L",
+      "w": "8-11 · SP 20/1",
+      "days": 20
+     }
+    },
+    {
+     "no": 3,
+     "dr": 5,
+     "h": "GRAND PARADE (IRE)",
+     "m": "6yo · J. Whitcombe",
+     "j": "Ellie Marsh",
+     "c": "7",
+     "jm": "Age 19 · GB · 36 wins",
+     "jn": "Sponsor: Hartley Feeds, to 31 Mar 27",
+     "jt": "n",
+     "w": "8st 8lb",
+     "ws": "9st 1lb -7 claim",
+     "md": "G",
+     "col": "Gold, dark green spots, light blue cap",
+     "lr": {
+      "d": "06/09/26",
+      "c": "Chelmsford",
+      "x": "Class 5 · 1m 1f · Standard",
+      "r": "3rd of 14, beaten ¾L",
+      "w": "9-01 · SP 6/1",
+      "days": 45
+     }
+    },
+    {
+     "no": 4,
+     "dr": 9,
+     "h": "LONG SHOT (IRE)",
+     "m": "4yo · S. Ingram",
+     "g": "bl",
+     "j": "Niamh Brennan",
+     "c": "7",
+     "jm": "Age 20 · IRE · 44 wins",
+     "w": "8st 11lb",
+     "ws": "9st 4lb -7 claim",
+     "md": "G",
+     "col": "Gold, royal blue star, orange cap",
+     "lr": {
+      "d": "16/09/26",
+      "c": "Windsor",
+      "x": "Class 7 · 1m 3f · Good to firm",
+      "r": "10th of 11, beaten 3½L",
+      "w": "9-06 · SP 5/2",
+      "days": 35
+     }
+    },
+    {
+     "no": 5,
+     "dr": 6,
+     "h": "LAST WORD (IRE)",
+     "m": "5yo · R. Faulds",
+     "j": "Theo Mercer",
+     "c": "7",
+     "jm": "Age 16 · GB · 50 wins",
+     "jn": "Check winners: 50 before 4 Oct (limit 50)",
+     "jt": "red",
+     "w": "8st 9lb",
+     "ws": "9st 2lb -7 claim",
+     "md": "G",
+     "col": "Maroon, navy star, gold cap",
+     "lr": {
+      "d": "21/08/26",
+      "c": "Lingfield",
+      "x": "Class 7 · 1m 2f · Standard",
+      "r": "3rd of 8, beaten nk",
+      "w": "9-06 · SP 12/1",
+      "days": 61
+     }
+    },
+    {
+     "no": 6,
+     "dr": 2,
+     "h": "SILENT PARTNER (GB)",
+     "m": "5yo · M. Okonjo",
+     "g": "h",
+     "j": "Lily Cartwright",
+     "c": "7",
+     "jm": "Age 21 · GB · 41 wins",
+     "jn": "Sponsor: Hartley Feeds, to 31 Mar 27",
+     "jt": "n",
+     "w": "8st 12lb",
+     "ws": "9st 5lb -7 claim",
+     "md": "G",
+     "col": "Orange, yellow stripe, gold cap",
+     "lr": {
+      "d": "10/10/26",
+      "c": "Nottingham",
+      "x": "Class 6 · 1m 3f · Soft",
+      "r": "6th of 10, beaten 3L",
+      "w": "9-10 · SP 6/1",
+      "days": 11
+     }
+    },
+    {
+     "no": 7,
+     "dr": 10,
+     "h": "STEADY HAND (USA)",
+     "m": "6yo · R. Faulds",
+     "j": "Freya Dunne",
+     "c": "7",
+     "jm": "Age 21 · GB · 28 wins",
+     "w": "9st 3lb",
+     "ws": "9st 10lb -7 claim",
+     "md": "G",
+     "col": "Yellow, grey sash, brown cap",
+     "lr": {
+      "d": "14/09/26",
+      "c": "Kempton",
+      "x": "Class 6 · 1m 2f · Standard",
+      "r": "4th of 10, beaten 6L",
+      "w": "9-12 · SP 10/1",
+      "days": 37
+     }
+    },
+    {
+     "no": 8,
+     "dr": 11,
+     "h": "GOLDEN HOUR (USA)",
+     "m": "3yo · S. Ingram",
+     "j": "Jake Pell",
+     "c": "10",
+     "jm": "Age 17 · GB · 6 wins",
+     "jn": "Sponsor: Apex Saddlery, to 31 Mar 27",
+     "jt": "n",
+     "w": "8st 9lb",
+     "ws": "9st 5lb -10 claim",
+     "md": "G",
+     "col": "Yellow, emerald stripe, red cap",
+     "lr": {
+      "d": "17/09/26",
+      "c": "Leicester",
+      "x": "Class 7 · 1m 3f · Soft",
+      "r": "10th of 14, beaten 7½L",
+      "w": "8-12 · SP 5/1",
+      "days": 34
+     }
+    },
+    {
+     "no": 9,
+     "dr": 3,
+     "h": "EASY STREET (GB)",
+     "m": "4yo · R. Faulds",
+     "j": "Molly Strand",
+     "c": "7",
+     "jm": "Age 20 · GB · 47 wins",
+     "w": "9st 2lb",
+     "ws": "9st 9lb -7 claim",
+     "md": "G",
+     "col": "Light blue, pink cross belts, black cap",
+     "lr": {
+      "d": "04/10/26",
+      "c": "Windsor",
+      "x": "Class 6 · 1m 1f · Good",
+      "r": "11th of 12, beaten 14L",
+      "w": "9-12 · SP 16/1",
+      "days": 17
+     }
+    },
+    {
+     "no": 10,
+     "dr": 4,
+     "h": "IRON SAINT (FR)",
+     "m": "4yo · C. Delaney",
+     "j": "Ruby Tallis",
+     "c": "10",
+     "jm": "Age 17 · GB · 9 wins",
+     "w": "8st 4lb",
+     "ws": "9st 0lb -10 claim",
+     "md": "G",
+     "col": "Gold, emerald chevrons, grey cap",
+     "lr": {
+      "d": "14/10/26",
+      "c": "Newcastle",
+      "x": "Class 7 · 1m 3f · Standard to slow",
+      "r": "4th of 14, beaten 1L",
+      "w": "9-07 · SP 9/2",
+      "days": 7
+     }
+    },
+    {
+     "no": 11,
+     "dr": 8,
+     "h": "DUSTY ROAD (FR)",
+     "m": "5yo · S. Ingram",
+     "j": "Ross Nyland",
+     "c": "7",
+     "jm": "Age 20 · IRE · 22 wins",
+     "w": "9st 1lb",
+     "ws": "9st 8lb -7 claim",
+     "md": "G",
+     "col": "Brown, maroon star, gold cap",
+     "lr": {
+      "d": "17/09/26",
+      "c": "Wolverhampton",
+      "x": "Class 6 · 1m 1f · Standard",
+      "r": "3rd of 12, beaten hd",
+      "w": "9-08 · SP 25/1",
+      "days": 34
+     }
+    }
+   ],
+   "rc": {
+    "id": "34424",
+    "weights": "October 15, 2026",
+    "ratings": "October 13, 2026",
+    "closed": "October 14, 2026",
+    "value": "£4,200.00",
+    "sched": "(F)9.3.2",
+    "prizes": [
+     [
+      "1st",
+      "£2,218.02"
+     ],
+     [
+      "2nd",
+      "£1,020.60"
+     ],
+     [
+      "3rd",
+      "£510.30"
+     ],
+     [
+      "4th",
+      "£255.36"
+     ],
+     [
+      "5th",
+      "£127.26"
+     ]
+    ],
+    "dist": "ONE MILE TWO FURLONGS (1m 2f 219yds)",
+    "info": [
+     "Restricted to apprentice riders with 50 or fewer winners before 4 Oct 2026.",
+     "Allowances: 10lb (up to 10 wins), 7lb (11-50).",
+     "Penalty after declaration: 6lb.",
+     "Check winners and claims at weigh out."
+    ],
+    "going": [
+     {
+      "at": "21/10/2026 at 7:32 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 4:10 PM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 7:45 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "19/10/2026 at 8:02 AM",
+      "g": "Standard",
+      "decl": 1
+     },
+     {
+      "at": "18/10/2026 at 8:15 AM",
+      "g": "Standard to Slow"
+     },
+     {
+      "at": "17/10/2026 at 8:20 AM",
+      "g": "Standard to Slow"
+     }
+    ],
+    "wfa": {
+     "type": "flat",
+     "typeLabel": "Flat",
+     "dist": "1m 2f",
+     "band": "1m 2f",
+     "month": 9,
+     "single": false,
+     "singleNote": ""
+    }
+   }
+  },
+  {
+   "n": 4,
+   "t": "7:00",
+   "title": "Northgate Motors Fillies' Handicap",
+   "sub": "Class 5 · 6f · Handicap · 8 runners · 1 non-runner",
+   "cond": "For fillies and mares 3yo+ rated 51-70. Penalty after declaration: 6lb. Claims allowed: 7, 5, 3.",
+   "runners": [
+    {
+     "no": 1,
+     "dr": 7,
+     "h": "TRUE NORTH (FR)",
+     "m": "7yo · S. Ingram",
+     "g": "h",
+     "j": "Niamh Brennan",
+     "c": "5",
+     "jm": "Age 20 · IRE · 44 wins",
+     "w": "9st 2lb",
+     "ws": "9st 1lb +6 pen -5 claim",
+     "md": "G",
+     "col": "Maroon, grey hoop, gold cap",
+     "lr": {
+      "d": "04/10/26",
+      "c": "Kempton",
+      "x": "Class 6 · 7f · Standard",
+      "r": "4th of 10, beaten 6L",
+      "w": "9-08 · SP 33/1",
+      "days": 17
+     }
+    },
+    {
+     "no": 2,
+     "dr": 2,
+     "h": "DAYBREAK (GB)",
+     "m": "6yo · A. Harrington",
+     "nr": 1,
+     "j": "Sean Doyle",
+     "c": "3",
+     "jm": "Age 24 · IRE · 88 wins",
+     "w": "9st 7lb",
+     "ws": "9st 4lb +6 pen -3 claim",
+     "md": "G",
+     "col": "Royal blue, pink star, navy cap",
+     "lr": {
+      "d": "11/10/26",
+      "c": "Newmarket",
+      "x": "Class 6 · 6f · Good",
+      "r": "Won by 2L, 9 ran",
+      "w": "9-06 · SP 40/1",
+      "days": 10
+     }
+    },
+    {
+     "no": 3,
+     "dr": 8,
+     "h": "TIDEWATER (GB)",
+     "m": "6yo · M. Okonjo",
+     "g": "p ts",
+     "j": "Katie Rowe",
+     "c": "7",
+     "jm": "Age 18 · GB · 14 wins",
+     "w": "9st 11lb",
+     "ws": "9st 12lb +6 pen -7 claim",
+     "md": "G",
+     "col": "Light blue, purple spots, grey cap",
+     "lr": {
+      "d": "07/10/26",
+      "c": "Southwell",
+      "x": "Class 5 · 6f · Standard",
+      "r": "5th of 12, beaten 2¼L",
+      "w": "9-10 · SP 5/2",
+      "days": 14
+     }
+    },
+    {
+     "no": 4,
+     "dr": 6,
+     "h": "LANTERN HILL (IRE)",
+     "m": "5yo · A. Harrington",
+     "j": "Dan Okafor",
+     "jm": "Age 34 · GB · 270 wins",
+     "jn": "Sponsor: Apex Saddlery, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 7lb",
+     "ws": "9st 7lb",
+     "md": "G",
+     "col": "Grey, yellow cross belts, black cap",
+     "lr": {
+      "d": "05/10/26",
+      "c": "Yarmouth",
+      "x": "Class 4 · 6f · Good",
+      "r": "5th of 12, beaten 3L",
+      "w": "8-05 · SP 5/1",
+      "days": 16
+     }
+    },
+    {
+     "no": 5,
+     "dr": 1,
+     "h": "FRESH START (GB)",
+     "m": "6yo · M. Okonjo",
+     "g": "h",
+     "j": "Hugo Bessant",
+     "jm": "Age 30 · FR · 120 wins",
+     "w": "9st 0lb",
+     "ws": "9st 0lb",
+     "md": "G",
+     "col": "Pink, maroon diamond, brown cap",
+     "lr": {
+      "d": "03/09/26",
+      "c": "Chelmsford",
+      "x": "Class 6 · 6f · Standard",
+      "r": "Won by ¾L, 7 ran",
+      "w": "9-01 · SP 10/1",
+      "days": 48
+     }
+    },
+    {
+     "no": 6,
+     "dr": 3,
+     "h": "HERON BAY (GB)",
+     "m": "3yo · R. Faulds",
+     "g": "h",
+     "j": "Ruby Tallis",
+     "c": "7",
+     "jm": "Age 17 · GB · 9 wins",
+     "w": "9st 0lb",
+     "ws": "9st 7lb -7 claim",
+     "md": "G",
+     "col": "Orange, purple diamond, gold cap",
+     "lr": {
+      "d": "31/08/26",
+      "c": "Southwell",
+      "x": "Class 6 · 5f · Standard",
+      "r": "4th of 12, beaten 2L",
+      "w": "9-06 · SP 3/1",
+      "days": 51
+     }
+    },
+    {
+     "no": 7,
+     "dr": 9,
+     "h": "RAPID VERSE (GB)",
+     "m": "3yo · A. Harrington",
+     "g": "h ts",
+     "j": "Owen Lacey",
+     "jm": "Age 36 · GB · 355 wins",
+     "w": "9st 4lb",
+     "ws": "9st 4lb",
+     "md": "A",
+     "col": "Navy, maroon sash, yellow cap",
+     "lr": {
+      "d": "01/09/26",
+      "c": "Leicester",
+      "x": "Class 5 · 7f · Good",
+      "r": "3rd of 14, beaten ¾L",
+      "w": "8-04 · SP 10/1",
+      "days": 50
+     }
+    },
+    {
+     "no": 8,
+     "dr": 4,
+     "h": "WINTER ROSE (IRE)",
+     "m": "3yo · J. Whitcombe",
+     "j": "Tom Harlow",
+     "jm": "Age 31 · GB · 412 wins",
+     "w": "9st 11lb",
+     "ws": "9st 11lb",
+     "md": "G",
+     "col": "Gold, emerald diamond, light blue cap",
+     "lr": {
+      "d": "27/09/26",
+      "c": "Goodwood",
+      "x": "Class 6 · 6f · Good",
+      "r": "12th of 14, beaten 12L",
+      "w": "9-01 · SP 5/2",
+      "days": 24
+     }
+    },
+    {
+     "no": 9,
+     "dr": 5,
+     "h": "SECOND WIND (GB)",
+     "m": "4yo · J. Whitcombe",
+     "g": "ts",
+     "j": "Aidan Kerr",
+     "c": "3",
+     "jm": "Age 22 · IRE · 52 wins",
+     "w": "10st 0lb",
+     "ws": "9st 11lb +6 pen -3 claim",
+     "md": "G",
+     "col": "Brown, pink cross belts, yellow cap",
+     "lr": {
+      "d": "08/09/26",
+      "c": "Leicester",
+      "x": "Class 4 · 7f · Good to soft",
+      "r": "3rd of 9, beaten 1L",
+      "w": "9-06 · SP 25/1",
+      "days": 43
+     }
+    }
+   ],
+   "rc": {
+    "id": "34431",
+    "weights": "October 15, 2026",
+    "ratings": "October 13, 2026",
+    "closed": "October 14, 2026",
+    "value": "£5,600.00",
+    "sched": "(F)9.3.2",
+    "prizes": [
+     [
+      "1st",
+      "£2,957.36"
+     ],
+     [
+      "2nd",
+      "£1,360.80"
+     ],
+     [
+      "3rd",
+      "£680.40"
+     ],
+     [
+      "4th",
+      "£340.48"
+     ],
+     [
+      "5th",
+      "£169.68"
+     ]
+    ],
+    "dist": "SIX FURLONGS (6f)",
+    "info": [
+     "For fillies and mares 3yo+ rated 51-70.",
+     "Penalty after declaration: 6lb.",
+     "Claims allowed: 7, 5, 3."
+    ],
+    "going": [
+     {
+      "at": "21/10/2026 at 7:32 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 4:10 PM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 7:45 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "19/10/2026 at 8:02 AM",
+      "g": "Standard",
+      "decl": 1
+     },
+     {
+      "at": "18/10/2026 at 8:15 AM",
+      "g": "Standard to Slow"
+     },
+     {
+      "at": "17/10/2026 at 8:20 AM",
+      "g": "Standard to Slow"
+     }
+    ],
+    "wfa": {
+     "type": "flat",
+     "typeLabel": "Flat",
+     "dist": "6f",
+     "band": "6f",
+     "month": 9,
+     "single": false,
+     "singleNote": ""
+    }
+   }
+  },
+  {
+   "n": 5,
+   "t": "7:30",
+   "title": "Apex Saddlery Maiden Stakes",
+   "sub": "Class 5 · 1m 4f · Maiden · 12 runners",
+   "cond": "For 3yo+ maidens. No penalties. Claims allowed: 7, 5, 3.",
+   "runners": [
+    {
+     "no": 1,
+     "dr": 4,
+     "h": "BRISK TEMPO (GB)",
+     "m": "7yo · J. Whitcombe",
+     "g": "p ts",
+     "j": "Callum Reid",
+     "c": "3",
+     "jm": "Age 23 · GB · 61 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 3lb",
+     "ws": "9st 6lb -3 claim",
+     "md": "G",
+     "col": "Orange, pink star, light blue cap",
+     "lr": {
+      "d": "28/09/26",
+      "c": "Newcastle",
+      "x": "Class 6 · 1m 4f · Standard to slow",
+      "r": "4th of 8, beaten 3½L",
+      "w": "9-09 · SP 5/1",
+      "days": 23
+     }
+    },
+    {
+     "no": 2,
+     "dr": 11,
+     "h": "PAPER MOON (IRE)",
+     "m": "6yo · P. Sallis",
+     "j": "Aidan Kerr",
+     "c": "3",
+     "jm": "Age 22 · IRE · 52 wins",
+     "w": "8st 11lb",
+     "ws": "9st 0lb -3 claim",
+     "md": "G",
+     "col": "White, grey star, gold cap",
+     "lr": {
+      "d": "10/09/26",
+      "c": "Southwell",
+      "x": "Class 5 · 1m 3f · Standard",
+      "r": "10th of 13, beaten 12L",
+      "w": "8-04 · SP 6/1",
+      "days": 41
+     }
+    },
+    {
+     "no": 3,
+     "dr": 7,
+     "h": "NIGHT COURIER (GB)",
+     "m": "4yo · R. Faulds",
+     "g": "p ts",
+     "j": "Freya Dunne",
+     "c": "5",
+     "jm": "Age 21 · GB · 28 wins",
+     "jn": "Sponsor: Bluestone Insurance, starts 1 Nov 26",
+     "jt": "amber",
+     "w": "9st 2lb",
+     "ws": "9st 7lb -5 claim",
+     "md": "G",
+     "col": "Brown, navy stripe, gold cap",
+     "lr": {
+      "d": "20/08/26",
+      "c": "Goodwood",
+      "x": "Class 5 · 1m 3f · Good to soft",
+      "r": "4th of 9, beaten 7½L",
+      "w": "9-03 · SP 33/1",
+      "days": 62
+     }
+    },
+    {
+     "no": 4,
+     "dr": 6,
+     "h": "QUICK STUDY (IRE)",
+     "m": "4yo · M. Okonjo",
+     "g": "ts",
+     "j": "Hugo Bessant",
+     "jm": "Age 30 · FR · 120 wins",
+     "jn": "Sponsor: Riverside Vets, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 2lb",
+     "ws": "9st 2lb",
+     "md": "G",
+     "bt": 1,
+     "col": "Yellow, maroon cross belts, brown cap",
+     "lr": {
+      "d": "30/09/26",
+      "c": "Goodwood",
+      "x": "Class 5 · 1m 6f · Good to firm",
+      "r": "4th of 13, beaten 4½L",
+      "w": "9-05 · SP 10/1",
+      "days": 21
+     }
+    },
+    {
+     "no": 5,
+     "dr": 12,
+     "h": "WREN HOLLOW (FR)",
+     "m": "4yo · M. Okonjo",
+     "j": "Ellie Marsh",
+     "c": "5",
+     "jm": "Age 19 · GB · 36 wins",
+     "w": "8st 10lb",
+     "ws": "9st 1lb -5 claim",
+     "md": "G",
+     "col": "Grey, dark green star, light blue cap",
+     "lr": {
+      "d": "14/10/26",
+      "c": "Chelmsford",
+      "x": "Class 5 · 1m 6f · Standard",
+      "r": "3rd of 11, beaten 1¼L",
+      "w": "8-11 · SP 5/1",
+      "days": 7
+     }
+    },
+    {
+     "no": 6,
+     "dr": 8,
+     "h": "OCHRE FIELD (USA)",
+     "m": "4yo · J. Whitcombe",
+     "j": "Luke Penrose",
+     "jm": "Age 33 · GB · 310 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 6lb",
+     "ws": "9st 6lb",
+     "md": "G",
+     "col": "Dark green, grey cross belts, navy cap",
+     "lr": {
+      "d": "16/10/26",
+      "c": "Chelmsford",
+      "x": "Class 5 · 1m 6f · Standard",
+      "r": "8th of 10, beaten 2L",
+      "w": "9-13 · SP 40/1",
+      "days": 5
+     }
+    },
+    {
+     "no": 7,
+     "dr": 1,
+     "h": "SABLE COAST (IRE)",
+     "m": "4yo · T. Brannigan",
+     "j": "Owen Lacey",
+     "jm": "Age 36 · GB · 355 wins",
+     "w": "9st 4lb",
+     "ws": "9st 4lb",
+     "md": "G",
+     "col": "Purple, light blue star, pink cap",
+     "lr": {
+      "d": "19/08/26",
+      "c": "Newmarket",
+      "x": "Class 5 · 1m 6f · Good to soft",
+      "r": "8th of 12, beaten 3L",
+      "w": "9-02 · SP 33/1",
+      "days": 63
+     }
+    },
+    {
+     "no": 8,
+     "dr": 3,
+     "h": "BRAMBLE RUN (GB)",
+     "m": "3yo · T. Brannigan",
+     "j": "Katie Rowe",
+     "c": "7",
+     "jm": "Age 18 · GB · 14 wins",
+     "jn": "Sponsor: Riverside Vets, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 2lb",
+     "ws": "9st 9lb -7 claim",
+     "md": "G",
+     "col": "Navy, light blue cross belts, brown cap",
+     "lr": {
+      "d": "22/08/26",
+      "c": "Southwell",
+      "x": "Class 5 · 1m 3f · Standard",
+      "r": "11th of 12, beaten 2¼L",
+      "w": "9-13 · SP 33/1",
+      "days": 60
+     }
+    },
+    {
+     "no": 9,
+     "dr": 10,
+     "h": "SCARLET THREAD (GB)",
+     "m": "6yo · J. Whitcombe",
+     "g": "h ts",
+     "j": "Tom Harlow",
+     "jm": "Age 31 · GB · 412 wins",
+     "jn": "Sponsor: Northgate Motors, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 1lb",
+     "ws": "9st 1lb",
+     "md": "G",
+     "col": "Yellow, light blue sash, grey cap",
+     "lr": {
+      "d": "21/08/26",
+      "c": "Goodwood",
+      "x": "Class 4 · 1m 4f · Good to soft",
+      "r": "3rd of 10, beaten hd",
+      "w": "10-00 · SP 10/1",
+      "days": 61
+     }
+    },
+    {
+     "no": 10,
+     "dr": 2,
+     "h": "FENNEL BROOK (USA)",
+     "m": "4yo · M. Okonjo",
+     "j": "Sean Doyle",
+     "c": "3",
+     "jm": "Age 24 · IRE · 88 wins",
+     "jn": "Sponsor: Bluestone Insurance, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 8lb",
+     "ws": "9st 11lb -3 claim",
+     "md": "G",
+     "col": "Orange, light blue diamond, pink cap",
+     "lr": {
+      "d": "05/09/26",
+      "c": "Newcastle",
+      "x": "Class 5 · 1m 4f · Standard",
+      "r": "8th of 9, beaten 12L",
+      "w": "9-12 · SP 40/1",
+      "days": 46
+     }
+    },
+    {
+     "no": 11,
+     "dr": 5,
+     "h": "LINEN SKY (GB)",
+     "m": "4yo · M. Okonjo",
+     "g": "v",
+     "j": "Molly Strand",
+     "c": "5",
+     "jm": "Age 20 · GB · 47 wins",
+     "w": "9st 3lb",
+     "ws": "9st 8lb -5 claim",
+     "ow": "OW 2lb",
+     "md": "G",
+     "col": "Yellow, white hoop, orange cap",
+     "lr": {
+      "d": "19/08/26",
+      "c": "Southwell",
+      "x": "Class 5 · 1m 3f · Standard",
+      "r": "3rd of 10, beaten ½L",
+      "w": "8-05 · SP 10/1",
+      "days": 63
+     }
+    },
+    {
+     "no": 12,
+     "dr": 9,
+     "h": "COBALT DAWN (USA)",
+     "m": "3yo · S. Ingram",
+     "j": "Ruby Tallis",
+     "c": "7",
+     "jm": "Age 17 · GB · 9 wins",
+     "jn": "Sponsor: Northgate Motors, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 4lb",
+     "ws": "9st 11lb -7 claim",
+     "md": "G",
+     "col": "Yellow, gold hoop, red cap",
+     "lr": {
+      "d": "09/10/26",
+      "c": "Nottingham",
+      "x": "Class 4 · 1m 4f · Good",
+      "r": "8th of 14, beaten 5L",
+      "w": "9-07 · SP 16/1",
+      "days": 12
+     }
+    }
+   ],
+   "rc": {
+    "id": "34438",
+    "weights": "October 15, 2026",
+    "ratings": "October 13, 2026",
+    "closed": "October 14, 2026",
+    "value": "£5,600.00",
+    "sched": "(F)9.3.2",
+    "prizes": [
+     [
+      "1st",
+      "£2,957.36"
+     ],
+     [
+      "2nd",
+      "£1,360.80"
+     ],
+     [
+      "3rd",
+      "£680.40"
+     ],
+     [
+      "4th",
+      "£340.48"
+     ],
+     [
+      "5th",
+      "£169.68"
+     ]
+    ],
+    "dist": "ONE MILE FOUR FURLONGS (1m 3f 219yds)",
+    "info": [
+     "For 3yo+ maidens.",
+     "No penalties.",
+     "Claims allowed: 7, 5, 3."
+    ],
+    "going": [
+     {
+      "at": "21/10/2026 at 7:32 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 4:10 PM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 7:45 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "19/10/2026 at 8:02 AM",
+      "g": "Standard",
+      "decl": 1
+     },
+     {
+      "at": "18/10/2026 at 8:15 AM",
+      "g": "Standard to Slow"
+     },
+     {
+      "at": "17/10/2026 at 8:20 AM",
+      "g": "Standard to Slow"
+     }
+    ],
+    "wfa": {
+     "type": "flat",
+     "typeLabel": "Flat",
+     "dist": "1m 4f",
+     "band": "1m 4f",
+     "month": 9,
+     "single": false,
+     "singleNote": ""
+    }
+   }
+  },
+  {
+   "n": 6,
+   "t": "8:00",
+   "title": "Fenwick & Co Handicap (Div II)",
+   "sub": "Class 6 · 1m 7f · Handicap · 9 runners · 1 non-runner",
+   "cond": "For 3yo+ rated 46-60. Penalty after declaration: 6lb. Claims allowed: 7, 5, 3.",
+   "runners": [
+    {
+     "no": 1,
+     "dr": 2,
+     "h": "QUIET HARBOUR (GB)",
+     "m": "3yo · P. Sallis",
+     "g": "h",
+     "j": "Tom Harlow",
+     "jm": "Age 31 · GB · 412 wins",
+     "w": "9st 12lb",
+     "ws": "9st 12lb",
+     "md": "G",
+     "col": "Dark green, red star, yellow cap",
+     "lr": {
+      "d": "23/09/26",
+      "c": "Kempton",
+      "x": "Class 6 · 1m 7f · Standard to slow",
+      "r": "13th of 13, beaten 4½L",
+      "w": "9-10 · SP 33/1",
+      "days": 28
+     }
+    },
+    {
+     "no": 2,
+     "dr": 10,
+     "h": "LATE BLOOMER (GB)",
+     "m": "3yo · S. Ingram",
+     "g": "h ts",
+     "j": "Callum Reid",
+     "c": "3",
+     "jm": "Age 23 · GB · 61 wins",
+     "w": "9st 11lb",
+     "ws": "10st 0lb -3 claim",
+     "md": "G",
+     "col": "Black, grey hoop, pink cap",
+     "lr": {
+      "d": "27/08/26",
+      "c": "Goodwood",
+      "x": "Class 6 · 1m 6f · Soft",
+      "r": "14th of 14, beaten 2L",
+      "w": "10-00 · SP 7/2",
+      "days": 55
+     }
+    },
+    {
+     "no": 3,
+     "dr": 5,
+     "h": "STARLING (IRE)",
+     "m": "3yo · T. Brannigan",
+     "nr": 1,
+     "j": "Katie Rowe",
+     "c": "7",
+     "jm": "Age 18 · GB · 14 wins",
+     "jn": "Sponsor: Northgate Motors, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 10lb",
+     "ws": "9st 11lb +6 pen -7 claim",
+     "ow": "OW 1lb",
+     "md": "G",
+     "col": "Royal blue, light blue spots, dark green cap",
+     "lr": {
+      "d": "16/10/26",
+      "c": "Lingfield",
+      "x": "Class 6 · 1m 7f · Standard",
+      "r": "5th of 12, beaten 2L",
+      "w": "8-05 · SP 33/1",
+      "days": 5
+     }
+    },
+    {
+     "no": 4,
+     "dr": 8,
+     "h": "UPPER HAND (GB)",
+     "m": "4yo · M. Okonjo",
+     "g": "ts",
+     "j": "Dan Okafor",
+     "jm": "Age 34 · GB · 270 wins",
+     "jn": "Sponsor: Fenwick & Co, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 8lb",
+     "ws": "9st 2lb +6 pen",
+     "ow": "OW 1lb",
+     "md": "G",
+     "col": "White, black chevrons, emerald cap",
+     "lr": {
+      "d": "07/09/26",
+      "c": "Lingfield",
+      "x": "Class 6 · 1m 7f · Standard",
+      "r": "9th of 10, beaten 1¼L",
+      "w": "8-09 · SP 4/1",
+      "days": 44
+     }
+    },
+    {
+     "no": 5,
+     "dr": 1,
+     "h": "MERROW LANE (IRE)",
+     "m": "4yo · M. Okonjo",
+     "g": "ts",
+     "j": "Jack Fenwick",
+     "jm": "Age 27 · GB · 168 wins",
+     "w": "9st 0lb",
+     "ws": "9st 0lb",
+     "md": "G",
+     "col": "Orange, black cross belts, white cap",
+     "lr": {
+      "d": "03/10/26",
+      "c": "Yarmouth",
+      "x": "Class 6 · 1m 6f · Good",
+      "r": "4th of 8, beaten 2L",
+      "w": "9-09 · SP 4/1",
+      "days": 18
+     }
+    },
+    {
+     "no": 6,
+     "dr": 9,
+     "h": "CALM WATERS (FR)",
+     "m": "7yo · A. Harrington",
+     "j": "Ellie Marsh",
+     "c": "5",
+     "jm": "Age 19 · GB · 36 wins",
+     "w": "9st 7lb",
+     "ws": "9st 12lb -5 claim",
+     "md": "A",
+     "col": "Brown, navy cross belts, pink cap",
+     "lr": {
+      "d": "27/08/26",
+      "c": "Chelmsford",
+      "x": "Class 5 · 1m 7f · Standard to slow",
+      "r": "6th of 11, beaten 12L",
+      "w": "9-11 · SP 16/1",
+      "days": 55
+     }
+    },
+    {
+     "no": 7,
+     "dr": 6,
+     "h": "SUMMER LEASE (IRE)",
+     "m": "4yo · C. Delaney",
+     "j": "Ben Carver",
+     "jm": "Age 29 · GB · 230 wins",
+     "w": "9st 5lb",
+     "ws": "9st 5lb",
+     "md": "G",
+     "col": "Gold, red sash, purple cap",
+     "lr": {
+      "d": "10/09/26",
+      "c": "Nottingham",
+      "x": "Class 7 · 1m 6f · Good",
+      "r": "13th of 13, beaten 12L",
+      "w": "9-08 · SP 40/1",
+      "days": 41
+     }
+    },
+    {
+     "no": 8,
+     "dr": 7,
+     "h": "CLOVER GATE (GB)",
+     "m": "4yo · R. Faulds",
+     "g": "h",
+     "j": "Molly Strand",
+     "c": "5",
+     "jm": "Age 20 · GB · 47 wins",
+     "w": "9st 8lb",
+     "ws": "9st 13lb -5 claim",
+     "md": "G",
+     "col": "Navy, purple sash, white cap",
+     "lr": {
+      "d": "28/08/26",
+      "c": "Southwell",
+      "x": "Class 6 · 1m 7f · Standard",
+      "r": "9th of 11, beaten 14L",
+      "w": "8-09 · SP 12/1",
+      "days": 54
+     }
+    },
+    {
+     "no": 9,
+     "dr": 3,
+     "h": "MARBLE ARCH (GB)",
+     "m": "4yo · M. Okonjo",
+     "g": "ts",
+     "j": "Hugo Bessant",
+     "jm": "Age 30 · FR · 120 wins",
+     "w": "9st 12lb",
+     "ws": "9st 12lb",
+     "md": "G",
+     "col": "Maroon, grey stripe, yellow cap",
+     "lr": {
+      "d": "05/09/26",
+      "c": "Southwell",
+      "x": "Class 6 · 1m 7f · Standard",
+      "r": "Won by hd, 11 ran",
+      "w": "8-13 · SP 7/2",
+      "days": 46
+     }
+    },
+    {
+     "no": 10,
+     "dr": 4,
+     "h": "CLEAR VIEW (FR)",
+     "m": "3yo · C. Delaney",
+     "g": "p",
+     "j": "Sean Doyle",
+     "c": "3",
+     "jm": "Age 24 · IRE · 88 wins",
+     "jn": "Sponsor: Hartley Feeds, to 31 Mar 27",
+     "jt": "n",
+     "w": "9st 3lb",
+     "ws": "9st 6lb -3 claim",
+     "md": "G",
+     "col": "Grey, emerald sash, white cap",
+     "lr": {
+      "d": "07/10/26",
+      "c": "Lingfield",
+      "x": "Class 6 · 1m 7f · Standard to slow",
+      "r": "2nd of 13, beaten ½L",
+      "w": "9-11 · SP 33/1",
+      "days": 14
+     }
+    }
+   ],
+   "rc": {
+    "id": "34445",
+    "weights": "October 15, 2026",
+    "ratings": "October 13, 2026",
+    "closed": "October 14, 2026",
+    "value": "£4,200.00",
+    "sched": "(F)9.3.2",
+    "prizes": [
+     [
+      "1st",
+      "£2,218.02"
+     ],
+     [
+      "2nd",
+      "£1,020.60"
+     ],
+     [
+      "3rd",
+      "£510.30"
+     ],
+     [
+      "4th",
+      "£255.36"
+     ],
+     [
+      "5th",
+      "£127.26"
+     ]
+    ],
+    "dist": "ONE MILE SEVEN FURLONGS (1m 7f 218yds)",
+    "info": [
+     "For 3yo+ rated 46-60.",
+     "Penalty after declaration: 6lb.",
+     "Claims allowed: 7, 5, 3."
+    ],
+    "going": [
+     {
+      "at": "21/10/2026 at 7:32 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 4:10 PM",
+      "g": "Standard"
+     },
+     {
+      "at": "20/10/2026 at 7:45 AM",
+      "g": "Standard"
+     },
+     {
+      "at": "19/10/2026 at 8:02 AM",
+      "g": "Standard",
+      "decl": 1
+     },
+     {
+      "at": "18/10/2026 at 8:15 AM",
+      "g": "Standard to Slow"
+     },
+     {
+      "at": "17/10/2026 at 8:20 AM",
+      "g": "Standard to Slow"
+     }
+    ],
+    "wfa": {
+     "type": "flat",
+     "typeLabel": "Flat",
+     "dist": "1m 7f",
+     "band": "1m 7f",
+     "month": 9,
+     "single": false,
+     "singleNote": ""
+    }
+   }
+  }
+ ],
+ "wfaScale": {
+  "name": "Flat",
+  "source": "From BHA Flat weight for age scale (2025)",
+  "bands": {
+   "6f": {
+    "3": [
+     8,
+     7,
+     6,
+     5,
+     4,
+     3,
+     2,
+     2,
+     1,
+     1,
+     null,
+     null
+    ]
+   },
+   "7f": {
+    "3": [
+     10,
+     9,
+     8,
+     7,
+     6,
+     5,
+     4,
+     3,
+     2,
+     1,
+     null,
+     null
+    ]
+   },
+   "1m": {
+    "3": [
+     11,
+     10,
+     9,
+     8,
+     7,
+     6,
+     5,
+     4,
+     3,
+     1,
+     null,
+     null
+    ]
+   },
+   "1m 2f": {
+    "3": [
+     13,
+     12,
+     11,
+     10,
+     9,
+     8,
+     7,
+     6,
+     5,
+     3,
+     2,
+     1
+    ]
+   },
+   "1m 4f": {
+    "3": [
+     15,
+     14,
+     13,
+     12,
+     11,
+     10,
+     9,
+     8,
+     7,
+     6,
+     5,
+     4
+    ]
+   },
+   "1m 7f": {
+    "3": [
+     17,
+     16,
+     15,
+     14,
+     13,
+     12,
+     11,
+     10,
+     9,
+     8,
+     7,
+     6
+    ]
+   }
+  }
+ }
+}

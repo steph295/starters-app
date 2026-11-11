@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-tokens.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-typography.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/aliases.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/core/core.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/data/data.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/navigation/navigation.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/forms/forms.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; }
+a { color: rgb(0,47,113); }
+a:hover { color: rgb(0,38,92); }
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--background, rgb(248,250,252));font-family:var(--font-sans, Inter, -apple-system, sans-serif);color:var(--foreground, rgb(9,9,11));padding:20px 20px 32px">
+<div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:10px">
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-width:0">
+<div style="position:relative">
+<button onClick="{{ togglePicker }}" style="display:inline-flex;align-items:center;gap:10px;margin:0;padding:2px 6px 2px 0;border:none;background:transparent;font:inherit;cursor:pointer;color:var(--foreground, rgb(9,9,11))">
+<h1 style="margin:0;font-size:24px;line-height:32px;font-weight:600;letter-spacing:-0.6px">{{ p.name }}</h1>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="20" hint-size="20px,20px"></x-import>
+</button>
+<sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closePicker }}" style="position:fixed;inset:0;z-index:40"></div>
+<div role="listbox" style="position:absolute;top:calc(100% + 6px);left:0;z-index:50;min-width:300px;background:#fff;border:1px solid rgb(228,228,231);border-radius:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);padding:4px;display:flex;flex-direction:column">
+<div style="padding:8px 10px 6px;font-size:12px;line-height:16px;color:var(--muted-foreground, rgb(113,113,122))">Trainers with runners today</div>
+<sc-for list="{{ trainers }}" as="r" hint-placeholder-count="5">
+<button role="option" aria-selected="{{ r.selected }}" onClick="{{ r.select }}" style="display:grid;grid-template-columns:16px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border:none;border-radius:6px;background:{{ r.bg }};font:inherit;font-size:14px;line-height:20px;text-align:left;cursor:pointer;color:var(--foreground, rgb(9,9,11))" style-hover="background:var(--secondary, rgb(245,245,245))">
+<span style="color:var(--primary, rgb(0,47,113))">{{ r.tick }}</span>
+<span style="font-weight:600">{{ r.name }}</span>
+<span style="color:var(--muted-foreground, rgb(113,113,122));white-space:nowrap">{{ r.count }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<span style="font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">{{ p.licence }}</span>
+<button onClick="{{ openStaff }}" style="display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 4px;border:none;background:transparent;font:inherit;font-size:14px;line-height:20px;font-weight:500;color:var(--primary, rgb(0,47,113));cursor:pointer;text-decoration:underline;text-underline-offset:3px">View all staff</button>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="bha-btn bha-btn--default bha-btn-default">Generic enquiry</button></div>
+</div>
+<div style="background:var(--secondary, rgb(245,245,245));border-radius:10px">
+<button onClick="{{ toggleInfo }}" aria-expanded="{{ infoOpen }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;border:none;background:transparent;font:inherit;font-size:13px;line-height:20px;font-weight:600;cursor:pointer;color:var(--foreground, rgb(9,9,11));text-align:left">
+<span>Trainer information</span>
+<span style="display:inline-flex;align-items:center;gap:4px;font-weight:500;color:var(--muted-foreground, rgb(113,113,122))">{{ infoLabel }}<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ infoIcon }}" size="16" hint-size="16px,16px"></x-import></span>
+</button>
+<sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px 32px;padding:0 14px 10px">
+<sc-for list="{{ basics }}" as="b" hint-placeholder-count="6">
+<div style="font-size:13px;line-height:19px;min-width:0;overflow-wrap:anywhere"><span style="font-weight:600">{{ b.k }}:</span> <span>{{ b.v }}</span></div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{ topFiltersOpen }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Racecourse</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fCourse }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fCourse }}" onChange="{{ onFCourse }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Ascot</option><option>Newbury</option><option>Newmarket</option><option>York</option><option>Doncaster</option></select>
+</label>
+</div>
+</sc-if>
+
+
+<div class="bha-tabs" role="tablist" style="align-self:flex-start;max-width:100%;overflow-x:auto;scrollbar-width:none">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+<button class="bha-tab" role="tab" data-state="{{ t.state }}" aria-selected="{{ t.selected }}" onClick="{{ t.select }}">{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ showRunners }}" hint-placeholder-val="{{ true }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead><tr><th>Date</th><th>Time</th><th>Racecourse</th><th>Race</th><th>Horse</th><th>Jockey</th><th>Weight</th><th>Status</th></tr></thead>
+<tbody>
+<sc-for list="{{ runners }}" as="r" hint-placeholder-count="3">
+<tr>
+<td style="white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums">{{ r.dateLabel }}</td>
+<td style="white-space:nowrap;color:var(--custom-info-text, rgb(27,142,201))">{{ r.time }}</td>
+<td style="white-space:nowrap;font-weight:600;color:var(--destructive, rgb(231,0,11))">{{ r.course }}</td>
+<td style="white-space:nowrap">{{ r.race }}</td>
+<td style="white-space:nowrap;font-weight:600">{{ r.horse }}</td>
+<td style="white-space:nowrap">{{ r.jockey }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ r.weight }}</td>
+<td style="white-space:nowrap"><span class="bha-badge {{ r.tagClass }}">{{ r.tag }}</span></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer"><span>{{ runnerCount }}</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showSponsorship }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<sc-if value="{{ hasSp }}" hint-placeholder-val="{{ true }}">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead><tr><th>Sponsor</th><th style="width:160px">Start date</th><th style="width:160px">End date</th></tr></thead>
+<tbody>
+<sc-for list="{{ sponsors }}" as="sp" hint-placeholder-count="1">
+<tr><td style="font-weight:500">{{ sp.sponsor }}</td><td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ sp.start }}</td><td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ sp.end }}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</sc-if>
+<sc-if value="{{ noSp }}" hint-placeholder-val="{{ false }}"><div style="padding:16px;font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">No current sponsorship agreement.</div></sc-if>
+</div>
+</sc-if>
+
+</div>
+<sc-if value="{{ staffOpen }}" hint-placeholder-val="{{ false }}">
+<aside style="position:fixed;top:56px;right:0;bottom:0;width:min(380px,100vw);box-sizing:border-box;background:#fff;border-left:1px solid rgb(228,228,231);border-top:1px solid rgb(228,228,231);box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);z-index:60;display:flex;flex-direction:column">
+<div style="display:flex;align-items:flex-start;gap:12px;padding:16px;border-bottom:1px solid rgb(228,228,231)">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:12px;line-height:16px;color:var(--muted-foreground, rgb(113,113,122))">Staff</span>
+<span style="font-size:16px;line-height:24px;font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ p.name }}</span>
+<span style="font-size:13px;line-height:18px;color:var(--muted-foreground, rgb(113,113,122))">{{ staffCount }}</span>
+</div>
+<button onClick="{{ closeStaff }}" aria-label="Close" class="bha-btn bha-btn-outline" style="width:44px;height:44px;padding:0;justify-content:center"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+</div>
+<div style="padding:12px 16px;border-bottom:1px solid rgb(228,228,231)">
+<input class="bha-input" value="{{ staffQuery }}" onChange="{{ onStaffQuery }}" placeholder="Search by name" style="width:100%;box-sizing:border-box">
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:0 16px 16px">
+<sc-for list="{{ staff }}" as="m" hint-placeholder-count="6">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid rgb(228,228,231);font-size:14px;line-height:20px"><span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ m.name }}</span><span style="color:var(--muted-foreground, rgb(113,113,122))">{{ m.role }}</span></div>
+</sc-for>
+<sc-if value="{{ staffNone }}" hint-placeholder-val="{{ false }}"><p style="margin:12px 0 0;font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">No staff match that name.</p></sc-if>
+</div>
+</aside>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;trainer&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;knight&quot;,&quot;kirby&quot;,&quot;hughes&quot;,&quot;boughey&quot;,&quot;gosden&quot;,&quot;appleby&quot;,&quot;haggas&quot;],&quot;default&quot;:&quot;knight&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { tab: (function(){ try { return new URLSearchParams(window.location.search).get('tab'); } catch(e){ return null; } })() || this.props.tab || 'today' };
+
+  PROFILES = {
+    knight: { name:'William Knight', licence:'Flat trainer · licensed 2006', yard:'Angmering Park, West Sussex', mobile:'07700 900 128', email:'office@angmeringpark.co.uk', office:'01903 871188',
+      sponsors:[{sponsor:'Angmering Park Estate', start:'01/01/2026', end:'31/12/2026'}],
+      runners:[{date:'Today',time:'15:15',course:'Ascot',race:'R3 Nursery Hcap',horse:'SOLDIER OF THE SEA (IRE)',jockey:'Tom Marquand',weight:'9st 10lb'},{date:'Sat 26/09',time:'–',course:'Newmarket',race:'Nursery Hcap',horse:'SOLDIER OF THE SEA (IRE)',jockey:'TBC',weight:'–'},{date:'Sun 27/09',time:'–',course:'York',race:'Maiden Stakes',horse:'HARBOUR LIGHT',jockey:'TBC',weight:'–'}] },
+    kirby: { name:'Adam Kirby', licence:'Flat trainer · licensed 2024', yard:'Lambourn, Berkshire', mobile:'07700 900 356', email:'office@kirbyracing.co.uk', office:'01488 71540',
+      sponsors:[],
+      runners:[{date:'Today',time:'15:15',course:'Ascot',race:'R3 Nursery Hcap',horse:'BILL THE BULL (IRE)',jockey:'William Carson',weight:'9st 7lb'}] },
+    hughes: { name:'Richard Hughes', licence:'Flat trainer · licensed 2016', yard:'Weston House, Upper Lambourn', mobile:'07700 900 537', email:'office@westonhouse.co.uk', office:'01488 73422',
+      sponsors:[{sponsor:'Betfred', start:'01/04/2026', end:'31/03/2027'}],
+      runners:[{date:'Today',time:'15:15',course:'Ascot',race:'R3 Nursery Hcap',horse:'DUBAI CHARM (IRE)',jockey:'Rossa Ryan',weight:'9st 6lb'}] },
+    boughey: { name:'George Boughey', licence:'Flat trainer · licensed 2020', yard:'Saffron House, Newmarket', mobile:'07700 900 644', email:'office@saffronhouse.co.uk', office:'01638 668831',
+      sponsors:[],
+      runners:[{date:'Today',time:'15:15',course:'Ascot',race:'R3 Nursery Hcap',horse:'MIRZIMAAN (IRE)',jockey:'Jim Crowley',weight:'9st 3lb'}] },
+    gosden: { name:'John & Thady Gosden', licence:'Flat trainer · licensed 1989', yard:'Clarehaven Stables, Newmarket', mobile:'07700 900 221', email:'office@clarehousestables.co.uk', office:'01638 565400',
+      sponsors:[{sponsor:'Godolphin', start:'01/01/2025', end:'31/12/2026'}],
+      runners:[{date:'Today',time:'14:15',course:'Ascot',race:'R3',horse:'PALACE PIER',jockey:'Tom Marquand',weight:'8st 12lb'},{date:'Today',time:'15:35',course:'Ascot',race:'R5',horse:'BARADAR',jockey:'Oisin Murphy',weight:'9st 1lb'},{date:'Thu 18/09',time:'–',course:'Newbury',race:'Conditions',horse:'NOSTRUM',jockey:'TBC',weight:'–'}] },
+    appleby: { name:'Charlie Appleby', licence:'Flat trainer · licensed 2013', yard:'Moulton Paddocks, Newmarket', mobile:'07700 900 304', email:'racing@moultonpaddocks.co.uk', office:'01638 569900',
+      sponsors:[{sponsor:'Godolphin', start:'01/01/2025', end:'31/12/2026'}],
+      runners:[{date:'Today',time:'14:55',course:'Ascot',race:'R4',horse:'KINROSS',jockey:'Hollie Doyle',weight:'9st 0lb'}] },
+    haggas: { name:'William Haggas', licence:'Flat trainer · licensed 1987', yard:'Somerville Lodge, Newmarket', mobile:'07700 900 455', email:'office@somervillelodge.co.uk', office:'01638 667013',
+      sponsors:[],
+      runners:[{date:'Today',time:'14:15',course:'Ascot',race:'R3',horse:'TRILLIUM',jockey:'Jim Crowley',weight:'9st 0lb'},{date:'Today',time:'16:10',course:'Ascot',race:'R6',horse:'SANDRINE',jockey:'Tom Marquand',weight:'9st 2lb'}] }
+  };
+
+  TODAY = '2026-09-14';
+  STAFF = {
+    knight:['Ollie Grant|Assistant trainer','Lucy Tate|Head groom','Sam Boyd|Travelling head lad','Megan Hart|Groom','Tariq Shah|Groom','Ellie Moss|Work rider','Jack Dunn|Stable lad'],
+    kirby:['Jess Clarke|Head groom','Paul Nevin|Travelling head lad','Ryan Cole|Groom','Amber Lowe|Groom','Dan Price|Stable lad'],
+    hughes:['Kieran Shaw|Assistant trainer','Danny Wood|Head groom','Amy Sellar|Travelling head lass','Holly Burke|Groom','Sean Kelly|Groom','Priya Nair|Work rider'],
+    boughey:['Freya Lane|Assistant trainer','Ines Muller|Head groom','Joe Tanner|Travelling head lad','Callum Reid|Groom','Nadia Rossi|Groom'],
+    gosden:['Harry Webb|Assistant trainer','Sarah Dunne|Head groom','Mick Ryan|Travelling head lad','Chloe Price|Groom','Liam Foster|Groom','Rosa Diaz|Groom','Ben Ashby|Stable lad'],
+    appleby:['Alex Merriam|Assistant trainer','Tom Reilly|Head groom','Ellie Frost|Travelling head lass','Kate Rowe|Groom','Imran Ali|Groom','Zoe Hunt|Work rider'],
+    haggas:['Josh Hayes|Assistant trainer','Dan Petch|Head groom','Kate Lomas|Travelling head lass','Mia Stone|Groom','Lewis Barr|Groom','Ruth Quinn|Groom']
+  };
+
+  renderVals() {
+    var self = this, st = this.state, info = st.infoOpen !== false, filt = st.topFiltersOpen !== false;
+    return Object.assign(this._rv(), {
+      infoOpen: info, infoLabel: info ? 'Hide' : 'Show', infoIcon: info ? 'chevron-up' : 'chevron-down',
+      toggleInfo: function(){ self.setState({infoOpen: !info}); },
+      topFiltersOpen: filt, topFiltersLabel: filt ? 'Hide filters' : 'Filters',
+      toggleTopFilters: function(){ self.setState({topFiltersOpen: !filt}); }
+    });
+  }
+  _rv() {
+    var self = this, s = this.state, p = this.props;
+    var key = s.trainerKey || (function(){ try { return new URLSearchParams(window.location.search).get('trainer'); } catch(e){ return null; } })() || p.trainer || 'knight';
+    var rec = this.PROFILES[key] || this.PROFILES.knight;
+    var fCourse = s.fCourse || 'All';
+    var tabDefs = [{key:'today',label:'Runners today'},{key:'upcoming',label:'Entries'},{key:'sponsorship',label:'Sponsorship'}];
+    var tabs = tabDefs.map(function(t){ var on = s.tab === t.key; return { label:t.label, state:on?'active':'inactive', selected:on, select:function(){ self.setState({tab:t.key}); } }; });
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'], today = this.TODAY;
+    var list = rec.runners.filter(function(r){ return (s.tab === 'today' ? r.date === 'Today' : r.date !== 'Today') && (fCourse === 'All' || r.course === fCourse); }).map(function(r){
+      var iso = r.date === 'Today' ? today : '2026-' + r.date.split(' ')[1].split('/')[1] + '-' + r.date.split(' ')[1].split('/')[0];
+      var p = iso.split('-'), declared = Math.round((Date.parse(iso) - Date.parse(today)) / 86400000) <= 2;
+      return Object.assign({}, r, { dateLabel: parseInt(p[2],10) + ' ' + MONTHS[parseInt(p[1],10)-1], tag: declared ? 'Declared' : 'Entry', tagClass: declared ? 'bha-badge-default' : 'bha-badge-outline' });
+    });
+    var q = (s.staffQuery || '').trim().toLowerCase();
+    var staffAll = (this.STAFF[key] || []).map(function(x){ var a = x.split('|'); return {name:a[0], role:a[1]}; });
+    var staff = staffAll.filter(function(m){ return !q || m.name.toLowerCase().indexOf(q) >= 0; });
+    var todayCount = rec.runners.filter(function(r){ return r.date === 'Today'; }).length;
+    var trainers = Object.keys(this.PROFILES).map(function(k){ var t = self.PROFILES[k], on = k === key, n = t.runners.filter(function(r){ return r.date === 'Today'; }).length;
+      return { name:t.name, count: n + (n === 1 ? ' runner' : ' runners'), selected:on, tick:on?'✓':'', bg:on?'var(--accent, rgb(233,244,250))':'transparent', select:function(){ self.setState({trainerKey:k, pickerOpen:false}); } }; });
+    return {
+      p: rec, trainers: trainers, pickerOpen: !!s.pickerOpen,
+      togglePicker: function(){ self.setState({pickerOpen: !s.pickerOpen}); }, closePicker: function(){ self.setState({pickerOpen:false}); },
+      basics: [{k:'Licence',v:rec.licence},{k:'Yard',v:rec.yard},{k:'Mobile',v:rec.mobile},{k:'Office',v:rec.office},{k:'Email',v:rec.email},{k:'Runners today',v:String(todayCount)}],
+      staffOpen: !!s.staffOpen, staff: staff, staffNone: staff.length === 0, staffCount: staffAll.length + ' registered staff', staffQuery: s.staffQuery || '',
+      openStaff: function(){ self.setState({staffOpen:true}); }, closeStaff: function(){ self.setState({staffOpen:false, staffQuery:''}); },
+      onStaffQuery: function(ev){ self.setState({staffQuery: ev.target.value}); },
+      tabs: tabs, showRunners: s.tab !== 'sponsorship', showSponsorship: s.tab === 'sponsorship',
+      runners: list, runnerCount: 'Showing ' + list.length + (list.length === 1 ? ' runner' : ' runners'),
+      sponsors: rec.sponsors, hasSp: rec.sponsors.length > 0, noSp: rec.sponsors.length === 0,
+      fCourse: fCourse, onFCourse: function(ev){ self.setState({fCourse: ev.target.value}); }
+    };
+  }
+}
+</script>
+</body>
+</html>

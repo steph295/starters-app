@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-tokens.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/aliases.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/core/core.css">
+<style>
+body { margin: 0; }
+a { color: rgb(0,47,113); }
+a:hover { color: rgb(0,38,92); }
+</style>
+</helmet>
+<div style="min-height:100vh;background:rgb(248,250,252);font-family:Inter,-apple-system,sans-serif;color:rgb(9,9,11)">
+<header style="height:86px;background:#fff;border-bottom:1px solid rgb(242,242,242);display:flex;align-items:center;padding:0 16px;gap:14px">
+<a href="./Stewards View.dc.html" style="display:flex;flex-shrink:0"><img src="./assets/bha-logo.jpg" alt="BHA" style="width:109px;height:48px;object-fit:cover;object-position:left center"></a>
+<div>
+<div style="font-size:12px;color:rgb(113,113,122)">Ascot · 15 Sept 2026</div>
+<div style="font-size:19px;font-weight:600;letter-spacing:-0.4px">Enquiries</div>
+</div>
+<div style="flex:1"></div>
+<a href="./Stewards View.dc.html" style="font-size:14px;font-weight:600;text-decoration:none;flex-shrink:0">Back to dashboard</a>
+<a href="./Enquiry.dc.html?scenario=careless_multi" style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#fff;background:rgb(0,47,113);border-radius:10px;padding:11px 18px;text-decoration:none">
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="plus" size="16" hint-size="16px,16px"></x-import>New enquiry
+</a>
+</header>
+
+<main style="max-width:1080px;margin:0 auto;padding:28px 24px 64px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-wrap:wrap;gap:10px">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+<button onClick="{{ f.select }}" style="font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:9999px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.ink }};cursor:pointer">{{ f.label }}</button>
+</sc-for>
+</div>
+
+<div style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;overflow:hidden">
+<sc-for list="{{ rows }}" as="e" hint-placeholder-count="5">
+<a href="{{ e.href }}" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;padding:16px 20px;border-bottom:1px solid rgb(228,228,231);text-decoration:none;color:inherit" style-hover="background:rgb(250,250,250)">
+<div style="width:64px;flex-shrink:0">
+<div style="font-size:13px;font-weight:700;color:rgb(0,47,113)">{{ e.race }}</div>
+<div style="font-size:12px;color:rgb(113,113,122)">{{ e.time }}</div>
+</div>
+<div style="flex:1;min-width:220px">
+<div style="font-size:15px;font-weight:600">{{ e.subjects }}</div>
+<div style="font-size:13px;color:rgb(113,113,122);margin-top:2px">{{ e.offence }}</div>
+</div>
+<span style="font-size:12px;font-weight:700;border-radius:9999px;padding:5px 12px;background:{{ e.statusBg }};color:{{ e.statusInk }};white-space:nowrap">{{ e.status }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-right" size="16" hint-size="16px,16px"></x-import>
+</a>
+</sc-for>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { filter: 'all' };
+
+  ENQUIRIES = [
+    { race:'R3', time:'15:15', subjects:'Tom Marquand, Jim Crowley', offence:'Careless riding, (B)64', status:'Unpublished', scenario:'careless_multi' },
+    { race:'R3', time:'15:15', subjects:'William Haggas', offence:'Non-runner declared late', status:'Published', scenario:'fine_offence' },
+    { race:'R4', time:'15:55', subjects:'Baradar (horse)', offence:'Interference caused', status:'Draft', scenario:'horse_only' },
+    { race:'R2', time:'14:15', subjects:'Jim Crowley', offence:'Use of the whip, (B)59', status:'Published', scenario:'locked' }
+  ];
+
+  renderVals() {
+    var self = this, s = this.state;
+    var statusStyle = {
+      Draft:{bg:'rgb(244,244,245)',ink:'rgb(82,82,91)'},
+      Unpublished:{bg:'rgb(255,247,230)',ink:'rgb(146,90,0)'},
+      Published:{bg:'rgb(233,246,239)',ink:'rgb(0,120,63)'}
+    };
+    var filterDefs = ['all','Draft','Unpublished','Published'];
+    var filters = filterDefs.map(function(f){
+      var on = s.filter === f;
+      return { label: f==='all'?'All':f, bg: on?'rgb(0,47,113)':'transparent', ink: on?'#fff':'rgb(9,9,11)', border: on?'transparent':'rgb(228,228,231)',
+        select:function(){ self.setState({filter:f}); } };
+    });
+    var list = this.ENQUIRIES.filter(function(e){ return s.filter==='all' || e.status===s.filter; });
+    var rows = list.map(function(e){
+      var st = statusStyle[e.status];
+      return { race:e.race, time:e.time, subjects:e.subjects, offence:e.offence, status:e.status,
+        statusBg:st.bg, statusInk:st.ink, href:'./Enquiry.dc.html?scenario='+e.scenario };
+    });
+    return { filters: filters, rows: rows };
+  }
+}
+</script>
+</body>
+</html>

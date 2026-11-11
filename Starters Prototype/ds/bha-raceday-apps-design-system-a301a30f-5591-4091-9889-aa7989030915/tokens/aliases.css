@@ -1,0 +1,92 @@
+/* Px-valued aliases over the raw Figma Variables in fig-tokens.css.
+   fig-tokens.css stores FLOAT variables unitless (--spacing-2: 8). Everything below
+   multiplies by 1px so components can consume tokens directly in CSS. Values are the
+   file's values — nothing is rounded or re-scaled. */
+:root {
+  /* spacing scale */
+  --sp-px: calc(var(--spacing-px) * 1px);
+  --sp-0: 0px;
+  --sp-0-5: calc(var(--spacing-0-5) * 1px);
+  --sp-1: calc(var(--spacing-1) * 1px);
+  --sp-1-5: calc(var(--spacing-1-5) * 1px);
+  --sp-2: calc(var(--spacing-2) * 1px);
+  --sp-2-5: calc(var(--spacing-2-5) * 1px);
+  --sp-3: calc(var(--spacing-3) * 1px);
+  --sp-3-5: calc(var(--spacing-3-5) * 1px);
+  --sp-4: calc(var(--spacing-4) * 1px);
+  --sp-5: calc(var(--spacing-5) * 1px);
+  --sp-6: calc(var(--spacing-6) * 1px);
+  --sp-7: calc(var(--spacing-7) * 1px);
+  --sp-8: calc(var(--spacing-8) * 1px);
+  --sp-9: calc(var(--spacing-9) * 1px);
+  --sp-10: calc(var(--spacing-10) * 1px);
+  --sp-12: calc(var(--spacing-12) * 1px);
+  --sp-14: calc(var(--spacing-14) * 1px);
+  --sp-16: calc(var(--spacing-16) * 1px);
+  --sp-20: calc(var(--spacing-20) * 1px);
+  --sp-24: calc(var(--spacing-24) * 1px);
+  --sp-40: calc(var(--spacing-40) * 1px);
+
+  /* radii */
+  --r-xs: calc(var(--radius-xs) * 1px);
+  --r-sm: calc(var(--radius-sm) * 1px);
+  --r-md: calc(var(--radius-md) * 1px);
+  --r-lg: calc(var(--radius-lg) * 1px);
+  --r-xl: calc(var(--radius-xl) * 1px);
+  --r-2xl: calc(var(--radius-2xl) * 1px);
+  --r-3xl: calc(var(--radius-3xl) * 1px);
+  --r-4xl: calc(var(--radius-4xl) * 1px);
+  --r-full: 9999px;
+
+  /* type scale */
+  --fs-xs: calc(var(--text-xs-size) * 1px);   --lh-xs: calc(var(--text-xs-lh) * 1px);
+  --fs-sm: calc(var(--text-sm-size) * 1px);   --lh-sm: calc(var(--text-sm-lh) * 1px);
+  --fs-base: calc(var(--text-base-size) * 1px); --lh-base: calc(var(--text-base-lh) * 1px);
+  --fs-lg: calc(var(--text-lg-size) * 1px);   --lh-lg: calc(var(--text-lg-lh) * 1px);
+  --fs-xl: calc(var(--text-xl-size) * 1px);   --lh-xl: calc(var(--text-xl-lh) * 1px);
+  --fs-2xl: calc(var(--text-2xl-size) * 1px); --lh-2xl: calc(var(--text-2xl-lh) * 1px);
+  --fs-3xl: calc(var(--text-3xl-size) * 1px); --lh-3xl: calc(var(--text-3xl-lh) * 1px);
+  --fs-4xl: calc(var(--text-4xl-size) * 1px); --lh-4xl: calc(var(--text-4xl-lh) * 1px);
+  --fs-5xl: calc(var(--text-5xl-size) * 1px); --lh-5xl: calc(var(--text-5xl-lh) * 1px);
+  --fs-6xl: calc(var(--text-6xl-size) * 1px); --lh-6xl: calc(var(--text-6xl-lh) * 1px);
+
+  /* families — Style collection: font/family/* */
+  --font-sans: var(--font-family-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-family-heading), "Inter", sans-serif;
+  --font-mono: var(--font-family-mono), ui-monospace, Menlo, monospace;
+  --font-serif: var(--font-family-serif), Georgia, serif;
+  /* Geist ships in the file alongside Inter as the shadcn default sans */
+  --font-geist: "Geist", var(--font-sans);
+  /* the pill label on the file cover */
+  --font-label: "DIN Next LT Pro", var(--font-sans);
+
+  /* elevation — Style collection: shadow/* */
+  --shadow-xs: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+
+  /* brand — read off the file cover and the Mode collection */
+  --bha-navy: rgb(0,47,113);
+  --bha-navy-deep: rgb(31,50,118);
+  --bha-red: rgb(216,0,39);
+  --bha-red-cover: rgb(218,32,55);
+  --bha-blue: rgb(27,142,201);
+  --bha-yellow: rgb(255,218,68);
+  --bha-green: rgb(0,151,79);
+  --bha-plum: rgb(111,32,117);
+  /* app canvas behind the nav bar in the BHA frames */
+  --bha-canvas: rgb(248,250,252);
+  --bha-hairline: rgb(242,242,242);
+
+  /* motion */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1); /* @kind other */
+  --dur-fast: 120ms; /* @kind other */
+  --dur-base: 180ms; /* @kind other */
+  --dur-slow: 260ms; /* @kind other */
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: var(--bha-blue); text-decoration: underline; }

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:fixed;inset:0;z-index:200;background:rgb(248,250,252);display:flex;flex-direction:column;font-family:Inter,-apple-system,sans-serif;color:rgb(9,9,11)">
+<div style="background:#fff;border-bottom:1px solid rgb(228,228,231);padding:16px 24px;display:flex;flex-direction:column;gap:12px;flex-shrink:0">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">Write notes</span>
+<span style="font-size:20px;line-height:28px;font-weight:600;letter-spacing:-0.4px;text-wrap:pretty">{{ raceTitle }}</span>
+<span style="font-size:14px;line-height:20px;color:rgb(113,113,122)">{{ raceSub }}</span>
+</div>
+<button type="button" onClick="{{ close }}" style="flex-shrink:0;display:flex;align-items:center;gap:6px;height:36px;padding:0 12px;border:1px solid rgb(228,228,231);border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.05);font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer" style-hover="background:rgb(244,244,245)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import>Close</button>
+</div>
+<div role="tablist" aria-label="Race" style="display:flex;align-items:center;gap:6px;overflow-x:auto">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="7">
+<button type="button" role="tab" aria-selected="{{ t.current }}" onClick="{{ t.select }}" style="flex-shrink:0;padding:3px 9px;font:inherit;font-size:12px;line-height:18px;font-weight:{{ t.weight }};font-variant-numeric:tabular-nums;background:{{ t.bg }};border:1px solid {{ t.border }};border-radius:4px;color:{{ t.color }};cursor:pointer">{{ t.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow:auto;padding:16px 24px 112px">
+<div style="background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;overflow:hidden;min-width:760px">
+<div style="display:grid;grid-template-columns:minmax(220px,2fr) 104px minmax(200px,3fr) 112px 64px;column-gap:16px;align-items:center;height:40px;padding:0 16px;border-bottom:1px solid rgb(228,228,231);font-size:12px;line-height:16px;font-weight:500;color:rgb(113,113,122)">
+<span>Jockey / horse</span><span>Sampled</span><span>Horse comments</span><span>Status</span><span>Result</span>
+</div>
+<div ref="{{ contentRef }}" style="position:relative">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:minmax(220px,2fr) 104px minmax(200px,3fr) 112px 64px;column-gap:16px;align-items:start;padding:12px 16px;border-bottom:1px solid rgb(228,228,231);font-size:14px;line-height:20px">
+<div style="display:flex;gap:10px;align-items:flex-start;min-width:0">
+<span style="flex-shrink:0;width:20px;font-size:16px;line-height:20px;font-weight:700;color:rgb(0,47,113);font-variant-numeric:tabular-nums">{{ r.no }}</span>
+<sc-if value="{{ r.hasSpec }}" hint-placeholder-val="{{ true }}"><span style="flex-shrink:0;display:inline-flex"><dc-import name="Silk" spec="{{ r.spec }}" size="36" label="{{ r.colours }}" hint-size="36px,36px"></dc-import></span></sc-if><sc-if value="{{ r.noSpec }}" hint-placeholder-val="{{ false }}"><span style="flex-shrink:0;width:32px;height:32px;border-radius:8px;border:1px solid rgb(228,228,231);background:{{ r.silk }};box-sizing:border-box"></span></sc-if>
+<div style="min-width:0;display:flex;flex-direction:column">
+<span style="font-weight:600;color:rgb(0,47,113)">{{ r.horse }}</span>
+<span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ r.jockey }}</span>
+</div>
+</div>
+<span style="font-size:13px;line-height:20px;color:rgb(63,63,70);font-variant-numeric:tabular-nums">{{ r.sampled }}</span>
+<div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+<sc-for list="{{ r.comments }}" as="c" hint-placeholder-count="0">
+<div style="display:flex;flex-direction:column;opacity:{{ c.opacity }}">
+<span style="font-size:12px;line-height:16px;color:rgb(113,113,122)">{{ c.type }}</span>
+<span style="font-size:13px;line-height:18px;text-wrap:pretty">{{ c.text }}</span>
+</div>
+</sc-for>
+<sc-if value="{{ r.noComments }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:rgb(161,161,170)">None</span></sc-if>
+</div>
+<span><span style="display:inline-block;font-size:12px;line-height:16px;font-weight:500;padding:2px 8px;border-radius:26px;background:{{ r.statusBg }};color:{{ r.statusInk }};white-space:nowrap">{{ r.status }}</span></span>
+<span style="font-weight:600;font-variant-numeric:tabular-nums">{{ r.result }}</span>
+</div>
+</sc-for>
+<sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+<div style="padding:32px 16px;font-size:14px;line-height:20px;color:rgb(113,113,122)">No runners loaded for this race. You can still write notes here.</div>
+</sc-if>
+<canvas ref="{{ canvasRef }}" onPointerDown="{{ down }}" onPointerMove="{{ move }}" onPointerUp="{{ up }}" onPointerLeave="{{ up }}" style="position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:{{ touchAction }};pointer-events:{{ pointerEvents }}"></canvas>
+</div>
+</div>
+</div>
+<div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:210;background:#fff;border:1px solid rgb(228,228,231);border-radius:14px;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -4px rgba(0,0,0,0.1);display:flex;align-items:center;gap:12px;padding:8px 10px 8px 14px;max-width:calc(100vw - 32px);overflow-x:auto;box-sizing:border-box">
+<label style="flex-shrink:0;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;line-height:20px;font-weight:500;white-space:nowrap">
+<span class="bha-switch" data-checked="{{ annAttr }}" style="position:relative">
+<input type="checkbox" checked="{{ annotating }}" onChange="{{ toggleAnnotate }}" aria-label="Drawing" style="position:absolute;inset:0;opacity:0;margin:0;cursor:pointer">
+<span class="bha-switch__thumb"></span>
+</span>{{ annLabel }}
+</label>
+<span style="width:1px;height:20px;background:rgb(228,228,231);flex-shrink:0"></span>
+<div class="bha-toggle-group" role="group" aria-label="Tool" style="flex-shrink:0">
+<button type="button" class="bha-toggle bha-toggle--sm" data-state="{{ penState }}" onClick="{{ pickPen }}" aria-label="Pen"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="pencil" size="14" hint-size="14px,14px"></x-import>Pen</button>
+<button type="button" class="bha-toggle bha-toggle--sm" data-state="{{ eraserState }}" onClick="{{ pickEraser }}" aria-label="Eraser">Eraser</button>
+</div>
+<div role="radiogroup" aria-label="Ink colour" style="display:flex;gap:10px;align-items:center;flex-shrink:0;padding:0 2px">
+<sc-for list="{{ swatches }}" as="sw" hint-placeholder-count="6">
+<button type="button" onClick="{{ sw.pick }}" aria-label="Ink {{ sw.hex }}" style="width:20px;height:20px;border-radius:9999px;padding:0;border:none;cursor:pointer;background:{{ sw.hex }};box-shadow:{{ sw.ring }}"></button>
+</sc-for>
+</div>
+<span style="width:1px;height:20px;background:rgb(228,228,231);flex-shrink:0"></span>
+<button type="button" onClick="{{ clear }}" style="flex-shrink:0;display:flex;align-items:center;gap:6px;height:36px;padding:0 10px;border:none;border-radius:10px;background:transparent;font:inherit;font-size:14px;font-weight:500;color:rgb(9,9,11);cursor:pointer" style-hover="background:rgb(244,244,245)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="Trash2" size="16" hint-size="16px,16px"></x-import>Clear</button>
+<button type="button" onClick="{{ save }}" style="flex-shrink:0;display:flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:none;border-radius:10px;background:rgb(0,47,113);font:inherit;font-size:14px;font-weight:500;color:#fff;cursor:pointer;white-space:nowrap" style-hover="background:rgb(31,50,118)"><sc-if value="{{ savedTick }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="check" size="16" hint-size="16px,16px"></x-import></sc-if>{{ saveLabel }}</button>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;races&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Array&lt;{time:string,title:string,cls?:string,runnerCount?:number,runners:any[]}&gt;&quot;},&quot;venue&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ascot&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;startIndex&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;tsType&quot;:&quot;number&quot;},&quot;scope&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { idx: null, annotating: true, tool: 'pen', color: '#111111', saved: false };
+  SW = ['#111111', '#1d4ed8', '#dc2626', '#16794f', '#94a3b8', '#475569'];
+  idx() { const n = (this.props.races || []).length; const i = this.state.idx != null ? this.state.idx : (this.props.startIndex || 0); return Math.max(0, Math.min(i, Math.max(0, n - 1))); }
+  key(i) { const sc = this.props.scope; return 'stewards-note-' + (sc ? sc + '-' : '') + i; }
+  componentDidMount() {
+    this._ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => this.fit(true)) : null;
+    if (this._ro && this.content) this._ro.observe(this.content);
+    this._onResize = () => this.fit(true);
+    window.addEventListener('resize', this._onResize);
+    window.dispatchEvent(new CustomEvent('bha-notes', { detail: true }));
+  }
+  componentDidUpdate(prev) {
+    if (prev.session !== this.props.session || prev.startIndex !== this.props.startIndex) {
+      if (this.state.idx != null && this.state.idx !== this.props.startIndex && !this.blank()) this.store(this.state.idx);
+      this.setState({ idx: null, saved: false }, () => this.load(this.idx()));
+    }
+  }
+  componentWillUnmount() { window.dispatchEvent(new CustomEvent('bha-notes', { detail: false })); if (this._ro) this._ro.disconnect(); window.removeEventListener('resize', this._onResize); clearTimeout(this._t); }
+  setCanvas = (el) => { if (el && el !== this.cv) { this.cv = el; this.fit(false); this.load(this.idx()); } };
+  setContent = (el) => { if (el && el !== this.content) { this.content = el; if (this._ro) this._ro.observe(el); } };
+  fit(keep) {
+    const cv = this.cv; if (!cv) return;
+    const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
+    if (!w || !h || (cv.width === w && cv.height === h)) return;
+    const snap = keep && cv.width && cv.height && !this.blank() ? cv.toDataURL() : null;
+    cv.width = w; cv.height = h;
+    const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (snap) this.paint(snap); else if (keep) this.load(this.idx());
+  }
+  paint(src) {
+    const cv = this.cv; if (!cv) return;
+    const img = new Image();
+    img.onload = () => { const ctx = cv.getContext('2d'), dpr = window.devicePixelRatio || 1; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.drawImage(img, 0, 0); ctx.restore(); };
+    img.src = src;
+  }
+  wipe() { const cv = this.cv; if (!cv) return; const ctx = cv.getContext('2d'); ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.restore(); }
+  load(i) { this.wipe(); let d = null; try { d = localStorage.getItem(this.key(i)); } catch (e) {} if (d) this.paint(d); }
+  blank() {
+    const cv = this.cv; if (!cv || !cv.width || !cv.height) return true;
+    const px = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data;
+    for (let i = 3; i < px.length; i += 4) if (px[i] !== 0) return false;
+    return true;
+  }
+  store(i) { if (!this.cv) return; try { if (this.blank()) localStorage.removeItem(this.key(i)); else localStorage.setItem(this.key(i), this.cv.toDataURL()); } catch (e) {} }
+  pt(e) { const r = this.cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  down = (e) => { if (!this.state.annotating || !this.cv) return; try { this.cv.setPointerCapture(e.pointerId); } catch (x) {} this.last = this.pt(e); this.drawing = true; this.seg(this.last, this.last); };
+  move = (e) => { if (!this.drawing) return; const p = this.pt(e); this.seg(this.last, p); this.last = p; };
+  up = () => { this.drawing = false; this.last = null; };
+  seg(a, b) {
+    const ctx = this.cv.getContext('2d'), er = this.state.tool === 'eraser';
+    ctx.globalCompositeOperation = er ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = this.state.color; ctx.lineWidth = er ? 22 : 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x + (a === b ? 0.01 : 0), b.y); ctx.stroke();
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  renderVals() {
+    const s = this.state, races = this.props.races || [], i = this.idx(), R = races[i] || { time: '', title: '', runners: [] };
+    const venue = this.props.venue || '', runners = R.runners || [];
+    const sub = [venue, (R.runnerCount != null ? R.runnerCount : runners.length) + ' runners', R.cls ? 'Class ' + R.cls : ''].filter(Boolean).join(' \u00b7 ');
+    const navy = 'rgb(0,47,113)';
+    return {
+      contentRef: this.setContent, canvasRef: this.setCanvas, down: this.down, move: this.move, up: this.up,
+      raceTitle: (R.time ? R.time + ' \u00b7 ' : '') + (R.title || ''), raceSub: sub,
+      tabs: races.map((r, j) => { const on = j === i; return { label: r.time, current: on ? 'true' : 'false', bg: on ? navy : '#fff', border: on ? navy : 'rgb(228,228,231)', color: on ? '#fff' : 'rgb(113,113,122)', weight: on ? 700 : 500,
+        select: () => { if (j === i) return; if (!this.blank()) this.store(i); this.setState({ idx: j, saved: false }, () => this.load(j)); if (this.props.onRaceChange) this.props.onRaceChange(j); } }; }),
+      rows: runners.map(r => ({ ...r, comments: r.comments || [], noComments: !(r.comments && r.comments.length), silk: r.silk || 'rgb(244,244,245)', hasSpec: !!r.spec, noSpec: !r.spec, spec: r.spec || {}, colours: r.colours || 'Silks',
+        sampled: r.sampled || '\u2013', status: r.status || 'Declared', statusBg: r.statusBg || 'rgb(245,245,245)', statusInk: r.statusInk || 'rgb(63,63,70)', result: r.result || '\u2013' })),
+      noRows: !runners.length,
+      pointerEvents: s.annotating ? 'auto' : 'none', touchAction: s.annotating ? 'none' : 'auto',
+      annotating: s.annotating,
+      toggleAnnotate: () => this.setState({ annotating: !s.annotating }),
+      annAttr: s.annotating ? 'true' : 'false', annLabel: s.annotating ? 'Drawing on' : 'Drawing paused', listHint: s.annotating ? 'Pause drawing to scroll the card.' : '',
+      penState: s.tool === 'pen' ? 'on' : 'off', eraserState: s.tool === 'eraser' ? 'on' : 'off',
+      pickPen: () => this.setState({ tool: 'pen' }), pickEraser: () => this.setState({ tool: 'eraser' }),
+      swatches: this.SW.map(hex => ({ hex, ring: hex === s.color && s.tool === 'pen' ? '0 0 0 2px #fff, 0 0 0 4px ' + navy : 'inset 0 0 0 1px rgba(0,0,0,0.12)', pick: () => this.setState({ color: hex, tool: 'pen' }) })),
+      clear: () => this.wipe(),
+      save: () => { this.store(i); this.setState({ saved: true }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ saved: false }), 1500); },
+      saveLabel: s.saved ? 'Saved' : 'Save note', savedTick: !!s.saved,
+      close: () => { if (!this.blank()) this.store(i); if (this.props.onClose) this.props.onClose(); }
+    };
+  }
+}
+</script>
+</body>
+</html>

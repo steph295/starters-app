@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-tokens.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-typography.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/aliases.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/core/core.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/data/data.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/navigation/navigation.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/forms/forms.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; }
+a { color: rgb(0,47,113); }
+a:hover { color: rgb(0,38,92); }
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--background, rgb(248,250,252));font-family:var(--font-sans, Inter, -apple-system, sans-serif);color:var(--foreground, rgb(9,9,11));padding:20px 20px 32px">
+<div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:10px">
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-width:0">
+<div style="position:relative">
+<button onClick="{{ toggleRunners }}" style="display:inline-flex;align-items:center;gap:10px;margin:0;padding:2px 6px 2px 0;border:none;background:transparent;font:inherit;cursor:pointer;color:var(--foreground, rgb(9,9,11))">
+<h1 style="margin:0;font-size:24px;line-height:32px;font-weight:600;letter-spacing:-0.6px">{{ p.name }}</h1>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="20" hint-size="20px,20px"></x-import>
+</button>
+<sc-if value="{{ runnersOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeRunners }}" style="position:fixed;inset:0;z-index:40"></div>
+<div role="listbox" style="position:absolute;top:calc(100% + 6px);left:0;z-index:50;min-width:340px;background:#fff;border:1px solid rgb(228,228,231);border-radius:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);padding:4px;display:flex;flex-direction:column">
+<div style="padding:8px 10px 6px;font-size:12px;line-height:16px;color:var(--muted-foreground, rgb(113,113,122))">{{ raceLabel }}</div>
+<sc-for list="{{ runners }}" as="r" hint-placeholder-count="6">
+<button role="option" aria-selected="{{ r.selected }}" onClick="{{ r.select }}" style="display:grid;grid-template-columns:16px 20px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border:none;border-radius:6px;background:{{ r.bg }};font:inherit;font-size:14px;line-height:20px;text-align:left;cursor:pointer;color:var(--foreground, rgb(9,9,11))" style-hover="background:var(--secondary, rgb(245,245,245))">
+<span style="color:var(--primary, rgb(0,47,113))">{{ r.tick }}</span>
+<span style="font-variant-numeric:tabular-nums;color:var(--muted-foreground, rgb(113,113,122))">{{ r.no }}</span>
+<span style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.jockey }}</span>
+<span style="color:var(--muted-foreground, rgb(113,113,122));white-space:nowrap">{{ r.horse }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<span style="font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">{{ p.licence }}</span>
+<span style="font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">{{ currentRunnerLabel }}</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="bha-btn bha-btn--default bha-btn-default">Generic enquiry</button></div>
+</div>
+<div style="background:var(--secondary, rgb(245,245,245));border-radius:10px">
+<button onClick="{{ toggleInfo }}" aria-expanded="{{ infoOpen }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;border:none;background:transparent;font:inherit;font-size:13px;line-height:20px;font-weight:600;cursor:pointer;color:var(--foreground, rgb(9,9,11));text-align:left">
+<span>Rider information</span>
+<span style="display:inline-flex;align-items:center;gap:4px;font-weight:500;color:var(--muted-foreground, rgb(113,113,122))">{{ infoLabel }}<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ infoIcon }}" size="16" hint-size="16px,16px"></x-import></span>
+</button>
+<sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2px 32px;padding:0 14px 6px;max-width:960px">
+<sc-for list="{{ basics }}" as="b" hint-placeholder-count="10">
+<div style="font-size:13px;line-height:19px;min-width:0;overflow-wrap:anywhere"><span style="font-weight:600">{{ b.k }}:</span> <span style="color:{{ b.color }}">{{ b.v }}</span></div>
+</sc-for>
+</div>
+<button onClick="{{ toggleMore }}" aria-expanded="{{ moreOpen }}" style="display:inline-flex;align-items:center;gap:4px;margin:0 0 8px;padding:0 14px;border:none;background:transparent;font:inherit;font-size:13px;line-height:20px;font-weight:500;cursor:pointer;color:var(--primary, rgb(0,47,113))">{{ moreLabel }}<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ moreIcon }}" size="16" hint-size="16px,16px"></x-import></button>
+</sc-if>
+</div>
+<sc-if value="{{ showEqFilters }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+<div role="group" aria-label="Date range" style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Dates</span>
+<input aria-label="From date" type="date" value="{{ eqFrom }}" onChange="{{ onEqFrom }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+<span aria-hidden="true" style="color:var(--muted-foreground, rgb(113,113,122))">–</span>
+<input aria-label="To date" type="date" value="{{ eqTo }}" onChange="{{ onEqTo }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+</div>
+<sc-for list="{{ eqMulti }}" as="m" hint-placeholder-count="6">
+<div style="position:relative">
+<button onClick="{{ m.toggle }}" aria-haspopup="listbox" aria-expanded="{{ m.open }}" style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid {{ m.border }};border-radius:8px;background:{{ m.bg }};font:inherit;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap;color:var(--foreground, rgb(9,9,11))">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">{{ m.label }}</span>
+<span style="font-weight:600">{{ m.summary }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+</button>
+<sc-if value="{{ m.open }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ m.close }}" style="position:fixed;inset:0;z-index:40"></div>
+<div role="listbox" aria-multiselectable="true" style="position:absolute;top:calc(100% + 4px);left:0;z-index:50;min-width:240px;max-height:300px;overflow-y:auto;background:#fff;border:1px solid rgb(228,228,231);border-radius:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);padding:4px;display:flex;flex-direction:column">
+<sc-for list="{{ m.options }}" as="o" hint-placeholder-count="4">
+<button role="option" aria-selected="{{ o.checked }}" onClick="{{ o.toggle }}" style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:none;border-radius:6px;background:transparent;font:inherit;font-size:13px;line-height:18px;text-align:left;cursor:pointer;color:var(--foreground, rgb(9,9,11))" style-hover="background:var(--secondary, rgb(245,245,245))">
+<span style="flex:none;width:16px;height:16px;box-sizing:border-box;border-radius:4px;border:1px solid {{ o.boxBorder }};background:{{ o.boxBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">{{ o.tick }}</span>
+<span>{{ o.label }}</span>
+</button>
+</sc-for>
+<sc-if value="{{ m.any }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ m.clear }}" style="margin-top:4px;padding:7px 10px;border:none;border-top:1px solid rgb(228,228,231);background:transparent;font:inherit;font-size:13px;line-height:18px;text-align:left;cursor:pointer;color:var(--primary, rgb(0,47,113))">Clear selection</button>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<div style="margin-left:auto;display:flex;align-items:baseline;gap:8px;padding:3px 12px;border-radius:8px;background:var(--accent, rgb(233,244,250))">
+<span style="font-size:13px;line-height:20px;color:var(--foreground, rgb(9,9,11))">Suspension days</span>
+<span style="font-size:18px;line-height:24px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--primary, rgb(0,47,113))">{{ eqDays }}</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ topFiltersOpen }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Race type</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fRaceType }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fRaceType }}" onChange="{{ onFRaceType }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Flat</option><option>Chase</option><option>Hurdle</option><option>NH Flat</option><option>Irish NH Flat</option><option>Pt-Pt</option></select>
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Country</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fCountry }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fCountry }}" onChange="{{ onFCountry }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Argentina</option><option>Australia</option><option>Austria</option><option>Bahrain</option><option>Barbados</option><option>Belgium</option><option>Brazil</option><option>Canada</option><option>Chile</option><option>China</option><option>Czech Republic</option><option>Denmark</option><option>France</option><option>Germany</option><option>Great Britain</option><option>Greece</option><option>Hong Kong</option><option>Hungary</option><option>India</option><option>Ireland</option><option>Italy</option><option>Japan</option><option>UAE</option><option>USA</option></select>
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Racecourse</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fCourse }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fCourse }}" onChange="{{ onFCourse }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Ascot</option><option>Newmarket</option><option>Doncaster</option></select>
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Finishing position</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fFinish }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fFinish }}" onChange="{{ onFFinish }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Places</option><option>Wins</option></select>
+</label>
+<div role="group" aria-label="Date range" style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Dates</span>
+<input aria-label="From date" type="date" value="{{ perfFrom }}" onChange="{{ onPerfFrom }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+<span aria-hidden="true" style="color:var(--muted-foreground, rgb(113,113,122))">–</span>
+<input aria-label="To date" type="date" value="{{ perfTo }}" onChange="{{ onPerfTo }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+</div>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Distance (f)</span>
+<input type="number" placeholder="Any" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums;width:52px">
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">View as</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fViewAs }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fViewAs }}" onChange="{{ onFViewAs }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>Rider</option><option>Trainer</option></select>
+</label>
+</div>
+</sc-if>
+
+
+<div class="bha-tabs" role="tablist" style="align-self:flex-start;max-width:100%;overflow-x:auto;scrollbar-width:none">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+<button class="bha-tab" role="tab" data-state="{{ t.state }}" aria-selected="{{ t.selected }}" onClick="{{ t.select }}">{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ showEnquiries }}" hint-placeholder-val="{{ true }}">
+<div class="bha-datatable">
+
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr>
+<th>Date</th>
+<th>Race</th>
+<th>Horse</th>
+<th>Offence</th>
+<th>Outcome</th>
+<th>Penalty</th>
+<th style="text-align:right">Days</th>
+<th style="text-align:right;width:72px"></th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ enquiries }}" as="e" hint-placeholder-count="3">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ e.date }}</td>
+<td style="font-variant-numeric:tabular-nums">{{ e.race }}</td>
+<td style="font-weight:500">{{ e.horse }}</td>
+<td>{{ e.offence }}</td>
+<td style="white-space:nowrap"><span class="bha-badge {{ e.outcomeClass }}">{{ e.outcome }}</span></td>
+<td>{{ e.penalty }}</td>
+<td style="text-align:right;font-variant-numeric:tabular-nums">{{ e.daysLabel }}</td>
+<td style="text-align:right;white-space:nowrap"><button class="bha-btn bha-btn--sm bha-btn-outline">View</button></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<sc-if value="{{ eqNone }}" hint-placeholder-val="{{ false }}"><div style="padding:16px;font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">No enquiries match these filters.</div></sc-if>
+<div class="bha-datatable__footer">
+<span>{{ footerCount }}</span>
+<div style="display:flex;gap:8px">
+<button class="bha-btn bha-btn--sm bha-btn-outline" disabled="{{ true }}">Previous</button>
+<button class="bha-btn bha-btn--sm bha-btn-outline" disabled="{{ true }}">Next</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showNext }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr>
+<th>Date</th>
+<th>Time</th>
+<th>Racecourse</th>
+<th>Horse</th>
+<th>Weight</th>
+<th>Trainer</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ nextRides }}" as="b" hint-placeholder-count="3">
+<tr>
+<td style="white-space:nowrap">{{ b.date }}</td>
+<td style="white-space:nowrap;color:var(--custom-info-text, rgb(27,142,201))">{{ b.time }}</td>
+<td style="white-space:nowrap;font-weight:600;color:var(--destructive, rgb(231,0,11))">{{ b.course }}</td>
+<td style="font-weight:600">{{ b.horse }}</td>
+<td style="white-space:nowrap">{{ b.weight }}</td>
+<td style="white-space:nowrap">{{ b.trainer }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showRecent }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr><th>Race</th><th>Date</th><th>Stewards' flag</th><th>Note</th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ previousRides }}" as="r" hint-placeholder-count="3">
+<tr>
+<td style="white-space:nowrap;font-weight:600">{{ r.t }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ r.w }}</td>
+<td style="white-space:nowrap"><span class="bha-badge {{ r.flagClass }}">{{ r.flagLabel }}</span></td>
+<td style="color:var(--muted-foreground, rgb(113,113,122))">{{ r.note }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showPerformance }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="display:flex;flex-wrap:wrap;gap:6px 20px;align-items:center;padding:10px 16px;border-bottom:1px solid rgb(228,228,231);font-size:13px;line-height:20px">
+<sc-for list="{{ perfStats }}" as="ps" hint-placeholder-count="4"><span><span style="color:var(--muted-foreground, rgb(113,113,122))">{{ ps.k }}</span> <strong style="font-weight:600;font-variant-numeric:tabular-nums">{{ ps.v }}</strong></span></sc-for>
+<button class="bha-btn bha-btn--sm bha-btn-outline" style="margin-left:auto">Export</button>
+</div>
+<div style="overflow-x:auto">
+<table class="bha-table" style="font-size:13px">
+<thead>
+<tr><th>Date</th><th>Type</th><th>Race details</th><th>Class</th><th>Horse</th><th>Headgear</th><th>Weight</th><th>Position</th><th style="text-align:right">SP</th><th>Fav</th><th style="text-align:right">Race no</th><th style="text-align:right">Winnings (£)</th><th>Country</th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ rides }}" as="r" hint-placeholder-count="8">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ r.date }}</td>
+<td>{{ r.type }}</td>
+<td style="white-space:nowrap">{{ r.race }}</td>
+<td style="white-space:nowrap">{{ r.cls }}</td>
+<td style="white-space:nowrap;font-weight:600;color:var(--primary, rgb(0,47,113))">{{ r.horse }}</td>
+<td>{{ r.hg }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ r.wt }}</td>
+<td style="white-space:nowrap"><strong style="font-weight:600;font-variant-numeric:tabular-nums">{{ r.pos }}</strong> <span style="color:var(--muted-foreground, rgb(113,113,122))">{{ r.btn }}</span></td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right">{{ r.sp }}</td>
+<td>{{ r.fav }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right">{{ r.no }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right">{{ r.win }}</td>
+<td>{{ r.country }}</td>
+</tr>
+</sc-for>
+<sc-if value="{{ ridesNone }}" hint-placeholder-val="{{ false }}"><tr><td colspan="13" style="text-align:center;color:var(--muted-foreground, rgb(113,113,122))">No rides match these filters.</td></tr></sc-if>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer"><span>{{ ridesCount }}</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showLicence }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr>
+<th>Type</th>
+<th>Issued</th>
+<th>Valid until</th>
+<th>Early finish</th>
+<th>Licence</th>
+<th>Weight</th>
+<th>Trainer</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ licences }}" as="l" hint-placeholder-count="3">
+<tr>
+<td style="white-space:nowrap;font-weight:600">{{ l.type }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ l.issued }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ l.validUntil }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted-foreground, rgb(113,113,122))">{{ l.earlyFinish }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ l.licence }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ l.weight }}</td>
+<td style="white-space:nowrap;color:var(--muted-foreground, rgb(113,113,122))">{{ l.trainer }}</td>
+<td style="white-space:nowrap"><span style="display:inline-flex;align-items:center;gap:6px;font-size:14px;line-height:20px;font-weight:{{ l.statusWeight }};color:{{ l.statusInk }}"><span style="width:8px;height:8px;border-radius:9999px;background:{{ l.statusDot }};flex-shrink:0"></span>{{ l.status }}</span></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer">
+<span>Last 2 years, or last licence issued</span>
+<button class="bha-btn bha-btn--sm bha-btn-outline">Full licence history</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showDisciplinary }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="display:flex;align-items:center;gap:20px;padding:12px 16px;border-bottom:1px solid rgb(228,228,231);font-size:13px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">
+<span>Running totals</span>
+<span style="color:var(--foreground, rgb(9,9,11))">Interference <strong style="font-variant-numeric:tabular-nums">{{ discTotals.interference }}</strong></span>
+<span style="color:var(--foreground, rgb(9,9,11))">Whip <strong style="font-variant-numeric:tabular-nums">{{ discTotals.whip }}</strong></span>
+</div>
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr>
+<th>Date</th>
+<th>Course</th>
+<th>Offence</th>
+<th>Result</th>
+<th>Disc/Appeal</th>
+<th>Also</th>
+<th>Animal</th>
+</tr>
+</thead>
+<tbody>
+<sc-for list="{{ disciplinary }}" as="d" hint-placeholder-count="5">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ d.date }}</td>
+<td style="white-space:nowrap">{{ d.course }}</td>
+<td style="white-space:nowrap">{{ d.offence }}</td>
+<td style="white-space:nowrap">{{ d.result }}</td>
+<td style="white-space:nowrap;color:var(--muted-foreground, rgb(113,113,122))">{{ d.appeal }}</td>
+<td style="white-space:nowrap;color:var(--muted-foreground, rgb(113,113,122))">{{ d.also }}</td>
+<td style="font-weight:500">{{ d.animal }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer">
+<span>Last 5 offences</span>
+<button class="bha-btn bha-btn--sm bha-btn-outline">Full disciplinary history</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showSponsorship }}" hint-placeholder-val="{{ false }}">
+<dc-import name="Sponsorship Agreements" title="Jockey sponsorship" empty-text="No jockey sponsorship" race-date="14/09/2026" items="{{ jockeySponsors }}" hint-size="100%,160px"></dc-import>
+</sc-if>
+
+<sc-if value="{{ showComments }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table" style="table-layout:fixed;width:100%">
+<thead><tr><th style="width:96px">Date</th><th>Comment</th><th style="width:40px"></th></tr></thead>
+<tbody>
+<sc-for list="{{ comments }}" as="c" hint-placeholder-count="6">
+<tr onClick="{{ c.toggle }}" style="cursor:pointer" style-hover="background:var(--custom-muted-subtle, rgb(250,250,250))">
+<td style="vertical-align:top;font-variant-numeric:tabular-nums;color:var(--primary, rgb(0,47,113))">{{ c.date }}</td>
+<td style="vertical-align:top;font-size:13px;line-height:20px;overflow:hidden;text-overflow:ellipsis;white-space:{{ c.ws }}">{{ c.text }}</td>
+<td style="vertical-align:top;text-align:right;color:var(--muted-foreground, rgb(113,113,122))"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ c.icon }}" size="16" hint-size="16px,16px"></x-import></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="padding:10px 16px;border-top:1px solid rgb(228,228,231);font-size:13px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">{{ commentCount }}</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;jockey&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;marquand&quot;,&quot;crowley&quot;,&quot;ryan&quot;],&quot;default&quot;:&quot;crowley&quot;,&quot;tsType&quot;:&quot;'marquand' | 'crowley' | 'ryan'&quot;}}">
+class Component extends DCLogic {
+  state = { tab: (function(){ try { return new URLSearchParams(window.location.search).get('tab'); } catch(e){ return null; } })() || this.props.tab || 'enquiries', filtersOpen: true };
+
+  SPONSORS = {
+    marquand: {current:[{sponsor:'Bet365', start:'01/03/2026', end:'28/02/2027', placement:'Breeches'},{sponsor:'Lambourn Equine Vets', start:'01/06/2026', end:'30/09/2026', placement:'Collar'},{sponsor:'Unibet', start:'01/03/2027', end:'29/02/2028', placement:'Breeches'}],
+      history:[{sponsor:'Sky Bet', start:'01/03/2024', end:'28/02/2026', placement:'Breeches'},{sponsor:'Racing TV', start:'01/01/2022', end:'31/12/2023', placement:'Collar'},{sponsor:'Stobart Group Limited', start:'15/04/2019', end:'31/03/2021', placement:'Breeches'},{sponsor:'geegeez.co.uk', start:'17/05/2017', end:'16/05/2019', placement:'Other'}]},
+    crowley: {current:[{sponsor:'GB Civil Engineering (Leicester) LTD', start:'04/09/2026', end:'04/09/2027', placement:'Breeches'}],
+      history:[{sponsor:'CORAL', start:'01/04/2024', end:'01/04/2025', placement:'Breeches'},{sponsor:'geegeez.co.uk', start:'01/12/2021', end:'01/12/2022', placement:'Collar'},{sponsor:'geegeez.co.uk', start:'01/06/2020', end:'15/12/2021', placement:'Breeches'},{sponsor:'geegeez.co.uk', start:'17/05/2018', end:'16/05/2020', placement:'Other'},{sponsor:'Stobart Group Limited', start:'01/04/2017', end:'30/09/2019', placement:'Breeches'}]},
+    ryan: {current:[],
+      history:[{sponsor:'Betfair', start:'01/02/2023', end:'31/01/2026', placement:'Collar'},{sponsor:'Clipper Logistics', start:'01/05/2020', end:'30/04/2022', placement:'Breeches'}]}
+  };
+
+  RACE = {
+    label: 'Ascot 14:15',
+    runners: [
+      {no:1, horse:'TRILLIUM (IRE)', jockey:'Jim Crowley', key:'crowley'},
+      {no:2, horse:'PALACE PIER', jockey:'Tom Marquand', key:'marquand'},
+      {no:3, horse:'DUBAI CHARM (IRE)', jockey:'Rossa Ryan', key:'ryan'},
+      {no:4, horse:'BARADAR', jockey:'Oisin Murphy', key:'murphy'},
+      {no:5, horse:'ALFLAILA', jockey:'Hollie Doyle', key:'doyle'},
+      {no:6, horse:'NOSTRUM', jockey:'Ryan Moore', key:'moore'}
+    ]
+  };
+
+  EXTRA = {
+    marquand:{age:'28', claim:'No claim', country:'Great Britain', status:'Can ride', season:'2', weight:'8st 7lb', minWeight:'8st 4lb', wins:'1,184', baseline:'12/02/2025', gpMedical:'03/03/2026', nok:'Hollie Doyle (07700 900812)', address:'Lambourn, Berkshire', defInt:'N/A', defWhip:'N/A', depts:['Disciplinary','Licensing','Racing Admin','Jockey Club']},
+    crowley:{age:'48', claim:'No claim', country:'Great Britain', status:'Can ride', season:'6', weight:'8st 11lb', minWeight:'8st 8lb', wins:'2,312', baseline:'04/06/2024', gpMedical:'11/02/2026', nok:'Sarah Crowley (07700 900233)', address:'Newmarket, Suffolk', defInt:'N/A', defWhip:'21/11/2026', depts:['Bank','Disciplinary','Licensing','Racing Admin']},
+    ryan:{age:'31', claim:'No claim', country:'Ireland', status:'Can ride', season:'2', weight:'8st 9lb', minWeight:'8st 6lb', wins:'642', baseline:'18/09/2024', gpMedical:'20/01/2026', nok:'Aoife Ryan (07700 900744)', address:'Newmarket, Suffolk', defInt:'N/A', defWhip:'N/A', depts:['Licensing','Racing Admin','BHEST']},
+    murphy:{age:'31', claim:'No claim', country:'Ireland', status:'Can ride', season:'4', weight:'8st 10lb', minWeight:'8st 7lb', wins:'1,402', baseline:'02/03/2025', gpMedical:'14/03/2026', nok:'Clodagh Murphy (07700 900377)', address:'Newmarket, Suffolk', defInt:'N/A', defWhip:'N/A', depts:['Disciplinary','Licensing','Racing Admin','Other']},
+    doyle:{age:'30', claim:'No claim', country:'Great Britain', status:'Can ride', season:'0', weight:'8st 2lb', minWeight:'7st 12lb', wins:'1,036', baseline:'09/12/2024', gpMedical:'27/02/2026', nok:'Tom Marquand (07700 900517)', address:'Lambourn, Berkshire', defInt:'N/A', defWhip:'N/A', depts:['Licensing','Racing Admin','BHEST']},
+    moore:{age:'43', claim:'No claim', country:'Great Britain', status:'Stood down', season:'2', weight:'8st 12lb', minWeight:'8st 9lb', wins:'2,980', baseline:'22/05/2024', gpMedical:'05/01/2026', nok:'Jo Moore (07700 900661)', address:'Newmarket, Suffolk', defInt:'14/11/2026', defWhip:'N/A', depts:['Bank','Disciplinary','Licensing','Racing Admin','Jockey Club']}
+  };
+
+  PROFILES = {
+    murphy: {
+      name: 'Oisin Murphy', licence: 'Flat, senior', roleContext: 'BARADAR today',
+      agent: {name:'Ross Doyle', phone:'07700 900455', email:'ross.doyle@jockeyagents.co.uk'},
+      email:'murphy@ridersmail.co.uk', workEmail:'office@oisinmurphy.com', sms:'07700 900731',
+      mobile:'07700 900731', home:'01488 72901', base:'Lambourn, Berkshire',
+      suspended:false, susSummary:'4 days in the last 12 months · last: Suspended 2 days, 22/08/2026', ridesSince:'31 rides since the last suspension (22/08/2026)',
+      whip:{ridesSince:'31', lastDate:'22/08/2026', daysServed:'4', daysPending:'0', offences12m:'2'},
+      licences:[
+        {type:'Flat',issued:'18/02/2026',validUntil:'17/02/2027',earlyFinish:'',licence:'74',weight:'8-07',trainer:'N/A'},
+        {type:'Flat',issued:'18/02/2025',validUntil:'17/02/2026',earlyFinish:'',licence:'***',weight:'8-07',trainer:'N/A'}
+      ],
+      discTotals:{interference:'8', whip:'10'},
+      disciplinary:[
+        {date:'22/08/2026',course:'J YRK',offence:'RdrInRace',result:'noted',appeal:'',also:'',animal:'Flora of Bermuda (IRE)'},
+        {date:'20/08/2026',course:'J YRK',offence:'',result:'2 days',appeal:'',also:'',animal:'Prizeland'},
+        {date:'18/08/2026',course:'J WOL',offence:'Whip',result:'2 days',appeal:'',also:'',animal:'Heroics'}
+      ],
+      enquiries:[
+        {date:'05/09/2026',race:'KEM 05/09/2026 6:30',horse:'HARBOUR LIGHT',offence:'Careless riding',outcome:'In Breach',penalty:'Suspended 2 days'},
+        {date:'22/08/2026',race:'YRK 22/08/2026 3:40',horse:'FLORA OF BERMUDA (IRE)',offence:'Careless riding',outcome:'In Breach',penalty:'Suspended 3 days'},
+        {date:'18/08/2026',race:'WOL 18/08/2026 7:20',horse:'HEROICS',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 2 days'},
+        {date:'26/07/2026',race:'ASC 26/07/2026 2:40',horse:'SOLDIER OF THE SEA (IRE)',offence:'Careless riding',outcome:'No Further Action',penalty:'–'},
+        {date:'14/06/2026',race:'SAN 14/06/2026 4:05',horse:'PALACE PIER',offence:'Careless riding',outcome:'In Breach',penalty:'Suspended 2 days'},
+        {date:'02/05/2026',race:'NMK 02/05/2026 3:15',horse:'CHALDEAN',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 4 days'},
+        {date:'11/03/2026',race:'LIN 11/03/2026 1:50',horse:'NOSTRUM',offence:'Interference',outcome:'No Further Action',penalty:'–'},
+        {date:'20/11/2025',race:'WOL 20/11/2025 7:00',horse:'OUZO',offence:'Careless riding',outcome:'In Breach',penalty:'Suspended 1 day'}
+      ],
+      performance:[
+        {season:'2026 (to date)',rides:455,wins:79,places:104,strikeRate:'17.4%'},
+        {season:'2025',rides:812,wins:141,places:203,strikeRate:'17.4%'},
+        {season:'2024',rides:766,wins:118,places:188,strikeRate:'15.4%'}
+      ],
+      nextRides:[
+        {date:'Today',time:'14:15',course:'Ascot',horse:'Baradar',weight:'9st 1lb',trainer:'Roger Varian'}
+      ],
+      previousRides:[
+        {t:'York R3, 1st',w:'22 Aug',f:['amber|careless riding']},
+        {t:'Wolverhampton R6, 2nd',w:'18 Aug',f:['red|2-day suspension']}
+      ]
+    },
+    doyle: {
+      name: 'Hollie Doyle', licence: 'Flat, senior', roleContext: 'ALFLAILA today',
+      agent: {name:'Sam Pickering', phone:'07700 900612', email:'sam.pickering@jockeyagents.co.uk'},
+      email:'doyle@ridersmail.co.uk', workEmail:'office@holliedoyle.com', sms:'07700 900244',
+      mobile:'07700 900244', home:'01488 74108', base:'Lambourn, Berkshire',
+      suspended:false, susSummary:'No suspensions in the last 12 months', ridesSince:'–',
+      whip:{ridesSince:'–', lastDate:'–', daysServed:'0', daysPending:'0', offences12m:'0'},
+      licences:[
+        {type:'Flat',issued:'09/01/2026',validUntil:'08/01/2027',earlyFinish:'',licence:'52',weight:'8-02',trainer:'N/A'},
+        {type:'Flat',issued:'09/01/2025',validUntil:'08/01/2026',earlyFinish:'',licence:'***',weight:'8-02',trainer:'N/A'}
+      ],
+      discTotals:{interference:'2', whip:'3'},
+      disciplinary:[
+        {date:'05/07/2026',course:'J SAN',offence:'RdrInRace',result:'caution',appeal:'',also:'',animal:'Nashwa'},
+        {date:'21/05/2026',course:'J GWD',offence:'Whip',result:'caution',appeal:'',also:'',animal:'Bradsell'}
+      ],
+      enquiries:[
+        {date:'05/07/2026',race:'SAN 05/07/2026 3:00',horse:'NASHWA',offence:'Careless riding',outcome:'No Further Action',penalty:'–'}
+      ],
+      performance:[
+        {season:'2026 (to date)',rides:398,wins:61,places:92,strikeRate:'15.3%'},
+        {season:'2025',rides:702,wins:112,places:177,strikeRate:'16.0%'},
+        {season:'2024',rides:688,wins:98,places:165,strikeRate:'14.2%'}
+      ],
+      nextRides:[
+        {date:'Today',time:'14:15',course:'Ascot',horse:'Alflaila',weight:'8st 13lb',trainer:'Owen Burrows'}
+      ],
+      previousRides:[
+        {t:'Sandown R4, 3rd',w:'05 Jul',f:['grey|no breach']}
+      ]
+    },
+    moore: {
+      name: 'Ryan Moore', licence: 'Flat, senior', roleContext: 'NOSTRUM today',
+      agent: {name:'Tony Hind', phone:'07700 900310', email:'tony.hind@jockeyagents.co.uk'},
+      email:'moore@ridersmail.co.uk', workEmail:'office@ryanmooreracing.com', sms:'07700 900909',
+      mobile:'07700 900909', home:'01488 70055', base:'Newmarket, Suffolk',
+      suspended:false, susSummary:'2 days in the last 12 months · last: Suspended 2 days, 31/07/2026', ridesSince:'27 rides since the last suspension (31/07/2026)',
+      whip:{ridesSince:'27', lastDate:'31/07/2026', daysServed:'2', daysPending:'0', offences12m:'1'},
+      licences:[
+        {type:'Flat',issued:'04/03/2026',validUntil:'03/03/2027',earlyFinish:'',licence:'19',weight:'8-06',trainer:'N/A'},
+        {type:'Flat',issued:'04/03/2025',validUntil:'03/03/2026',earlyFinish:'',licence:'***',weight:'8-06',trainer:'N/A'}
+      ],
+      discTotals:{interference:'6', whip:'7'},
+      disciplinary:[
+        {date:'31/07/2026',course:'J GWD',offence:'Whip',result:'2 days',appeal:'',also:'',animal:'Asfoora (AUS)'},
+        {date:'17/07/2026',course:'J NBY',offence:'RdrInRace',result:'caution',appeal:'',also:'',animal:'Turty Tree (IRE)'}
+      ],
+      enquiries:[
+        {date:'31/07/2026',race:'GWD 31/07/2026 2:45',horse:'ASFOORA (AUS)',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 2 days'}
+      ],
+      performance:[
+        {season:'2026 (to date)',rides:344,wins:82,places:88,strikeRate:'23.8%'},
+        {season:'2025',rides:611,wins:139,places:151,strikeRate:'22.7%'},
+        {season:'2024',rides:598,wins:126,places:144,strikeRate:'21.1%'}
+      ],
+      nextRides:[
+        {date:'Today',time:'14:15',course:'Ascot',horse:'Nostrum',weight:'9st 3lb',trainer:'Sir Michael Stoute'}
+      ],
+      previousRides:[
+        {t:'Goodwood R2, 1st',w:'31 Jul',f:['red|2-day suspension']}
+      ]
+    },
+    marquand: {
+      name: 'Tom Marquand', licence: 'Flat, senior', roleContext: 'PALACE PIER (IRE) today',
+      agent: {name:'Guy Jewell', phone:'07700 900188', email:'guy.jewell@jockeyagents.co.uk'},
+      email:'t.marquand@ridersmail.co.uk', workEmail:'office@marquandracing.com', sms:'07700 900412',
+      mobile:'07700 900412', home:'01488 71422', base:'Lambourn, Berkshire',
+      suspended:false, susSummary:'2 days in the last 12 months · last: Suspended 2 days, 06/09/2026', ridesSince:'14 rides since the last suspension (06/09/2026)',
+      whip:{ridesSince:'14', lastDate:'06/09/2026', daysServed:'2', daysPending:'0', offences12m:'1'},
+      licences:[
+        {type:'Flat',issued:'18/02/2026',validUntil:'17/02/2027',earlyFinish:'',licence:'74',weight:'8-07',trainer:'N/A'},
+        {type:'Flat',issued:'18/02/2025',validUntil:'17/02/2026',earlyFinish:'',licence:'***',weight:'8-07',trainer:'N/A'},
+        {type:'Jump',issued:'17/12/2024',validUntil:'16/12/2025',earlyFinish:'Rel 21/10/2025',licence:'***',weight:'8-09',trainer:'N/A'}
+      ],
+      discTotals:{interference:'8', whip:'10'},
+      disciplinary:[
+        {date:'22/08/2026',course:'J YRK',offence:'RdrInRace',result:'noted',appeal:'',also:'',animal:'Flora of Bermuda (IRE)'},
+        {date:'20/08/2026',course:'J YRK',offence:'',result:'2 days',appeal:'',also:'',animal:'Prizeland'},
+        {date:'18/08/2026',course:'J WOL',offence:'Whip',result:'2 days',appeal:'',also:'',animal:'Heroics'},
+        {date:'31/07/2026',course:'J GWD',offence:'',result:'2 days',appeal:'',also:'',animal:'Asfoora (AUS)'},
+        {date:'17/07/2026',course:'J NBY',offence:'',result:'caution',appeal:'',also:'',animal:'Turty Tree (IRE)'}
+      ],
+      enquiries:[
+        {date:'06/09/2026',race:'ASC 06/09/2026 2:30',horse:'SANDRINE',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 2 days'},
+        {date:'12/07/2026',race:'YOR 12/07/2026 3:15',horse:'NOSTRUM',offence:'Careless riding',outcome:'In Breach',penalty:'Noted'},
+        {date:'03/05/2026',race:'NBY 03/05/2026 1:50',horse:'LEZOO',offence:'Failure to weigh in',outcome:'No Further Action',penalty:'–'}
+      ],
+      performance:[
+        {season:'2026 (to date)',rides:412,wins:68,places:96,strikeRate:'16.5%'},
+        {season:'2025',rides:721,wins:104,places:189,strikeRate:'14.4%'},
+        {season:'2024',rides:698,wins:92,places:171,strikeRate:'13.2%'}
+      ],
+      nextRides:[
+        {date:'Today',time:'14:15',course:'Ascot',horse:'Palace Pier',weight:'8st 12lb',trainer:'John Gosden'},
+        {date:'Today',time:'16:10',course:'Ascot',horse:'Sandrine',weight:'9st 2lb',trainer:'William Haggas'},
+        {date:'Thu 18/09',time:'–',course:'Newbury',horse:'Nostrum',weight:'–',trainer:'John Gosden'},
+        {date:'Sat 20/09',time:'–',course:'Newmarket',horse:'Lezoo',weight:'–',trainer:'Karl Burke'}
+      ],
+      previousRides:[
+        {t:'Doncaster R4, 1st',w:'13 Sep',f:['grey|no breach']},
+        {t:'Kempton R2, 3rd',w:'06 Sep',f:['amber|whip warning'],n:'One above permitted level, no penalty'},
+        {t:'Ascot R5, 2nd',w:'30 Aug',f:['red|2-day suspension'],n:'Whip (B)59, served 08–09 Sep'},
+        {t:'York R1, 5th',w:'23 Aug',f:['grey|no breach']}
+      ]
+    },
+    crowley: {
+      name: 'Jim Crowley', licence: 'Flat, senior', roleContext: 'TRILLIUM (IRE) today',
+      agent: {name:'Tony Hind', phone:'07700 900310', email:'tony.hind@jockeyagents.co.uk'},
+      email:'crowley@ridersmail.co.uk', workEmail:'office@jimcrowleyracing.com', sms:'07700 900517',
+      mobile:'07700 900517', home:'01638 561220', base:'Newmarket, Suffolk',
+      suspended:true, suspension:{range:'20–21 Sept 2026', remaining:'2 of 2 days remaining'},
+      susSummary:'6 days in the last 12 months · last: Suspended 4 days, 06/09/2026', ridesSince:'0 rides since the last suspension (06/09/2026)',
+      whip:{ridesSince:'0', lastDate:'20/09/2026', daysServed:'4', daysPending:'2', offences12m:'3'},
+      licences:[
+        {type:'Flat',issued:'05/01/2026',validUntil:'04/01/2027',earlyFinish:'',licence:'61',weight:'8-10',trainer:'N/A'},
+        {type:'Flat',issued:'05/01/2025',validUntil:'04/01/2026',earlyFinish:'',licence:'***',weight:'8-10',trainer:'N/A'},
+        {type:'Jump',issued:'12/11/2024',validUntil:'11/11/2025',earlyFinish:'Rel 03/06/2025',licence:'***',weight:'9-00',trainer:'N/A'}
+      ],
+      discTotals:{interference:'5', whip:'12'},
+      disciplinary:[
+        {date:'20/09/2026',course:'J ASC',offence:'Whip',result:'2 days',appeal:'',also:'',animal:'Trillium (IRE)'},
+        {date:'06/09/2026',course:'J DON',offence:'Whip',result:'4 days',appeal:'',also:'',animal:'Mostahdaf'},
+        {date:'31/08/2026',course:'J GWD',offence:'RdrInRace',result:'noted',appeal:'',also:'',animal:'Baradar'},
+        {date:'12/08/2026',course:'J NEW',offence:'Whip',result:'caution',appeal:'',also:'',animal:'Alflaila'},
+        {date:'29/07/2026',course:'J GDW',offence:'RdrInRace',result:'2 days',appeal:'Appeal dismissed',also:'',animal:'Nations Pride (IRE)'}
+      ],
+      enquiries:[
+        {date:'20/09/2026',race:'ASC 20/09/2026 3:15',horse:'TRILLIUM',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 2 days'},
+        {date:'06/09/2026',race:'DON 06/09/2026 2:10',horse:'MOSTAHDAF',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 4 days'},
+        {date:'31/08/2026',race:'GOO 31/08/2026 4:05',horse:'BARADAR',offence:'Careless riding',outcome:'No Further Action',penalty:'–'}
+      ],
+      performance:[
+        {season:'2026 (to date)',rides:389,wins:54,places:88,strikeRate:'13.9%'},
+        {season:'2025',rides:650,wins:81,places:156,strikeRate:'12.5%'},
+        {season:'2024',rides:612,wins:76,places:143,strikeRate:'12.4%'}
+      ],
+      nextRides:[
+        {date:'Today',time:'14:15',course:'Ascot',horse:'Trillium',weight:'9st 0lb',trainer:'William Haggas'},
+        {date:'Fri 19/09',time:'–',course:'Newbury',horse:'Mostahdaf',weight:'–',trainer:'John Gosden'}
+      ],
+      previousRides:[
+        {t:'Doncaster R2, 2nd',w:'13 Sep',f:['amber|whip warning'],n:'Second warning this season'},
+        {t:'Ascot R6, 1st',w:'06 Sep',f:['amber|whip warning']},
+        {t:'Goodwood R3, 4th',w:'31 Aug',f:['grey|no breach']}
+      ]
+    },
+    ryan: {
+      name: 'Rossa Ryan', licence: 'Flat, senior', roleContext: 'DUBAI CHARM (IRE) today',
+      agent: {name:'Richard Hale', phone:'07700 900377', email:'richard.hale@jockeyagents.co.uk'},
+      email:'ryan@ridersmail.co.uk', workEmail:'office@rossaryanracing.com', sms:'07700 900862',
+      mobile:'07700 900862', home:'01488 73310', base:'Lambourn, Berkshire',
+      suspended:false, susSummary:'2 days in the last 12 months · last: Suspended 2 days, 14/08/2026', ridesSince:'22 rides since the last suspension (14/08/2026)',
+      whip:{ridesSince:'22', lastDate:'14/08/2026', daysServed:'2', daysPending:'0', offences12m:'1'},
+      licences:[
+        {type:'Flat',issued:'22/03/2026',validUntil:'21/03/2027',earlyFinish:'',licence:'88',weight:'8-05',trainer:'N/A'},
+        {type:'Flat',issued:'22/03/2025',validUntil:'21/03/2026',earlyFinish:'',licence:'***',weight:'8-05',trainer:'N/A'},
+        {type:'Apprentice',issued:'14/02/2024',validUntil:'13/02/2025',earlyFinish:'Rel 09/09/2024',licence:'***',weight:'8-02',trainer:'Richard Hannon'}
+      ],
+      discTotals:{interference:'4', whip:'6'},
+      disciplinary:[
+        {date:'14/08/2026',course:'J GWD',offence:'Whip',result:'2 days',appeal:'',also:'',animal:'Dubai Charm (IRE)'},
+        {date:'02/08/2026',course:'J ASC',offence:'RdrInRace',result:'noted',appeal:'',also:'',animal:'Baradar'},
+        {date:'19/07/2026',course:'J WOL',offence:'',result:'caution',appeal:'',also:'',animal:'Spycatcher'},
+        {date:'28/06/2026',course:'J NBY',offence:'Whip',result:'caution',appeal:'',also:'',animal:'Isle of Jura (IRE)'},
+        {date:'11/06/2026',course:'J YRK',offence:'RdrInRace',result:'2 days',appeal:'',also:'',animal:'Rogue Lightning'}
+      ],
+      enquiries:[
+        {date:'14/08/2026',race:'GOO 14/08/2026 3:35',horse:'DUBAI CHARM (IRE)',offence:'Use of the whip above the permitted level',outcome:'In Breach',penalty:'Suspended 2 days'},
+        {date:'02/08/2026',race:'ASC 02/08/2026 2:20',horse:'BARADAR',offence:'Interference',outcome:'No Further Action',penalty:'–'}
+      ],
+      performance:[
+        {season:'2026 (to date)',rides:301,wins:39,places:67,strikeRate:'13.0%'},
+        {season:'2025',rides:588,wins:71,places:132,strikeRate:'12.1%'},
+        {season:'2024',rides:544,wins:63,places:119,strikeRate:'11.6%'}
+      ],
+      nextRides:[
+        {date:'Today',time:'15:15',course:'Ascot',horse:'Dubai Charm (IRE)',weight:'9st 6lb',trainer:'Charlie Hughes'}
+      ],
+      previousRides:[
+        {t:'Goodwood R5, 3rd',w:'14 Aug',f:['amber|whip warning'],n:'One above permitted level'},
+        {t:'Ascot R2, 1st',w:'02 Aug',f:['grey|no breach']}
+      ]
+    }
+  };
+
+  renderVals() {
+    var self = this, st = this.state, info = st.infoOpen !== false, filt = st.topFiltersOpen !== false;
+    return Object.assign(this._rv(), {
+      infoOpen: info, infoLabel: info ? 'Hide' : 'Show', infoIcon: info ? 'chevron-up' : 'chevron-down',
+      toggleInfo: function(){ self.setState({infoOpen: !info}); },
+      moreOpen: !!st.moreOpen, moreLabel: st.moreOpen ? 'See less' : 'See more', moreIcon: st.moreOpen ? 'chevron-up' : 'chevron-down',
+      toggleMore: function(){ self.setState({moreOpen: !st.moreOpen}); },
+      showEqFilters: st.tab === 'enquiries', topFiltersOpen: ['next','performance'].indexOf(st.tab) >= 0, topFiltersLabel: filt ? 'Hide filters' : 'Filters',
+      toggleTopFilters: function(){ self.setState({topFiltersOpen: !filt}); }
+    });
+  }
+  _rv() {
+    var self = this, s = this.state, p = this.props;
+    var key = s.jockeyKey || (function(){ try { return new URLSearchParams(window.location.search).get('jockey'); } catch(e){ return null; } })() || p.jockey || 'marquand';
+    var rec = this.PROFILES[key] || this.PROFILES.marquand;
+    var nameOverride = (function(){ try { return new URLSearchParams(window.location.search).get('name'); } catch(e){ return null; } })();
+    if (nameOverride && !s.jockeyKey) rec = Object.assign({}, rec, {name: nameOverride});
+    var tabDefs = [{key:'enquiries', label:'Enquiries'},{key:'next', label:'Bookings'},{key:'performance', label:'Performance history'},{key:'licence', label:'Licence history'},{key:'disciplinary', label:'Disciplinary history'},{key:'sponsorship', label:'Jockey sponsorship'},{key:'comments', label:'Comments'}];
+    var tabs = tabDefs.map(function(t){
+      var on = s.tab === t.key;
+      return { label:t.label, state: on?'active':'inactive', selected: on, select:function(){ self.setState({tab:t.key}); } };
+    });
+    var eqOffence = s.eqOffence || 'All', eqBreach = s.eqBreach || 'All', eqFrom = s.eqFrom || '2025-10-13', eqTo = s.eqTo || '2026-10-13';
+    var offType = function(o){ return /careless/i.test(o) ? 'Careless riding' : /whip/i.test(o) ? 'Whip' : /interference/i.test(o) ? 'Interference' : /improper/i.test(o) ? 'Improper riding' : 'Other'; };
+    var iso = function(d){ var p = d.split('/'); return p[2] + '-' + p[1] + '-' + p[0]; };
+    var allEnq = rec.enquiries || [];
+    var COURSES = {ASC:'Ascot',KEM:'Kempton Park',YRK:'York',YOR:'York',WOL:'Wolverhampton',SAN:'Sandown Park',NMK:'Newmarket',LIN:'Lingfield Park',GWD:'Goodwood',GOO:'Goodwood',NBY:'Newbury',DON:'Doncaster'};
+    var mapEq = function(e){
+      var o = e.offence || '';
+      return {
+        course: COURSES[(e.race || '').slice(0,3)] || (e.race || '').slice(0,3),
+        outcome: e.outcome === 'In Breach' ? 'In Breach' : e.outcome === 'No Further Action' ? 'Not In Breach' : e.outcome,
+        offence: /careless/i.test(o) ? 'Interference Careless' : /whip/i.test(o) ? 'Misuse of the Whip' : /interference/i.test(o) ? 'Interference Accidental' : /weigh/i.test(o) ? 'Running and Riding' : o,
+        horse: e.horse,
+        penalty: /suspend/i.test(e.penalty || '') ? 'Suspension' : /fine/i.test(e.penalty || '') ? 'Fine' : /caution/i.test(e.penalty || '') ? 'Caution' : /noted/i.test(e.penalty || '') ? 'Noted' : '',
+        sub: /careless/i.test(o) ? 'Careless Riding' : /whip/i.test(o) ? '1st offence' : ''
+      };
+    };
+    var sel = Object.assign({course:[],outcome:[],offence:[],horse:[],penalty:[],sub:[]}, s.eqSel || {});
+    var uniq = function(a){ return a.filter(function(v,i){ return v && a.indexOf(v) === i; }).sort(); };
+    var MULTI = [
+      {key:'course', label:'Courses', options: uniq(allEnq.map(function(e){ return mapEq(e).course; }))},
+      {key:'outcome', label:'Outcomes', options:['In Breach','Not In Breach','Adjourned','Further Investigation','Referred','Advisory']},
+      {key:'offence', label:'Offences', options:['Interference Noted','Interference Careless','Running and Riding','Interference Accidental','Late arrival of rider in parade ring','Failure to remove or slow removal of the blindfold','Misuse of the Whip','Failing to ride out','Rider goes into wrong stall','Violent or Improper conduct between riders/trainers']},
+      {key:'horse', label:'Horses', options: uniq(allEnq.map(function(e){ return e.horse; }))},
+      {key:'penalty', label:'Penalties', options:['Noted','Caution','Suspension','Fine']},
+      {key:'sub', label:'Sub-offences', options:['Careless Riding','Place not obtained - second/third','1st offence']}
+    ];
+    var setSel = function(k, v){ var n = Object.assign({}, sel); n[k] = v; self.setState({eqSel: n}); };
+    var eqMulti = MULTI.map(function(M){
+      var cur = sel[M.key], open = s.eqOpenKey === M.key, n = cur.length;
+      return {label: M.label, open: open, any: n > 0,
+        summary: n === 0 ? 'All' : n === 1 ? cur[0] : n + ' selected',
+        border: n ? 'var(--primary, rgb(0,47,113))' : 'rgb(228,228,231)', bg: n ? 'var(--accent, rgb(233,244,250))' : '#fff',
+        toggle: function(){ self.setState({eqOpenKey: open ? null : M.key}); },
+        close: function(){ self.setState({eqOpenKey: null}); },
+        clear: function(){ setSel(M.key, []); },
+        options: M.options.map(function(v){ var on = cur.indexOf(v) >= 0;
+          return {label: v, checked: on, tick: on ? '\u2713' : '', boxBg: on ? 'var(--primary, rgb(0,47,113))' : '#fff', boxBorder: on ? 'var(--primary, rgb(0,47,113))' : 'rgb(212,212,216)',
+            toggle: function(){ setSel(M.key, on ? cur.filter(function(x){ return x !== v; }) : cur.concat([v])); }}; })
+      };
+    });
+    var enquiries = allEnq.filter(function(e){
+      var breach = e.outcome === 'In Breach', d = iso(e.date);
+      var m = mapEq(e);
+      for (var k in sel) { if (sel[k].length && sel[k].indexOf(m[k]) < 0) return false; }
+      if (eqFrom && d < eqFrom) return false;
+      if (eqTo && d > eqTo) return false;
+      return true;
+    }).map(function(e){
+      var breach = e.outcome === 'In Breach', m = /(\d+)\s*day/.exec(e.penalty || ''), days = m ? parseInt(m[1], 10) : 0;
+      return Object.assign({}, e, { days: days, daysLabel: days ? String(days) : '–', outcomeClass: breach ? 'bha-badge-destructive' : 'bha-badge-secondary' });
+    });
+    var eqDays = enquiries.reduce(function(a, e){ return a + e.days; }, 0);
+    var runners = this.RACE.runners.map(function(r){
+      var on = r.key === key;
+      return {
+        no: r.no + '.', horse: r.horse, jockey: r.jockey, selected: on,
+        tick: on ? '✓' : '', bg: on ? 'var(--accent, rgb(233,244,250))' : 'transparent',
+        select: function(){ self.setState({jockeyKey: r.key, runnersOpen: false}); }
+      };
+    });
+    var current = this.RACE.runners.filter(function(r){ return r.key === key; })[0] || this.RACE.runners[0];
+
+    var fFinish = s.fFinish || 'All';
+    var winsOnly = fFinish === 'Wins', placesOnly = fFinish === 'Places';
+    var RIDES = [
+      ['2026-10-19','F','Pon 6f Hcap (R Stakes)','C3','SING THE BLUES (IRE)','','9st 11lb',7,10,'btn 5\u00bEL Dandy Magic (IRE)','','',48022,0,'GB'],
+      ['2026-10-19','F','Pon 1m6y Hcap','C5','UNDER ARREST','','9st 9lb',3,11,'btn 3L Craven Force (IRE)','','',48027,981.60,'GB'],
+      ['2026-10-19','F','Pon 1m6y','C1 L','KING HIGH','','9st 5lb',1,8,'bt Tyrrhenian Thunder 2L','','',48021,31190.50,'GB'],
+      ['2026-10-19','F','Pon 6f Mdn','C4','GREEN STAR (IRE)','','9st 7lb',6,6,'btn 13\u00bcL Longshanks Luke','','',48026,0,'GB'],
+      ['2026-10-17','F','Asc 1m G','C1 G1','NEEDLE MATCH','','9st 3lb',4,11,'btn 1\u00bEL Talk of New York','150/1','',47982,58960.00,'GB'],
+      ['2026-10-17','F','Asc 6f G','C1 G1','BINHAREER (IRE)','','9st 4lb',12,16,'btn 12L Almeraq','33/1','',47983,0,'GB'],
+      ['2026-10-17','F','Asc 1m G Hcap','C2','BULLET POINT','','9st 3lb',20,20,'btn 15\u00bEL Fifth Column (IRE)','16/1','',47986,0,'GB'],
+      ['2026-10-16','F','Red 5f G Hcap (R Stakes)','C5','HOUNDHILL','v','9st 3lb',9,10,'btn 9\u00bEL Sergeant Mayer (IRE)','7/2','F',47975,0,'GB'],
+      ['2026-10-16','F','Red 5f217y G Hcap (R Stakes)','C5','WODAO (FR)','bl,ts','9st 4lb',1,12,'bt Showtime Mahomes 2\u00bcL','22/1','',47974,3925.50,'GB'],
+      ['2026-10-16','F','Red 5f G Hcap','C6','CAVAN LADY','','9st 8lb',1,9,'bt Luna Lacy (IRE) NK','13/2','',47973,4004.00,'GB'],
+      ['2026-10-16','F','Red 7f G Nov','C3','FROM AFAR','','9st 9lb',2,7,'btn \u00bEL Trapped Goddess (GER)','11/4','F',47971,3042.00,'GB'],
+      ['2026-10-05','F','Leo 1m4f Hcap','C2','ARCTIC VOW (IRE)','h','9st 0lb',3,14,'btn 1\u00bdL Tarawa (IRE)','9/1','',47801,2150.00,'IRE']
+    ];
+    var COURSE_OF = {Pon:'Pontefract',Asc:'Ascot',Red:'Redcar',Leo:'Leopardstown'};
+    var fmt = function(d){ var p = d.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; };
+    var pf = s.perfFrom || '2025-10-19', pt = s.perfTo || '2026-10-19';
+    var rides = RIDES.filter(function(r){
+      if (r[0] < pf || r[0] > pt) return false;
+      if ((s.fCountry || 'All') !== 'All' && ({'Great Britain':'GB','Ireland':'IRE','GB':'GB','IRE':'IRE'}[s.fCountry] || s.fCountry) !== r[14]) return false;
+      if ((s.fCourse || 'All') !== 'All' && COURSE_OF[r[2].slice(0,3)] !== s.fCourse) return false;
+      if ((s.fRaceType || 'All') !== 'All' && s.fRaceType !== 'Flat') return false;
+      if (winsOnly && r[7] !== 1) return false;
+      if (placesOnly && r[7] > 3) return false;
+      return true;
+    }).map(function(r){ return {date: fmt(r[0]), type: r[1], race: r[2], cls: r[3], horse: r[4], hg: r[5], wt: r[6], pos: r[7] + '/' + r[8], btn: '(' + r[9] + ')', sp: r[10], fav: r[11], no: String(r[12]), win: r[13].toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2}), country: r[14], _p: r[7], _w: r[13]}; });
+    var rWins = rides.filter(function(r){ return r._p === 1; }).length, rPlaces = rides.filter(function(r){ return r._p <= 3; }).length, rTot = rides.reduce(function(a,r){ return a + r._w; }, 0);
+    var perfRows = (rec.performance || []).filter(function(r){
+      if (winsOnly) return r.wins > 0;
+      if (placesOnly) return r.places > 0;
+      return true;
+    });
+    var totRides = perfRows.reduce(function(a,r){ return a + r.rides; }, 0);
+    var totWins = perfRows.reduce(function(a,r){ return a + r.wins; }, 0);
+    var totPlaces = perfRows.reduce(function(a,r){ return a + r.places; }, 0);
+    var perfSummary = winsOnly
+      ? totWins + ' wins from ' + totRides + ' rides (' + (totRides ? (totWins/totRides*100).toFixed(1) : '0.0') + '%)'
+      : placesOnly
+        ? totPlaces + ' places from ' + totRides + ' rides (' + (totRides ? (totPlaces/totRides*100).toFixed(1) : '0.0') + '%)'
+        : totRides + ' rides · ' + totWins + ' wins · ' + totPlaces + ' places';
+    var sp = this.SPONSORS[key] || this.SPONSORS.crowley;
+    var whip = rec.whip || {};
+    var whipOffences = (rec.enquiries || []).filter(function(e){ return /whip/i.test(e.offence); });
+    var ex = this.EXTRA[key] || this.EXTRA.marquand, ag = rec.agent || {};
+    var stColor = ex.status === 'Can ride' ? 'rgb(0,151,79)' : 'rgb(231,0,11)';
+    var basics = [
+      {k:'Age', v:ex.age}, {k:'Licence and claim', v:rec.licence + ' · ' + ex.claim}, {k:'Licence country', v:ex.country},
+      {k:'Eligibility', v:ex.status, color:stColor},
+      {k:'Current suspension', v: rec.suspended ? (rec.susSummary || 'Suspended') : 'None'},
+      {k:'Rides since last whip offence', v: whip.ridesSince || '–'},
+      {k:'Agent', v: (ag.name || '–') + (ag.phone ? ' · ' + ag.phone : '')},
+      {k:'Mobile', v: rec.mobile || rec.sms || '–'}, {k:'Email', v: rec.email || '–'},
+      {k:'Riding weight', v: ex.weight || '–'}, {k:'Minimum riding weight', v: ex.minWeight || '–'}, {k:'Career wins', v: ex.wins || '–'},
+      {k:'Last baseline test', v: ex.baseline || '–'}, {k:'Last GP medical', v: ex.gpMedical || '–'},
+      {k:'Deferred date (interference)', v: ex.defInt || 'N/A'}, {k:'Deferred date (whip)', v: ex.defWhip || 'N/A'},
+      {k:'Next of kin', v: ex.nok || '–'}, {k:'Address', v: ex.address || '–'}
+    ].map(function(b){ return {k:b.k, v:b.v, color:b.color || 'var(--foreground, rgb(9,9,11))'}; });
+    return {
+      p: rec,
+      basics: this.state.moreOpen ? basics : ['Age','Licence and claim','Eligibility','Current suspension','Riding weight','Rides since last whip offence'].map(function(k){ return basics.filter(function(b){ return b.k === k; })[0]; }).filter(Boolean),
+      depts: ex.depts || [],
+      runners: runners,
+      runnersOpen: !!s.runnersOpen,
+      raceLabel: this.RACE.label,
+      currentRunnerLabel: current.no + '. ' + current.horse,
+      toggleRunners: function(){ self.setState({runnersOpen: !s.runnersOpen}); },
+      closeRunners: function(){ self.setState({runnersOpen: false}); },
+      whip: Object.assign({}, whip, {offences12m: String(whipOffences.length)}),
+      whipOffences: whipOffences,
+      whipOffenceCount: String(whipOffences.length) + (whipOffences.length === 1 ? ' whip offence in the last 12 months' : ' whip offences in the last 12 months'),
+      whipPendingDisplay: (whip.daysPending && whip.daysPending !== '0') ? 'flex' : 'none',
+      enquiries: enquiries,
+      footerCount: 'Showing ' + enquiries.length + ' of ' + allEnq.length + (allEnq.length === 1 ? ' enquiry' : ' enquiries'),
+      eqNone: enquiries.length === 0, eqDays: String(eqDays),
+      eqMulti: eqMulti,
+      eqOffence: eqOffence, onEqOffence: function(ev){ self.setState({eqOffence: ev.target.value}); },
+      eqBreach: eqBreach, onEqBreach: function(ev){ self.setState({eqBreach: ev.target.value}); },
+      eqFrom: eqFrom, onEqFrom: function(ev){ self.setState({eqFrom: ev.target.value}); },
+      eqTo: eqTo, onEqTo: function(ev){ self.setState({eqTo: ev.target.value}); },
+      suspDisplay: rec.suspended ? 'inline-flex' : 'none',
+      tabs: tabs,
+      showEnquiries: s.tab === 'enquiries',
+      showNext: s.tab === 'next',
+      showRecent: s.tab === 'recent',
+
+      comments: (function(){
+        var last = (rec.name || '').split(' ').slice(-1)[0];
+        var C = [
+          ['16/10/26','Approaching 1 furlong out, ROYAL ASCENT, placed second, lugged right-handed despite the rider\u2019s best efforts, moving the winner, TRILLIUM, off its intended line. After viewing a recording of the incident, the Stewards were satisfied ' + last + ' had taken corrective action and no further action was taken.'],
+          ['14/10/26','An enquiry was held to consider interference rounding the bend into the home straight involving KINROSS, placed fifth, ridden by ' + rec.name + ' and BARADAR, unplaced, ridden by Rossa Ryan. Having heard their evidence and viewed recordings, the Stewards found no breach.'],
+          ['05/10/26', rec.name + ', the rider of PALACE PIER, drawn 5, was slow to remove the blindfold. After being interviewed and shown recordings of the incident, ' + last + '\u2019s explanation that the blindfold was caught on the bridle and took two attempts to remove was noted.'],
+          ['17/09/26','Shortly after the start, SANDRINE, placed second, ran onto the heels of DUBAI CHARM, placed fourth, which had moved fractionally left-handed. After viewing a recording of the incident, it was considered accidental.'],
+          ['15/09/26','An enquiry was held to consider interference approximately 2\u00bd furlongs out involving SOLDIER OF THE SEA, placed second, ridden by ' + rec.name + ' and MIRZIMAAN, placed third, ridden by Jim Crowley. ' + last + ' was found in breach of Rule (B)54 and suspended for 2 days.'],
+          ['12/09/26','An enquiry was held to consider interference approximately 1\u00bd furlongs out involving BILL THE BULL, placed second, ridden by ' + rec.name + ', and two others. The Stewards found that the interference was accidental.'],
+          ['09/09/26','Approximately half a furlong out, TRILLIUM, placed second, shifted slightly right-handed at the same time as the winner moved left-handed away from the whip. No further action was taken.'],
+          ['06/09/26','An enquiry was held to consider interference approaching the line involving the winner KINROSS, ridden by ' + rec.name + ', and BARADAR, placed fourth. ' + last + ' was cautioned for careless riding.']
+        ];
+        var open = s.commentOpen;
+        return C.map(function(c, i){ var on = open === i;
+          return {date:c[0], text:c[1], ws: on ? 'normal' : 'nowrap', icon: on ? 'chevron-up' : 'chevron-down',
+            toggle: function(){ self.setState({commentOpen: on ? null : i}); }}; });
+      })(),
+      commentCount: 'Showing 8 comments',
+      showPerformance: s.tab === 'performance',
+      filtersOpen: s.filtersOpen,
+      filtersToggleLabel: s.filtersOpen ? 'Hide' : 'Show',
+      toggleFilters: function(){ self.setState({filtersOpen: !s.filtersOpen}); },
+      fRaceType: s.fRaceType || 'All', onFRaceType: function(ev){ self.setState({fRaceType: ev.target.value}); },
+      fCountry: s.fCountry || 'All', onFCountry: function(ev){ self.setState({fCountry: ev.target.value}); },
+      fCourse: s.fCourse || 'All', onFCourse: function(ev){ self.setState({fCourse: ev.target.value}); },
+      fFinish: s.fFinish || 'All', onFFinish: function(ev){ self.setState({fFinish: ev.target.value}); },
+      fViewAs: s.fViewAs || 'Rider', onFViewAs: function(ev){ self.setState({fViewAs: ev.target.value}); },
+      perfFrom: s.perfFrom || '2025-10-19', onPerfFrom: function(ev){ self.setState({perfFrom: ev.target.value}); },
+      perfTo: s.perfTo || '2026-10-19', onPerfTo: function(ev){ self.setState({perfTo: ev.target.value}); },
+      showComments: s.tab === 'comments',
+      showLicence: s.tab === 'licence',
+      licences: (rec.licences || []).map(function(l, i){
+        var st = l.status || (l.earlyFinish && l.earlyFinish !== '–' ? 'Relinquished' : i === 0 ? 'Active' : 'Expired');
+        return Object.assign({}, l, {status: st, statusClass: st === 'Active' ? 'bha-badge-default' : 'bha-badge-outline', statusDot: st === 'Active' ? 'rgb(22,163,74)' : 'rgb(161,161,170)', statusInk: st === 'Active' ? 'rgb(9,9,11)' : 'rgb(113,113,122)', statusWeight: st === 'Active' ? 600 : 400});
+      }),
+      showSponsorship: s.tab === 'sponsorship',
+      jockeySponsors: sp.current.concat(sp.history),
+      spCurrent: sp.current, spHistory: sp.history,
+      spHasCurrent: sp.current.length > 0, spNoCurrent: sp.current.length === 0,
+      spCurrentCount: 'Records found: ' + sp.current.length,
+      spHistoryCount: 'Records found: ' + sp.history.length,
+      showDisciplinary: s.tab === 'disciplinary',
+      disciplinary: rec.disciplinary || [],
+      discTotals: rec.discTotals || {interference:'0', whip:'0'},
+      performance: perfRows,
+      rides: rides, ridesNone: rides.length === 0,
+      ridesCount: 'Showing ' + rides.length + ' of ' + RIDES.length + ' rides',
+      perfStats: [{k:'Rides', v:String(rides.length)},{k:'Wins', v:String(rWins)},{k:'Places', v:String(rPlaces)},{k:'Strike rate', v: rides.length ? (rWins/rides.length*100).toFixed(1) + '%' : '0.0%'},{k:'Winnings', v:'£' + rTot.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}],
+      perfSummary: perfSummary,
+      perfWinsOnly: winsOnly,
+      nextRides: rec.nextRides || [],
+      previousRides: (rec.previousRides || []).map(function(row){
+        var f = (row.f || [])[0] || 'grey|no breach';
+        var parts = f.split('|');
+        var cls = parts[0] === 'red' ? 'bha-badge-destructive' : (parts[0] === 'amber' ? 'bha-badge-secondary' : 'bha-badge-secondary');
+        return { t: row.t, w: row.w, flagLabel: parts[1], flagClass: cls, note: row.n || '' };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

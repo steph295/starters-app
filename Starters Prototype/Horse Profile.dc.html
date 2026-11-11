@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fonts.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-tokens.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/fig-typography.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/tokens/aliases.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/core/core.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/data/data.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/navigation/navigation.css">
+<link rel="stylesheet" href="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/components/forms/forms.css">
+<script src="ds/bha-raceday-apps-design-system-a301a30f-5591-4091-9889-aa7989030915/_ds_bundle.js"></script>
+<style>
+body { margin: 0; }
+a { color: rgb(0,47,113); }
+a:hover { color: rgb(0,38,92); }
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--background, rgb(248,250,252));font-family:var(--font-sans, Inter, -apple-system, sans-serif);color:var(--foreground, rgb(9,9,11));padding:20px 20px 32px">
+<div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:10px">
+
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-width:0">
+<div style="position:relative">
+<button onClick="{{ toggleRunners }}" style="display:inline-flex;align-items:center;gap:10px;margin:0;padding:2px 6px 2px 0;border:none;background:transparent;font:inherit;cursor:pointer;color:var(--foreground, rgb(9,9,11))">
+<h1 style="margin:0;font-size:24px;line-height:32px;font-weight:600;letter-spacing:-0.6px">{{ p.name }}</h1>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="20" hint-size="20px,20px"></x-import>
+</button>
+<sc-if value="{{ runnersOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeRunners }}" style="position:fixed;inset:0;z-index:40"></div>
+<div role="listbox" style="position:absolute;top:calc(100% + 6px);left:0;z-index:50;min-width:340px;background:#fff;border:1px solid rgb(228,228,231);border-radius:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);padding:4px;display:flex;flex-direction:column">
+<div style="padding:8px 10px 6px;font-size:12px;line-height:16px;color:var(--muted-foreground, rgb(113,113,122))">{{ raceLabel }}</div>
+<sc-for list="{{ runners }}" as="r" hint-placeholder-count="4">
+<button role="option" aria-selected="{{ r.selected }}" onClick="{{ r.select }}" style="display:grid;grid-template-columns:16px 20px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border:none;border-radius:6px;background:{{ r.bg }};font:inherit;font-size:14px;line-height:20px;text-align:left;cursor:pointer;color:var(--foreground, rgb(9,9,11))" style-hover="background:var(--secondary, rgb(245,245,245))">
+<span style="color:var(--primary, rgb(0,47,113))">{{ r.tick }}</span>
+<span style="font-variant-numeric:tabular-nums;color:var(--muted-foreground, rgb(113,113,122))">{{ r.no }}</span>
+<span style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.horse }}</span>
+<span style="color:var(--muted-foreground, rgb(113,113,122));white-space:nowrap">{{ r.jockey }}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<span style="font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">{{ p.sub }}</span>
+<span style="font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">{{ currentRunnerLabel }}</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="bha-btn bha-btn--default bha-btn-default">Generic enquiry</button></div>
+</div>
+<div style="background:var(--secondary, rgb(245,245,245));border-radius:10px">
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px 32px;padding:10px 14px 8px">
+<sc-for list="{{ basicsTop }}" as="b" hint-placeholder-count="4">
+<div style="font-size:13px;line-height:19px;min-width:0;overflow-wrap:anywhere;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px"><span style="font-weight:600">{{ b.k }}:</span><span>{{ b.v }}</span><sc-if value="{{ b.hasCall }}" hint-placeholder-val="{{ false }}"><a href="{{ b.tel }}" aria-label="Call {{ b.v }}" style="display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0 8px;border:1px solid rgb(228,228,231);border-radius:26px;background:#fff;font-size:12px;line-height:16px;font-weight:600;color:rgb(0,47,113);text-decoration:none;font-variant-numeric:tabular-nums" style-hover="background:rgb(244,244,245)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="phone" size="12" hint-size="12px,12px"></x-import>{{ b.phone }}</a><a href="{{ b.mail }}" aria-label="Email {{ b.v }}" style="display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0 8px;border:1px solid rgb(228,228,231);border-radius:26px;background:#fff;font-size:12px;line-height:16px;font-weight:600;color:rgb(0,47,113);text-decoration:none" style-hover="background:rgb(244,244,245)"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="mail" size="12" hint-size="12px,12px"></x-import>Email</a></sc-if><sc-if value="{{ b.hasBadge }}" hint-placeholder-val="{{ false }}"><span class="bha-badge {{ b.badgeClass }}">{{ b.badge }}</span></sc-if></div>
+</sc-for>
+</div>
+
+<sc-if value="{{ moreOpen }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px 32px;padding:0 14px 10px">
+<sc-for list="{{ basicsRest }}" as="b" hint-placeholder-count="8">
+<div style="font-size:13px;line-height:19px;min-width:0;overflow-wrap:anywhere;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px"><span style="font-weight:600">{{ b.k }}:</span><span>{{ b.v }}</span><sc-if value="{{ b.hasBadge }}" hint-placeholder-val="{{ false }}"><span class="bha-badge {{ b.badgeClass }}">{{ b.badge }}</span></sc-if></div>
+</sc-for>
+</div>
+</sc-if>
+<div style="border-top:1px solid rgb(228,228,231);margin:0 14px"></div>
+<button onClick="{{ toggleMore }}" aria-expanded="{{ moreOpen }}" style="display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border:none;background:transparent;font:inherit;font-size:13px;line-height:20px;font-weight:500;cursor:pointer;color:var(--muted-foreground, rgb(113,113,122))">{{ moreLabel }}<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="{{ moreIcon }}" size="16" hint-size="16px,16px"></x-import></button>
+</div>
+<sc-if value="{{ showEqFilters }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+<div role="group" aria-label="Date range" style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Dates</span>
+<input aria-label="From date" type="date" value="{{ eqFrom }}" onChange="{{ onEqFrom }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+<span aria-hidden="true" style="color:var(--muted-foreground, rgb(113,113,122))">–</span>
+<input aria-label="To date" type="date" value="{{ eqTo }}" onChange="{{ onEqTo }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+</div>
+<sc-for list="{{ eqMulti }}" as="m" hint-placeholder-count="6">
+<div style="position:relative">
+<button onClick="{{ m.toggle }}" aria-haspopup="listbox" aria-expanded="{{ m.open }}" style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid {{ m.border }};border-radius:8px;background:{{ m.bg }};font:inherit;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap;color:var(--foreground, rgb(9,9,11))">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">{{ m.label }}</span>
+<span style="font-weight:600">{{ m.summary }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+</button>
+<sc-if value="{{ m.open }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ m.close }}" style="position:fixed;inset:0;z-index:40"></div>
+<div role="listbox" aria-multiselectable="true" style="position:absolute;top:calc(100% + 4px);left:0;z-index:50;min-width:240px;max-height:300px;overflow-y:auto;background:#fff;border:1px solid rgb(228,228,231);border-radius:10px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);padding:4px;display:flex;flex-direction:column">
+<sc-for list="{{ m.options }}" as="o" hint-placeholder-count="4">
+<button role="option" aria-selected="{{ o.checked }}" onClick="{{ o.toggle }}" style="display:flex;align-items:center;gap:10px;padding:7px 10px;border:none;border-radius:6px;background:transparent;font:inherit;font-size:13px;line-height:18px;text-align:left;cursor:pointer;color:var(--foreground, rgb(9,9,11))" style-hover="background:var(--secondary, rgb(245,245,245))">
+<span style="flex:none;width:16px;height:16px;box-sizing:border-box;border-radius:4px;border:1px solid {{ o.boxBorder }};background:{{ o.boxBg }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1">{{ o.tick }}</span>
+<span>{{ o.label }}</span>
+</button>
+</sc-for>
+<sc-if value="{{ m.any }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ m.clear }}" style="margin-top:4px;padding:7px 10px;border:none;border-top:1px solid rgb(228,228,231);background:transparent;font:inherit;font-size:13px;line-height:18px;text-align:left;cursor:pointer;color:var(--primary, rgb(0,47,113))">Clear selection</button>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ showFormFilters }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Race type</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fRaceType }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fRaceType }}" onChange="{{ onFRaceType }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Flat</option><option>Chase</option><option>Hurdle</option><option>NH Flat</option></select>
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Racecourse</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fCourse }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fCourse }}" onChange="{{ onFCourse }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Ascot</option><option>Newbury</option><option>Newmarket</option><option>York</option><option>Goodwood</option><option>Doncaster</option></select>
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Going</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fGoing }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fGoing }}" onChange="{{ onFGoing }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Firm</option><option>Good to firm</option><option>Good</option><option>Good to soft</option><option>Soft</option><option>Heavy</option></select>
+</label>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Finishing position</span>
+<span style="font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ fFinish }}</span>
+<x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="chevron-down" size="14" hint-size="14px,14px"></x-import>
+<select value="{{ fFinish }}" onChange="{{ onFFinish }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font:inherit;border:none;padding:0;margin:0"><option>All</option><option>Places</option><option>Wins</option></select>
+</label>
+<div role="group" aria-label="Date range" style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Dates</span>
+<input aria-label="From date" type="date" value="{{ perfFrom }}" onChange="{{ onPerfFrom }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+<span aria-hidden="true" style="color:var(--muted-foreground, rgb(113,113,122))">–</span>
+<input aria-label="To date" type="date" value="{{ perfTo }}" onChange="{{ onPerfTo }}" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums">
+</div>
+<label style="position:relative;display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid rgb(228,228,231);border-radius:8px;background:#fff;font-size:13px;line-height:20px;cursor:pointer;white-space:nowrap">
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Distance (f)</span>
+<input type="number" placeholder="Any" style="border:none;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--foreground, rgb(9,9,11));outline:none;padding:0;font-variant-numeric:tabular-nums;width:52px">
+</label>
+</div>
+</sc-if>
+
+
+<div class="bha-tabs" role="tablist" style="align-self:flex-start;max-width:100%;overflow-x:auto;scrollbar-width:none">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button class="bha-tab" role="tab" data-state="{{ t.state }}" aria-selected="{{ t.selected }}" onClick="{{ t.select }}">{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr><th>Date</th><th>Racecourse</th><th>Race details</th><th>Going</th><th>Distance</th><th>Jockey</th><th>Trainer</th><th>Weight</th><th>Position</th><th style="text-align:right">P. figure</th><th style="text-align:right">SP</th><th style="text-align:right">Behind winner</th><th style="text-align:right">Behind horse in front</th><th>Handicapper's codes</th><th style="text-align:right;width:72px"></th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ form }}" as="f" hint-placeholder-count="4">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums"><div style="display:flex;align-items:center;gap:8px"><span>{{ f.dateLabel }}</span></div></td>
+<td style="white-space:nowrap;font-weight:600">{{ f.course }}</td>
+<td style="white-space:nowrap">{{ f.race }}</td>
+<td style="white-space:nowrap">{{ f.going }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ f.dist }}</td>
+<td style="white-space:nowrap">{{ f.jockey }}</td>
+<td style="white-space:nowrap">{{ f.trainer }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ f.weight }}</td>
+<td style="white-space:nowrap"><span class="bha-badge {{ f.posClass }}">{{ f.posLabel }}</span></td>
+<td style="white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums">{{ f.pfig }}</td>
+<td style="white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums">{{ f.sp }}</td>
+<td style="white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;font-weight:600">{{ f.btnWin }}</td>
+<td style="white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;font-weight:600">{{ f.btnNext }}</td>
+<td style="white-space:nowrap"><div style="display:flex;gap:4px;align-items:center"><sc-for list="{{ f.codeList }}" as="c" hint-placeholder-count="1"><button onClick="{{ c.open }}" aria-label="{{ c.aria }}" style="min-width:36px;height:32px;padding:0 8px;border:1px solid rgb(228,228,231);border-radius:8px;background:{{ c.bg }};font:inherit;font-size:13px;font-weight:600;color:var(--primary, rgb(0,47,113));cursor:pointer">{{ c.code }}</button></sc-for><sc-if value="{{ f.noCodes }}" hint-placeholder-val="{{ false }}"><span style="color:var(--muted-foreground, rgb(113,113,122))">–</span></sc-if></div></td>
+<td style="text-align:right;white-space:nowrap"><button onClick="{{ f.open }}" class="bha-btn bha-btn--sm bha-btn-outline">Comment</button></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer">
+<span>{{ formSummary }}</span>
+<span style="color:var(--muted-foreground, rgb(113,113,122))">Beaten distances in lengths. Tap a code for its meaning.</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showEntries }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ entries }}" as="e" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:12px 16px;border-bottom:1px solid rgb(228,228,231)">
+<div style="font-size:15px;line-height:22px;font-variant-numeric:tabular-nums;color:var(--foreground, rgb(9,9,11));text-wrap:pretty"><strong style="font-weight:700">{{ e.dateLabel }}</strong> · {{ e.line }}</div>
+<span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;line-height:18px;font-weight:{{ e.tagWeight }};color:{{ e.tagInk }};white-space:nowrap"><span aria-hidden="true" style="width:6px;height:6px;border-radius:9999px;background:{{ e.tagInk }}"></span>{{ e.tag }}</span>
+<div style="grid-column:1/-1;font-size:13px;line-height:18px;color:var(--muted-foreground, rgb(113,113,122))">{{ e.detail }}</div>
+</div>
+</sc-for>
+</div>
+<div class="bha-datatable__footer"><span>{{ entrySummary }}</span><span style="color:var(--muted-foreground, rgb(113,113,122))">Declared: within 48 hours of the race. Entry: further out.</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showEnquiries }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr><th>Date</th><th>Race</th><th>Jockey</th><th>Matter</th><th>Outcome</th><th>Penalty</th><th style="text-align:right;width:72px"></th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ enquiries }}" as="e" hint-placeholder-count="2">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ e.date }}</td>
+<td style="font-variant-numeric:tabular-nums">{{ e.race }}</td>
+<td style="white-space:nowrap">{{ e.jockey }}</td>
+<td>{{ e.matter }}</td>
+<td style="white-space:nowrap"><span class="bha-badge {{ e.outcomeClass }}">{{ e.outcome }}</span></td>
+<td>{{ e.penalty }}</td>
+<td style="text-align:right;white-space:nowrap"><button class="bha-btn bha-btn--sm bha-btn-outline">View</button></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer"><span>{{ enqCount }}</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showComments }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr><th>Date</th><th>Type</th><th>Comment</th><th>Racecourse</th><th style="text-align:right;width:84px"></th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ comments }}" as="c" hint-placeholder-count="2">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums"><div style="display:flex;align-items:center;gap:8px"><span>{{ c.dateLabel }}</span></div></td>
+<td style="white-space:nowrap"><div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px"><span class="bha-badge {{ c.typeClass }}">{{ c.type }}</span><span style="font-size:12px;line-height:16px;color:var(--muted-foreground, rgb(113,113,122))">{{ c.sub }}</span></div></td>
+<td style="min-width:240px;font-weight:600">{{ c.pick }}</td>
+<td style="white-space:nowrap">{{ c.course }}</td>
+<td style="text-align:right;white-space:nowrap"><button onClick="{{ c.open }}" class="bha-btn bha-btn--sm bha-btn-outline">Details</button></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div class="bha-datatable__footer"><span>{{ commentCount }}</span><span style="color:var(--muted-foreground, rgb(113,113,122))">Race performance comments are picked from a fixed list. Starters' reports are recorded as enquiries.</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showMedical }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="display:flex;align-items:center;gap:20px;padding:12px 16px;border-bottom:1px solid rgb(228,228,231);font-size:13px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">
+<span>Medication suspended <strong style="color:var(--foreground, rgb(9,9,11))">{{ p.medSuspended }}</strong></span>
+<span>Last sampled <strong style="color:var(--foreground, rgb(9,9,11));font-variant-numeric:tabular-nums">{{ p.sampled }}</strong></span>
+</div>
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr><th>Date</th><th>Course</th><th>Type</th><th>Detail</th><th>Result</th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ medical }}" as="m" hint-placeholder-count="2">
+<tr>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ m.date }}</td>
+<td style="white-space:nowrap">{{ m.course }}</td>
+<td style="white-space:nowrap;font-weight:500">{{ m.type }}</td>
+<td style="min-width:260px">{{ m.detail }}</td>
+<td style="white-space:nowrap"><span class="bha-badge {{ m.resultClass }}">{{ m.result }}</span></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showNonRunners }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<sc-if value="{{ hasNR }}" hint-placeholder-val="{{ true }}">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead><tr><th>Date</th><th>Course</th><th>Reason</th><th>Type</th><th>Fine</th></tr></thead>
+<tbody>
+<sc-for list="{{ nonRunners }}" as="n" hint-placeholder-count="1">
+<tr><td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ n.date }}</td><td style="white-space:nowrap">{{ n.course }}</td><td>{{ n.reason }}</td><td style="white-space:nowrap">{{ n.type }}</td><td style="white-space:nowrap">{{ n.fine }}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</sc-if>
+<sc-if value="{{ noNR }}" hint-placeholder-val="{{ false }}"><div style="padding:16px;font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">No non-runner history.</div></sc-if>
+<div class="bha-datatable__footer"><span>{{ nrCount }}</span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showSponsorship }}" hint-placeholder-val="{{ false }}">
+<dc-import name="Sponsorship Agreements" title="Owner sponsorship" empty-text="No owner sponsorship" race-date="14/09/2026" items="{{ ownerSponsors }}" hint-size="100%,120px"></dc-import>
+</sc-if>
+
+<sc-if value="{{ showTravel }}" hint-placeholder-val="{{ false }}">
+<div class="bha-card"><div class="bha-card__body" style="text-align:center;font-size:14px;line-height:20px;color:var(--muted-foreground, rgb(113,113,122))">No RCNs found.</div></div>
+</sc-if>
+
+<sc-if value="{{ showConnections }}" hint-placeholder-val="{{ false }}">
+<div class="bha-datatable">
+<div style="overflow-x:auto">
+<table class="bha-table">
+<thead>
+<tr><th>Role</th><th>Name</th><th>From</th><th>To</th></tr>
+</thead>
+<tbody>
+<sc-for list="{{ connections }}" as="c" hint-placeholder-count="3">
+<tr>
+<td style="white-space:nowrap;color:var(--muted-foreground, rgb(113,113,122))">{{ c.role }}</td>
+<td style="font-weight:500">{{ c.name }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ c.from }}</td>
+<td style="white-space:nowrap;font-variant-numeric:tabular-nums">{{ c.to }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+</sc-if>
+
+</div>
+<sc-if value="{{ panelOpen }}" hint-placeholder-val="{{ false }}">
+<aside style="position:fixed;top:56px;right:0;bottom:0;width:min(380px,100vw);box-sizing:border-box;background:#fff;border-left:1px solid rgb(228,228,231);border-top:1px solid rgb(228,228,231);box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);z-index:60;display:flex;flex-direction:column">
+<div style="display:flex;align-items:flex-start;gap:12px;padding:16px;border-bottom:1px solid rgb(228,228,231)">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:12px;line-height:16px;color:var(--muted-foreground, rgb(113,113,122))">{{ panel.eyebrow }}</span>
+<span style="font-size:16px;line-height:24px;font-weight:600;color:var(--foreground, rgb(9,9,11))">{{ panel.title }}</span>
+<span style="font-size:13px;line-height:18px;color:var(--muted-foreground, rgb(113,113,122))">{{ panel.sub }}</span>
+</div>
+<button onClick="{{ closePanel }}" aria-label="Close" class="bha-btn bha-btn-outline" style="width:44px;height:44px;padding:0;justify-content:center"><x-import component-from-global-scope="BHARacedayAppsDesignSystem_a301a3.Icon" name="x" size="16" hint-size="16px,16px"></x-import></button>
+</div>
+<div style="flex:1;min-height:0;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px">
+<sc-if value="{{ panel.hasBody }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-size:14px;line-height:20px;color:var(--foreground, rgb(9,9,11));text-wrap:pretty">{{ panel.body }}</p></sc-if>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ panel.rows }}" as="r" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:140px minmax(0,1fr);gap:12px;padding:8px 0;border-top:1px solid rgb(228,228,231);font-size:13px;line-height:18px"><span style="color:var(--muted-foreground, rgb(113,113,122))">{{ r.k }}</span><span style="color:var(--foreground, rgb(9,9,11));font-weight:500">{{ r.v }}</span></div>
+</sc-for>
+</div>
+</div>
+</aside>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;horse&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;soldier&quot;,&quot;billthebull&quot;,&quot;dubaicharm&quot;,&quot;mirzimaan&quot;,&quot;palacepier&quot;,&quot;trillium&quot;,&quot;baradar&quot;,&quot;kinross&quot;],&quot;default&quot;:&quot;soldier&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { tab: (function(){ try { return new URLSearchParams(window.location.search).get('tab'); } catch(e){ return null; } })() || this.props.tab || 'form' };
+
+  RACES = [{ label: 'Ascot 15:15', runners: [
+    {no:1, key:'soldier', horse:'SOLDIER OF THE SEA (IRE)', jockey:'Tom Marquand'},
+    {no:2, key:'billthebull', horse:'BILL THE BULL (IRE)', jockey:'William Carson'},
+    {no:3, key:'dubaicharm', horse:'DUBAI CHARM (IRE)', jockey:'Rossa Ryan'},
+    {no:4, key:'mirzimaan', horse:'MIRZIMAAN (IRE)', jockey:'Jim Crowley'}
+  ]},
+  { label: 'Ascot 14:15', runners: [
+    {no:3, key:'palacepier', horse:'PALACE PIER', jockey:'Tom Marquand'},
+    {no:5, key:'trillium', horse:'TRILLIUM', jockey:'Jim Crowley'}
+  ]},
+  { label: 'Ascot 14:55', runners: [
+    {no:2, key:'kinross', horse:'KINROSS', jockey:'Hollie Doyle'}
+  ]},
+  { label: 'Ascot 15:35', runners: [
+    {no:7, key:'baradar', horse:'BARADAR', jockey:'Oisin Murphy'}
+  ]}];
+
+  PROFILES = {
+    soldier: {
+      age:'2', hemisphere:'Northern', ratings:['82','80','76','72','–'], lastRun:'13 days · Flat nursery handicap', penalty:'None', nonRunners:[{date:'02/08/2026', course:'Goodwood', reason:'Going (soft)', type:'Self-certified', fine:'–'}], sponsors:[{sponsor:'Mansoori Racing', start:'01/03/2026', end:'28/02/2027'},{sponsor:'Emirates Racing Club', start:'01/03/2024', end:'28/02/2026'}],
+      name:'SOLDIER OF THE SEA (IRE)', sub:'2yo b c', trainer:'William Knight', owner:'Mr Abdulla Al Mansoori', dob:'12/03/2024', sex:'Colt', sire:'Sea The Stars (IRE)', dam:'Soldier\'s Pride', rating:'82', medSuspended:'No', sampled:'29/06/26',
+      enquiries:[
+        {date:'29/08/2026', race:'ASC 29/08/2026 3:40', jockey:'Tom Marquand', matter:'Fall, veterinary report requested', outcome:'No Further Action', penalty:'–'}
+      ],
+      medical:[
+        {date:'29/06/2026', course:'Newbury', type:'Sample', detail:'Post-race urine sample taken as routine.', result:'Negative'},
+        {date:'29/08/2026', course:'Ascot', type:'Vet check', detail:'Checked after fall. No injury found.', result:'Fit to race'}
+      ],
+      connections:[
+        {role:'Trainer', name:'William Knight', from:'01/02/2026', to:'Current'},
+        {role:'Owner', name:'Mr Abdulla Al Mansoori', from:'14/11/2025', to:'Current'},
+        {role:'Breeder', name:'Ballylinch Stud', from:'–', to:'–'}
+      ]
+    },
+    billthebull: {
+      age:'2', hemisphere:'Northern', ratings:['78','76','–','–','–'], lastRun:'86 days · Flat maiden', penalty:'Stalls warning, re-test before next run', nonRunners:[], sponsors:[],
+      name:'BILL THE BULL (IRE)', sub:'2yo b c', trainer:'Adam Kirby', owner:'Vicarage Dreamers', dob:'02/04/2024', sex:'Colt', sire:'No Nay Never (USA)', dam:'Bull Market', rating:'78', medSuspended:'No', sampled:'18/07/26',
+      enquiries:[{date:'18/07/2026', race:'GOO 18/07/2026 2:45', jockey:'William Carson', matter:'Slow to load, reluctant to enter stalls', outcome:'In Breach', penalty:'Warning issued'}],
+      medical:[{date:'18/07/2026', course:'Goodwood', type:'Sample', detail:'Post-race urine sample taken as routine.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'Adam Kirby', from:'10/01/2026', to:'Current'},{role:'Owner', name:'Vicarage Dreamers', from:'10/01/2026', to:'Current'}]
+    },
+    dubaicharm: {
+      age:'1', hemisphere:'Southern', ratings:['75','79','–','–','–'], lastRun:'59 days · Flat novice', penalty:'None', nonRunners:[{date:'30/08/2026', course:'Sandown', reason:'Lame', type:'Vet certificate', fine:'–'}], sponsors:[],
+      name:'DUBAI CHARM (IRE)', sub:'2yo b f', trainer:'Charlie Hughes', owner:'Mr Abdulla Al Mansoori', dob:'19/12/2024', sex:'Filly', sire:'Dubawi (IRE)', dam:'Charming Thought', rating:'75', medSuspended:'No', sampled:'14/08/26',
+      enquiries:[{date:'14/08/2026', race:'GOO 14/08/2026 3:35', jockey:'Rossa Ryan', matter:'Running and riding, poor performance', outcome:'No Further Action', penalty:'–'}],
+      medical:[{date:'14/08/2026', course:'Goodwood', type:'Sample', detail:'Post-race sample taken following poor performance.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'Charlie Hughes', from:'02/02/2026', to:'Current'},{role:'Owner', name:'Mr Abdulla Al Mansoori', from:'02/02/2026', to:'Current'}]
+    },
+    mirzimaan: {
+      age:'2', hemisphere:'Northern', ratings:['80','74','–','–','–'], lastRun:'46 days · Flat novice', penalty:'None', nonRunners:[], sponsors:[{sponsor:'Shadwell', start:'01/01/2026', end:'31/12/2026'},{sponsor:'Tattersalls', start:'01/10/2026', end:'30/09/2027'}],
+      name:'MIRZIMAAN (IRE)', sub:'2yo b c', trainer:'James Tate', owner:'Shadwell Estate Company Ltd', dob:'28/02/2024', sex:'Colt', sire:'Mehmas (IRE)', dam:'Mirzam', rating:'80', medSuspended:'No', sampled:'27/08/26',
+      enquiries:[],
+      medical:[{date:'27/08/2026', course:'York', type:'Sample', detail:'Post-race urine sample taken as routine.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'James Tate', from:'15/01/2026', to:'Current'},{role:'Owner', name:'Shadwell Estate Company Ltd', from:'15/01/2026', to:'Current'}]
+    },
+    palacepier: {
+      age:'5', hemisphere:'Northern', ratings:['118','117','120','116','114'], lastRun:'14 days · Flat Group 1', penalty:'Self-certified lame 14 Sep, cannot run until 22 Sep', nonRunners:[{date:'14/09/2026', course:'Doncaster', reason:'Lame', type:'Trainer self-certification', fine:'–'}], sponsors:[],
+      name:'PALACE PIER', sub:'5yo b g', trainer:'John Gosden', owner:'Hnd Al Maktoum', dob:'19/03/2021', sex:'Gelding', sire:'Kingman (GB)', dam:'Beach Frolic', rating:'118', medSuspended:'No', sampled:'30/08/26',
+      enquiries:[{date:'05/10/2026', race:'ASC 05/10/2026 3:35', jockey:'Tom Marquand', matter:'Interference, careless riding', outcome:'In Breach', penalty:'Suspended 2 days'},{date:'14/09/2026', race:'DON 14/09/2026 2:25', jockey:'Tom Marquand', matter:'Running and riding, poor performance', outcome:'No Further Action', penalty:'–'},{date:'22/06/2026', race:'ASC 22/06/2026 4:20', jockey:'Frankie Dettori', matter:'Use of the whip, review', outcome:'No Further Action', penalty:'–'}],
+      medical:[{date:'30/08/2026', course:'Ascot', type:'Sample', detail:'Post-race urine sample taken as routine.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'John & Thady Gosden', from:'01/01/2023', to:'Current'},{role:'Owner', name:'Hnd Al Maktoum', from:'01/01/2023', to:'Current'}]
+    },
+    trillium: {
+      age:'4', hemisphere:'Northern', ratings:['108','105','104','–','–'], lastRun:'8 days · Flat Group 3', penalty:'None', nonRunners:[], sponsors:[{sponsor:'Highclere Thoroughbred Racing', start:'01/10/2025', end:'30/09/2026'}],
+      name:'TRILLIUM', sub:'4yo b f', trainer:'William Haggas', owner:'Highclere', dob:'03/05/2022', sex:'Filly', sire:'Night of Thunder (IRE)', dam:'Trilogy', rating:'108', medSuspended:'No', sampled:'06/09/26',
+      enquiries:[{date:'06/09/2026', race:'ASC 06/09/2026 2:30', jockey:'Jim Crowley', matter:'Use of the whip, review', outcome:'No Further Action', penalty:'–'}],
+      medical:[{date:'06/09/2026', course:'Ascot', type:'Sample', detail:'Winner sample taken as routine.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'William Haggas', from:'01/03/2024', to:'Current'},{role:'Owner', name:'Highclere', from:'01/03/2024', to:'Current'}]
+    },
+    baradar: {
+      age:'4', hemisphere:'Northern', ratings:['96','94','95','92','–'], lastRun:'21 days · Flat handicap', penalty:'None', nonRunners:[], sponsors:[{sponsor:'Godolphin', start:'01/01/2025', end:'31/12/2026'}],
+      name:'BARADAR', sub:'4yo b c', trainer:'John Gosden', owner:'Godolphin', dob:'14/04/2022', sex:'Colt', sire:'Dubawi (IRE)', dam:'Barahin', rating:'96', medSuspended:'No', sampled:'02/08/26',
+      enquiries:[{date:'02/08/2026', race:'ASC 02/08/2026 2:20', jockey:'Rossa Ryan', matter:'Interference', outcome:'No Further Action', penalty:'–'}],
+      medical:[{date:'02/08/2026', course:'Ascot', type:'Sample', detail:'Post-race urine sample taken as routine.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'John & Thady Gosden', from:'01/01/2025', to:'Current'},{role:'Owner', name:'Godolphin', from:'01/01/2025', to:'Current'}]
+    },
+    kinross: {
+      age:'6', hemisphere:'Northern', ratings:['114','116','115','117','113'], lastRun:'15 days · Flat Group 2', penalty:'Self-certified coughing 13 Sep, cannot run until 21 Sep', nonRunners:[{date:'13/09/2026', course:'Doncaster', reason:'Coughing', type:'Trainer self-certification', fine:'–'}], sponsors:[],
+      name:'KINROSS', sub:'6yo ch g', trainer:'Karl Burke', owner:'Marc Chan', dob:'02/02/2020', sex:'Gelding', sire:'Kingman (GB)', dam:'Ceilidh House', rating:'114', medSuspended:'No', sampled:'30/08/26',
+      enquiries:[],
+      medical:[{date:'30/08/2026', course:'York', type:'Sample', detail:'Post-race urine sample taken as routine.', result:'Negative'}],
+      connections:[{role:'Trainer', name:'Karl Burke', from:'01/01/2024', to:'Current'},{role:'Owner', name:'Marc Chan', from:'01/01/2022', to:'Current'}]
+    }
+  };
+
+  TODAY = '2026-09-14';
+
+  CODES = {
+    SA:{name:'Slowly away', meaning:'Lost ground at the start. The run may underrate the horse and is treated with caution when assessing the rating.'},
+    NCR:{name:'Not clear run', meaning:'Met trouble in running and could not obtain a clear run. Beaten distances are not taken at face value.'},
+    HMP:{name:'Hampered', meaning:'Interfered with by another runner. The handicapper may discount the run when reviewing the rating.'},
+    HL:{name:'Hung left', meaning:'Drifted left under pressure, losing ground. Noted as a possible factor in the result.'},
+    HR:{name:'Hung right', meaning:'Drifted right under pressure, losing ground. Noted as a possible factor in the result.'},
+    TK:{name:'Took a keen hold', meaning:'Raced too freely early on and used energy that told late in the race.'},
+    G:{name:'Ran green', meaning:'Showed inexperience. Typically applied to debutants and lightly raced horses.'},
+    LS:{name:'Lost a shoe', meaning:'Shoe lost during the race. The run is treated with caution when assessing the rating.'},
+    EZ:{name:'Eased', meaning:'Eased by the rider before the line. The beaten distance overstates the true margin.'}
+  };
+
+  HX = {
+    soldier: {
+      form:[
+        {date:'2026-09-04', race:'Maiden Stakes', course:'Newbury', going:'Good to soft', dist:'7f', jockey:'Tom Marquand', weight:'9st 5lb', pos:'4th', ran:9, btnWin:'3¼l', btnNext:'1l', codes:['SA'], comment:'Slowly away, kept on in the final furlong.'},
+        {date:'2026-08-29', race:'Nursery Hcap', course:'Ascot', going:'Good', dist:'7f', jockey:'Tom Marquand', weight:'9st 7lb', pos:'F', ran:11, btnWin:'–', btnNext:'–', codes:[], comment:'Fell two out. Horse and rider unhurt; checked by the veterinary officer.'},
+        {date:'2026-08-14', race:'Novice Stakes', course:'Newmarket', going:'Good to firm', dist:'6f', jockey:'Rossa Ryan', weight:'9st 5lb', pos:'2nd', ran:7, btnWin:'½l', btnNext:'½l', codes:['TK'], comment:'Led until the final furlong, headed close home.'},
+        {date:'2026-07-21', race:'Maiden Stakes', course:'Newbury', going:'Good', dist:'6f', jockey:'Tom Marquand', weight:'9st 5lb', pos:'6th', ran:12, btnWin:'7½l', btnNext:'2l', codes:['G','HL'], comment:'Green on debut, hung left from halfway.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:3, no:1, time:'15:15', jockey:'Tom Marquand', weight:'9st 10lb', note:'Red hood to start · plate fitted near fore'},
+        {date:'2026-09-26', course:'Newmarket', race:5, time:'15:40', note:'Nursery handicap'},
+        {date:'2026-10-03', course:'Newmarket', race:2, time:'13:50', note:'Nursery handicap'}
+      ],
+      comments:[
+        {date:'2026-09-04', course:'Newbury', race:'R4', type:'Race performance', pick:'Slowly away', detail:'Lost around two lengths at the start, kept on in the final furlong.', by:'S. Mitchell'},
+        {date:'2026-08-29', course:'Ascot', race:'R3', type:'Race performance', pick:'Fell', detail:'Fell two out. Horse and rider unhurt; trotted up sound for the veterinary officer.', by:'S. Mitchell'},
+        {date:'2026-08-29', course:'Ascot', race:'R3', type:'Enquiry', pick:'Fall, veterinary report requested', outcome:'No further action', detail:'Veterinary officer examined the colt after the fall. No injury found.', by:'S. Mitchell'},
+        {date:'2026-07-21', course:'Newbury', race:'R1', type:'Enquiry', sub:'Starter’s report', pick:'Stalls test required', outcome:'Stalls test passed 04/08/2026', detail:'Refused to enter the stalls at the first attempt; loaded at the second with assistance.', by:'P. Hughes'}
+      ]
+    },
+    billthebull: {
+      form:[
+        {date:'2026-07-18', race:'Maiden Stakes', course:'Goodwood', going:'Good', dist:'6f', jockey:'William Carson', weight:'9st 5lb', pos:'3rd', ran:10, btnWin:'2¼l', btnNext:'¾l', codes:['SA','HR'], comment:'Slow to load and slowly away, hung right final furlong, ran on late.'},
+        {date:'2026-06-28', race:'Novice Stakes', course:'Newbury', going:'Good to firm', dist:'5f', jockey:'William Carson', weight:'9st 5lb', pos:'1st', ran:8, btnWin:'–', btnNext:'–', codes:[], comment:'Made all, won by 1½l.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:3, no:2, time:'15:15', jockey:'William Carson', weight:'9st 7lb', note:'Tongue tie declared'},
+        {date:'2026-09-30', course:'Nottingham', race:2, time:'14:25', note:'Nursery handicap'}
+      ],
+      comments:[
+        {date:'2026-07-18', course:'Goodwood', race:'R2', type:'Enquiry', sub:'Starter’s report', pick:'Stalls test required', outcome:'Warning issued', detail:'Slow to load, reluctant to enter the stalls. Must pass a stalls test before running again.', by:'S. Mitchell'},
+        {date:'2026-07-18', course:'Goodwood', race:'R2', type:'Race performance', pick:'Hung right', detail:'Hung right inside the final furlong.', by:'S. Mitchell'}
+      ]
+    },
+    dubaicharm: {
+      form:[
+        {date:'2026-08-14', race:'Fillies\' Novice', course:'Goodwood', going:'Soft', dist:'7f', jockey:'Rossa Ryan', weight:'9st 2lb', pos:'9th', ran:11, btnWin:'14l', btnNext:'3l', codes:['EZ'], comment:'Never travelling, eased inside the final furlong.'},
+        {date:'2026-07-12', race:'Fillies\' Maiden', course:'Newmarket', going:'Good', dist:'6f', jockey:'Rossa Ryan', weight:'9st 2lb', pos:'2nd', ran:9, btnWin:'1¼l', btnNext:'1¼l', codes:[], comment:'Kept on well.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:3, no:3, time:'15:15', jockey:'Rossa Ryan', weight:'9st 6lb', note:'Sheepskin cheekpieces'},
+        {date:'2026-09-25', course:'Newbury', race:4, time:'15:05', note:'Fillies’ nursery'}
+      ],
+      comments:[
+        {date:'2026-08-14', course:'Goodwood', race:'R6', type:'Race performance', pick:'Unsuited by the going', detail:'Trainer’s representative reported the filly was unsuited by the soft ground.', by:'P. Hughes'},
+        {date:'2026-08-14', course:'Goodwood', race:'R6', type:'Enquiry', pick:'Poor performance, trainer’s explanation', outcome:'Explanation noted', detail:'Post-race sample taken. Explanation noted.', by:'P. Hughes'}
+      ]
+    },
+    mirzimaan: {
+      form:[
+        {date:'2026-08-27', race:'Novice Stakes', course:'York', going:'Good to firm', dist:'7f', jockey:'Jim Crowley', weight:'9st 5lb', pos:'1st', ran:8, btnWin:'–', btnNext:'–', codes:[], comment:'Won readily by 2l.'},
+        {date:'2026-08-03', race:'Maiden Stakes', course:'Doncaster', going:'Good', dist:'6f', jockey:'Jim Crowley', weight:'9st 5lb', pos:'5th', ran:13, btnWin:'4¾l', btnNext:'nk', codes:['G','LS'], comment:'Debut, green; spread a plate.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:3, no:4, time:'15:15', jockey:'Billy Loughnane', weight:'9st 5lb', note:'Mount at the start'},
+        {date:'2026-10-02', course:'Newmarket', race:1, time:'13:15', note:'Nursery handicap'}
+      ],
+      comments:[
+        {date:'2026-08-03', course:'Doncaster', race:'R3', type:'Race performance', pick:'Lost a shoe', detail:'Spread a plate on the near fore; found on the track after the race.', by:'S. Mitchell'}
+      ]
+    },
+    palacepier: {
+      form:[
+        {date:'2026-08-30', race:'Group 1', course:'Ascot', going:'Good', dist:'1m', jockey:'Tom Marquand', weight:'9st 0lb', pos:'2nd', ran:8, btnWin:'½l', btnNext:'½l', codes:['LS'], comment:'Kept on, no extra close home. Lost near-fore shoe.'},
+        {date:'2026-08-02', race:'Group 2', course:'Goodwood', going:'Good to firm', dist:'1m', jockey:'Tom Marquand', weight:'9st 0lb', pos:'1st', ran:7, btnWin:'–', btnNext:'–', codes:[], comment:'Won readily by 1¾l.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:3, no:3, time:'14:15', jockey:'Tom Marquand', weight:'8st 10lb', note:'Inside 7 clear days, cannot run'},
+        {date:'2026-09-16', course:'Sandown', race:4, no:6, time:'15:30', jockey:'Tom Marquand', weight:'9st 2lb', note:'Inside 7 clear days, cannot run'},
+        {date:'2026-09-22', course:'Newmarket', race:2, time:'14:05', note:'First eligible run'},
+        {date:'2026-09-27', course:'York', race:5, time:'15:50', note:'Listed'}
+      ],
+      comments:[
+        {date:'2026-08-30', course:'Ascot', race:'R4', type:'Race performance', pick:'Lost a shoe', detail:'Lost near-fore shoe; found on the track after the race.', by:'S. Mitchell'}
+      ]
+    },
+    trillium: {
+      form:[
+        {date:'2026-09-06', race:'Group 3', course:'Ascot', going:'Good', dist:'7f', jockey:'Jim Crowley', weight:'9st 0lb', pos:'1st', ran:9, btnWin:'–', btnNext:'–', codes:[], comment:'Led final furlong, ran on well.'},
+        {date:'2026-08-10', race:'Listed', course:'Newmarket', going:'Good to firm', dist:'7f', jockey:'Jim Crowley', weight:'9st 0lb', pos:'3rd', ran:10, btnWin:'1½l', btnNext:'hd', codes:['NCR'], comment:'Short of room two out, switched left, kept on.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:3, no:5, time:'14:15', jockey:'Jim Crowley', weight:'9st 0lb', note:''},
+        {date:'2026-09-27', course:'Newmarket', race:1, time:'13:35', note:'Listed'}
+      ],
+      comments:[
+        {date:'2026-09-06', course:'Ascot', race:'R2', type:'Enquiry', pick:'Use of the whip, review', outcome:'No further action', detail:'Whip use reviewed after the race. Within the permitted level.', by:'P. Hughes'},
+        {date:'2026-08-10', course:'Newmarket', race:'R5', type:'Race performance', pick:'Denied a clear run', detail:'Short of room two furlongs out and switched left.', by:'S. Mitchell'}
+      ]
+    },
+    baradar: {
+      form:[
+        {date:'2026-08-24', race:'Handicap', course:'York', going:'Good', dist:'1m2f', jockey:'Oisin Murphy', weight:'9st 1lb', pos:'2nd', ran:12, btnWin:'1¾l', btnNext:'1¾l', codes:[], comment:'Kept on, no match for the winner.'},
+        {date:'2026-08-02', race:'Handicap', course:'Ascot', going:'Good to firm', dist:'1m2f', jockey:'Rossa Ryan', weight:'9st 0lb', pos:'4th', ran:14, btnWin:'2½l', btnNext:'sh', codes:['HMP'], comment:'Hampered two out, kept on.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:5, no:7, time:'15:35', jockey:'Oisin Murphy', weight:'8st 9lb', note:'Colours changed 14:11, purple & pink'},
+        {date:'2026-09-25', course:'Newbury', race:6, time:'16:15', note:'Handicap'}
+      ],
+      comments:[
+        {date:'2026-08-02', course:'Ascot', race:'R3', type:'Race performance', pick:'Hampered', detail:'Hampered two furlongs out when a rival edged right.', by:'S. Mitchell'},
+        {date:'2026-08-02', course:'Ascot', race:'R3', type:'Enquiry', pick:'Interference', outcome:'No further action', detail:'Interference two furlongs out. Accidental; placings unaltered.', by:'S. Mitchell'}
+      ]
+    },
+    kinross: {
+      form:[
+        {date:'2026-08-30', race:'Group 2', course:'York', going:'Good', dist:'7f', jockey:'Hollie Doyle', weight:'9st 4lb', pos:'3rd', ran:10, btnWin:'1¼l', btnNext:'nk', codes:['HL'], comment:'Hung left under pressure, ran on late.'},
+        {date:'2026-08-01', race:'Group 1', course:'Goodwood', going:'Good to soft', dist:'7f', jockey:'Hollie Doyle', weight:'9st 0lb', pos:'1st', ran:9, btnWin:'–', btnNext:'–', codes:[], comment:'Won comfortably.'}
+      ],
+      entries:[
+        {date:'2026-09-14', course:'Ascot', race:4, no:2, time:'14:55', jockey:'Hollie Doyle', weight:'9st 0lb', note:'Inside 7 clear days, cannot run'},
+        {date:'2026-09-26', course:'Newmarket', race:3, time:'14:40', note:'Group 2'}
+      ],
+      comments:[
+        {date:'2026-08-30', course:'York', race:'R4', type:'Race performance', pick:'Hung left', detail:'Hung left in the final furlong under pressure.', by:'P. Hughes'}
+      ]
+    }
+  };
+
+  renderVals() {
+    var self = this, st = this.state, info = st.infoOpen !== false, filt = st.topFiltersOpen !== false;
+    return Object.assign(this._rv(), {
+      infoOpen: info, infoLabel: info ? 'Hide' : 'Show', infoIcon: info ? 'chevron-up' : 'chevron-down',
+      toggleInfo: function(){ self.setState({infoOpen: !info}); },
+      moreOpen: !!st.moreOpen, moreLabel: st.moreOpen ? 'See less' : 'See more', moreIcon: st.moreOpen ? 'chevron-up' : 'chevron-down',
+      toggleMore: function(){ self.setState({moreOpen: !st.moreOpen}); },
+      topFiltersOpen: filt, topFiltersLabel: filt ? 'Hide filters' : 'Filters',
+      toggleTopFilters: function(){ self.setState({topFiltersOpen: !filt}); }
+    });
+  }
+  _rv() {
+    var self = this, s = this.state, p = this.props;
+    var key = s.horseKey || (function(){ try { return new URLSearchParams(window.location.search).get('horse'); } catch(e){ return null; } })() || p.horse || 'soldier';
+    if (!this.PROFILES[key]) key = 'soldier';
+    var rec = Object.assign({}, this.PROFILES[key], this.HX[key]);
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var longDate = function(iso){ var p = iso.split('-'); return parseInt(p[2],10) + ' ' + MONTHS[parseInt(p[1],10)-1]; };
+    var shortDate = function(iso){ var p = iso.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; };
+    var dayDiff = function(a, b){ return Math.round((Date.parse(a) - Date.parse(b)) / 86400000); };
+    var today = this.TODAY, CODES = this.CODES, panel = s.panel;
+    var openPanel = function(pn){ return function(ev){ if (ev && ev.stopPropagation) ev.stopPropagation(); self.setState({panel:pn}); }; };
+    var race = this.RACES.filter(function(r){ return r.runners.some(function(x){ return x.key === key; }); })[0] || this.RACES[0];
+    var tabDefs = [{key:'enquiries',label:'Enquiries'},{key:'form',label:'Performance history'},{key:'sponsorship',label:'Owner sponsorship'},{key:'entries',label:'Entries'},{key:'nonrunners',label:'Non-runners'},{key:'medical',label:'Medical & sampling'},{key:'connections',label:'Training & ownership'},{key:'travel',label:'Foreign travel'},{key:'comments',label:'Comments'}];
+    var judges = (function(){ try { return new URLSearchParams(window.location.search).get('role'); } catch(e){ return null; } })() === 'Judges' || p.role === 'Judges';
+    if (judges) tabDefs = tabDefs.filter(function(t){ return t.key !== 'medical'; }).map(function(t){ return t.key === 'sponsorship' ? {key:t.key, label:'Owner sponsorship'} : t; });
+    var tabs = tabDefs.map(function(t){ var on = s.tab === t.key; return { label:t.label, state:on?'active':'inactive', selected:on, select:function(){ self.setState({tab:t.key}); } }; });
+    var runners = race.runners.map(function(r){ var on = r.key === key; return { no:r.no+'.', horse:r.horse, jockey:r.jockey, selected:on, tick:on?'✓':'', bg:on?'var(--accent, rgb(233,244,250))':'transparent', select:function(){ self.setState({horseKey:r.key, runnersOpen:false}); } }; });
+    var current = race.runners.filter(function(r){ return r.key === key; })[0] || race.runners[0];
+    var fFinish = s.fFinish || 'All', fCourse = s.fCourse || 'All', fGoing = s.fGoing || 'All';
+    var isWin = function(pos){ return pos === '1st'; }, isPlace = function(pos){ return /^(1st|2nd|3rd)$/.test(pos); };
+    var lastRunDate = rec.form.length ? rec.form[0].date : null;
+    var form = rec.form.filter(function(f){
+      if (fCourse !== 'All' && f.course !== fCourse) return false;
+      if (fGoing !== 'All' && f.going !== fGoing) return false;
+      if (fFinish === 'Wins') return isWin(f.pos);
+      if (fFinish === 'Places') return isPlace(f.pos);
+      return true;
+    }).map(function(f){
+      var runId = 'run:' + f.date;
+      return Object.assign({}, f, {
+        dateLabel: shortDate(f.date), isLast: f.date === lastRunDate, posLabel: f.pos + '/' + f.ran,
+        posClass: isWin(f.pos) ? 'bha-badge-default' : (f.pos === 'F' || f.pos === 'UR' || f.pos === 'PU' ? 'bha-badge-destructive' : 'bha-badge-secondary'),
+        noCodes: f.codes.length === 0,
+        codeList: f.codes.map(function(c){ var on = panel && panel.kind === 'code' && panel.code === c && panel.run === f.date; return { code:c, aria:c + ': ' + (CODES[c] ? CODES[c].name : ''), bg: on ? 'var(--accent, rgb(233,244,250))' : '#fff', open: openPanel({kind:'code', code:c, run:f.date}) }; }),
+        open: openPanel({kind:'run', run:f.date})
+      });
+    });
+    var wins = rec.form.filter(function(f){ return isWin(f.pos); }).length, places = rec.form.filter(function(f){ return isPlace(f.pos); }).length;
+    var entries = rec.entries.map(function(e){
+      var declared = dayDiff(e.date, today) <= 2;
+      var parts = [e.course, 'Race ' + e.race]; if (declared && e.no) parts.push('No. ' + e.no);
+      var det = [e.time]; if (declared) { if (e.jockey) det.push(e.jockey); if (e.weight) det.push(e.weight); } if (e.note) det.push(e.note);
+      return { dateLabel: longDate(e.date), line: parts.join(' · '), declared: declared, tag: declared ? 'Declared' : 'Entry', tagInk: declared ? 'rgb(0,47,113)' : 'rgb(113,113,122)', tagWeight: declared ? '600' : '500', detail: (e.date === today ? 'Today · ' : '') + det.join(' · ') };
+    });
+    var comments = rec.comments.map(function(c, i){
+      return Object.assign({}, c, { dateLabel: shortDate(c.date), isLast: c.date === lastRunDate, typeClass: c.type === 'Enquiry' ? 'bha-badge-outline' : 'bha-badge-secondary', sub: c.sub || '', open: openPanel({kind:'comment', idx:i}) });
+    });
+    var panelData = null;
+    if (panel && panel.kind === 'code' && CODES[panel.code]) {
+      var pr = rec.form.filter(function(f){ return f.date === panel.run; })[0];
+      panelData = { eyebrow:'Handicapper’s code', title: panel.code + ' · ' + CODES[panel.code].name, sub: pr ? shortDate(pr.date) + ' · ' + pr.course + ' · ' + pr.race : '', body: CODES[panel.code].meaning, hasBody:true, rows: [] };
+    } else if (panel && panel.kind === 'run') {
+      var rr = rec.form.filter(function(f){ return f.date === panel.run; })[0];
+      if (rr) panelData = { eyebrow: rr.date === lastRunDate ? 'Run comment · last run' : 'Run comment', title: shortDate(rr.date) + ' · ' + rr.course, sub: rr.race + ' · ' + rr.dist + ' · ' + rr.going, body: rr.comment, hasBody:true,
+        rows: [{k:'Position', v: rr.pos + ' of ' + rr.ran}, {k:'Behind winner', v: rr.btnWin}, {k:'Behind horse in front', v: rr.btnNext}, {k:'Jockey', v: rr.jockey}, {k:'Weight', v: rr.weight}, {k:'Codes', v: rr.codes.length ? rr.codes.map(function(c){ return c + ' (' + CODES[c].name.toLowerCase() + ')'; }).join(', ') : '–'}] };
+    } else if (panel && panel.kind === 'comment' && rec.comments[panel.idx]) {
+      var cc = rec.comments[panel.idx];
+      var crow = [{k:'Type', v: cc.type + (cc.sub ? ' · ' + cc.sub : '')}, {k:'Date', v: shortDate(cc.date) + (cc.date === lastRunDate ? ' · last run' : '')}, {k:'Race', v: cc.course + ' ' + cc.race}];
+      if (cc.outcome) crow.push({k:'Outcome', v: cc.outcome});
+      crow.push({k:'Recorded by', v: cc.by});
+      panelData = { eyebrow: cc.type, title: cc.pick, sub: cc.type === 'Race performance' ? 'Selected from the race performance list' : (cc.sub || 'Stewards’ enquiry'), body: cc.detail || '', hasBody: !!cc.detail, rows: crow };
+    }
+    var hsh = 0; for (var hi = 0; hi < key.length; hi++) hsh = (hsh * 31 + key.charCodeAt(hi)) % 1000000;
+    var cc = /\((IRE|FR|USA|GER)\)/.exec(rec.name || ''); cc = cc ? cc[1] : 'GB';
+    var ext = {
+      damsire: ['Galileo (IRE)','Dansili (GB)','Pivotal (GB)','Storm Cat (USA)','Cape Cross (IRE)'][hsh % 5],
+      breeder: (rec.connections.filter(function(c){ return c.role === 'Breeder'; })[0] || {}).name || ['Juddmonte Farms','Darley','Shadwell Estate Co','Cheveley Park Stud'][hsh % 4],
+      passport: String(826000 + hsh % 1000) + cc + String(45900000 + hsh) + 'T',
+      chip: '98510104' + String(5000000 + hsh).slice(0,7),
+      ratingsByCode: 'Flat ' + (rec.rating || '–') + ' \u00b7 AW, \u00b7 Chase, \u00b7 Hurdle –',
+      ebf: hsh % 3 ? 'Eligible' : 'Not eligible',
+      median: (5000 + hsh % 9000).toLocaleString('en-GB') + ' (' + ((rec.dob || '').split('/')[2] || '2024') + ')'
+    };
+    var MON = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11}, TODAY = new Date(2026, 9, 19);
+    var row = function(k, v, badge, cls){ return {k:k, v:v, badge:badge || '', hasBadge: !!badge, badgeClass: cls || 'bha-badge-secondary'}; };
+    var restr = (function(){ var p = rec.penalty || 'None'; if (p === 'None') return row('Restrictions', 'None');
+      var m = /until (\d{1,2}) (\w{3})/.exec(p); if (!m) return row('Restrictions', p, 'Live', 'bha-badge-destructive');
+      var live = new Date(2026, MON[m[2]], +m[1]) >= TODAY; return row('Restrictions', p, live ? 'Live' : 'Expired', live ? 'bha-badge-destructive' : 'bha-badge-secondary'); })();
+    var lrc = (rec.comments || []).filter(function(c){ return c.date === lastRunDate; })[0];
+    var hg = [['None',''],['Cheekpieces','First time'],['Hood',''],['Blinkers','First time'],['Tongue strap','']][hsh % 5];
+    var inBreach = rec.enquiries.filter(function(e){ return e.outcome === 'In Breach'; }).length;
+    var stallsWarn = /stalls/i.test(rec.penalty || '');
+    var TC = {'William Knight':['07700 900 128','office@angmeringpark.co.uk'],'Adam Kirby':['07700 900 356','office@kirbyracing.co.uk'],'Charlie Hughes':['07700 900 537','office@westonhouse.co.uk'],'James Tate':['07700 900 462','office@jamestateracing.co.uk'],'John Gosden':['07700 900 221','office@clarehousestables.co.uk'],'William Haggas':['07700 900 279','office@somervillelodge.co.uk'],'Karl Burke':['07700 900 395','office@karlburkeracing.co.uk']}[rec.trainer];
+    var trRow = row('Trainer', rec.trainer); if (judges && TC) { trRow.hasCall = true; trRow.phone = TC[0]; trRow.tel = 'tel:' + TC[0].replace(/\s/g,''); trRow.mail = 'mailto:' + TC[1]; }
+    var card = [row('Age', rec.age), row('Sex', rec.sex), trRow, row('Owner', rec.owner),
+      row('Last run', rec.lastRun), row('Last run stewards\u2019 comment', lrc ? lrc.pick : 'None recorded'),
+      restr, row('Non-runner today', 'No'), row('Shoes', 'Not set'), row('Headgear', hg[0], hg[1], 'bha-badge-outline'),
+      row('Stalls test', stallsWarn ? 'Re-test required' : 'Passed', stallsWarn ? 'Action' : '', 'bha-badge-destructive'),
+      row('Vaccination', 'In date'), row('Raceday privilege requests', 'None'),
+      row('Enquiry & suspension history', rec.enquiries.length ? rec.enquiries.length + ' in last 12 months \u00b7 ' + inBreach + ' in breach' : 'None in last 12 months')];
+    if (rec.hemisphere === 'Southern' && !judges) card.splice(2, 0, row('Weight-for-age', 'Southern Hemisphere bred', 'SH allowance', 'bha-badge-outline'));
+    var more = [row('Rating', rec.rating || '–'), row('Last five ratings', rec.ratings.join(' \u00b7 ')), row('Last sampled', rec.sampled), row('Passport', ext.passport), row('Microchip', ext.chip)]
+      .filter(function(b){ return !judges || ['Last sampled','Passport','Microchip'].indexOf(b.k) < 0; });
+    var enqSel = Object.assign({course:[],outcome:[],offence:[],jockey:[],penalty:[],sub:[]}, s.eqSel || {});
+    var ECOURSE = {ASC:'Ascot',GOO:'Goodwood',GWD:'Goodwood',YRK:'York',YOR:'York',SAN:'Sandown Park',NBY:'Newbury',DON:'Doncaster',KEM:'Kempton Park',CHP:'Chepstow'};
+    var mapE = function(e){ var m = e.matter || '';
+      return {course: ECOURSE[(e.race || '').slice(0,3)] || (e.race || '').slice(0,3), outcome: e.outcome === 'In Breach' ? 'In Breach' : 'Not In Breach',
+        offence: /careless/i.test(m) ? 'Interference Careless' : /whip/i.test(m) ? 'Misuse of the Whip' : /interference/i.test(m) ? 'Interference Accidental' : /stalls|load/i.test(m) ? 'Rider goes into wrong stall' : 'Running and Riding',
+        jockey: e.jockey, penalty: /warning|caution/i.test(e.penalty || '') ? 'Caution' : /suspend/i.test(e.penalty || '') ? 'Suspension' : /fine/i.test(e.penalty || '') ? 'Fine' : /noted/i.test(e.penalty || '') ? 'Noted' : '',
+        sub: /careless/i.test(m) ? 'Careless Riding' : /whip/i.test(m) ? '1st offence' : ''}; };
+    var uq = function(a){ return a.filter(function(v,i){ return v && a.indexOf(v) === i; }).sort(); };
+    var EM = [
+      {key:'course', label:'Courses', options: uq(rec.enquiries.map(function(e){ return mapE(e).course; }))},
+      {key:'outcome', label:'Outcomes', options:['In Breach','Not In Breach','Adjourned','Further Investigation','Referred','Advisory']},
+      {key:'offence', label:'Offences', options:['Interference Noted','Interference Careless','Running and Riding','Interference Accidental','Late arrival of rider in parade ring','Failure to remove or slow removal of the blindfold','Misuse of the Whip','Failing to ride out','Rider goes into wrong stall','Violent or Improper conduct between riders/trainers']},
+      {key:'jockey', label:'Jockeys', options: uq(rec.enquiries.map(function(e){ return e.jockey; }))},
+      {key:'penalty', label:'Penalties', options:['Noted','Caution','Suspension','Fine']},
+      {key:'sub', label:'Sub-offences', options:['Careless Riding','Place not obtained - second/third','1st offence']}
+    ];
+    var setES = function(k, v){ var n = Object.assign({}, enqSel); n[k] = v; self.setState({eqSel: n}); };
+    var eqMulti = EM.map(function(M){
+      var cur = enqSel[M.key], open = s.eqOpenKey === M.key, n = cur.length;
+      return {label: M.label, open: open, any: n > 0, summary: n === 0 ? 'All' : n === 1 ? cur[0] : n + ' selected',
+        border: n ? 'var(--primary, rgb(0,47,113))' : 'rgb(228,228,231)', bg: n ? 'var(--accent, rgb(233,244,250))' : '#fff',
+        toggle: function(){ self.setState({eqOpenKey: open ? null : M.key}); }, close: function(){ self.setState({eqOpenKey: null}); },
+        clear: function(){ setES(M.key, []); },
+        options: M.options.map(function(v){ var on = cur.indexOf(v) >= 0;
+          return {label: v, checked: on, tick: on ? '\u2713' : '', boxBg: on ? 'var(--primary, rgb(0,47,113))' : '#fff', boxBorder: on ? 'var(--primary, rgb(0,47,113))' : 'rgb(212,212,216)',
+            toggle: function(){ setES(M.key, on ? cur.filter(function(x){ return x !== v; }) : cur.concat([v])); }}; })};
+    });
+    var eqFromH = s.eqFrom || '2025-10-19', eqToH = s.eqTo || '2026-10-19';
+    var isoH = function(d){ var p = d.split('/'); return p[2] + '-' + p[1] + '-' + p[0]; };
+    var enquiries = rec.enquiries.filter(function(e){ var m = mapE(e), d = isoH(e.date);
+      if (d < eqFromH || d > eqToH) return false;
+      for (var k in enqSel) { if (enqSel[k].length && enqSel[k].indexOf(m[k]) < 0) return false; } return true; }).map(function(e){ return Object.assign({}, e, { outcomeClass: e.outcome === 'In Breach' ? 'bha-badge-destructive' : 'bha-badge-secondary' }); });
+    return {
+      p: rec, runners: runners, runnersOpen: !!s.runnersOpen, raceLabel: race.label, currentRunnerLabel: 'No.' + current.no + ' today',
+      toggleRunners: function(){ self.setState({runnersOpen: !s.runnersOpen}); }, closeRunners: function(){ self.setState({runnersOpen:false}); },
+      basics: card, more: more,
+      basicsTop: card.filter(function(b){ return ['Age','Sex','Trainer','Owner'].indexOf(b.k) >= 0; }),
+      basicsRest: card.filter(function(b){ return ['Age','Sex','Trainer','Owner'].indexOf(b.k) < 0; }).concat(more),
+      tabs: tabs,
+      showForm: s.tab === 'form', showEntries: s.tab === 'entries', showEnquiries: s.tab === 'enquiries', showComments: s.tab === 'comments', showMedical: s.tab === 'medical', showConnections: s.tab === 'connections', showNonRunners: s.tab === 'nonrunners', showSponsorship: s.tab === 'sponsorship',
+      ownerSponsors: rec.sponsors || [],
+      nonRunners: rec.nonRunners, hasNR: rec.nonRunners.length > 0, noNR: rec.nonRunners.length === 0, nrCount: 'Records found: ' + rec.nonRunners.length,
+      sponsors: rec.sponsors.map(function(x){ var pd = function(v){ var a = String(v).split('/'); return new Date(+a[2], +a[1]-1, +a[0]); }; var T = new Date(2026,8,14); var st = T < pd(x.start) ? 'Pending' : T > pd(x.end) ? 'Expired' : 'Active'; return Object.assign({}, x, {status: st, statusBg: st==='Active'?'rgb(233,246,239)':st==='Pending'?'rgb(255,247,230)':'rgb(254,242,242)', statusInk: st==='Active'?'rgb(0,120,63)':st==='Pending'?'rgb(146,90,0)':'rgb(185,28,28)'}); }), hasSp: rec.sponsors.length > 0, noSp: rec.sponsors.length === 0,
+      form: form.map(function(x, i){ var r = parseInt((rec.ratings || [])[i], 10); return Object.assign({}, x, {trainer: x.trainer || rec.trainer, pfig: isNaN(r) ? '–' : String(r - 4 + (i % 3) * 2), sp: x.sp || ['11/4','9/4','9/2','7/1','5/2','16/1'][(i + hsh) % 6]}); }), formSummary: 'Showing ' + form.length + ' of ' + rec.form.length + ' runs · ' + wins + ' wins · ' + places + ' places',
+      entries: entries, entrySummary: entries.filter(function(e){ return e.declared; }).length + ' declared · ' + entries.filter(function(e){ return !e.declared; }).length + ' entered',
+      enquiries: enquiries, enqCount: 'Showing ' + enquiries.length + ' of ' + rec.enquiries.length,
+      eqMulti: eqMulti, eqFrom: eqFromH, eqTo: eqToH,
+      onEqFrom: function(ev){ self.setState({eqFrom: ev.target.value}); }, onEqTo: function(ev){ self.setState({eqTo: ev.target.value}); },
+      showEqFilters: s.tab === 'enquiries', showFormFilters: s.tab === 'form', showTravel: s.tab === 'travel',
+      comments: comments, commentCount: 'Records found: ' + comments.length,
+      panelOpen: !!panelData, panel: panelData || {eyebrow:'', title:'', sub:'', body:'', hasBody:false, rows:[]},
+      closePanel: function(){ self.setState({panel:null}); },
+      medical: rec.medical.map(function(m){ return Object.assign({}, m, { resultClass: /negative|fit/i.test(m.result) ? 'bha-badge-secondary' : 'bha-badge-destructive' }); }),
+      connections: rec.connections,
+      fRaceType: s.fRaceType || 'All', onFRaceType: function(ev){ self.setState({fRaceType: ev.target.value}); },
+      fCourse: fCourse, onFCourse: function(ev){ self.setState({fCourse: ev.target.value}); },
+      fGoing: fGoing, onFGoing: function(ev){ self.setState({fGoing: ev.target.value}); },
+      fFinish: fFinish, onFFinish: function(ev){ self.setState({fFinish: ev.target.value}); },
+      perfFrom: s.perfFrom || '2025-08-26', onPerfFrom: function(ev){ self.setState({perfFrom: ev.target.value}); },
+      perfTo: s.perfTo || '2026-08-26', onPerfTo: function(ev){ self.setState({perfTo: ev.target.value}); }
+    };
+  }
+}
+</script>
+</body>
+</html>
